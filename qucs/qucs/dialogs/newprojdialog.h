@@ -41,10 +41,12 @@ public:
 
 private slots:
   void slotTextChanged(const QString &);
+  void slotBrowsePath();
 
 private:
-  QPushButton *ButtonOk, *ButtonCancel;
+  QPushButton *ButtonOk, *ButtonCancel, *ButtonBrowsePath;
   QGridLayout *gbox;
+  QString proj_name;
 };
 
 #endif

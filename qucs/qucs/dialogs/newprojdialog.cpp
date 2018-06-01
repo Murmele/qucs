@@ -23,7 +23,7 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QGridLayout>
-
+#include <QFileDialog>
 
 NewProjDialog::NewProjDialog(QWidget *parent)
   : QDialog(parent)
@@ -36,11 +36,19 @@ NewProjDialog::NewProjDialog(QWidget *parent)
 
   ProjName = new QLineEdit(this);
   ProjName->setMinimumWidth(250);
+  ProjName->setEnabled(false);
   connect(ProjName, SIGNAL(textChanged(const QString&)), SLOT(slotTextChanged(const QString&)));
   gbox->addWidget(ProjName, 0, 1, 1, 2);
+
+  ButtonBrowsePath = new QPushButton(tr("Browse"));
+  gbox->addWidget(ButtonBrowsePath,0,3,1,1);
+  connect(ButtonBrowsePath,SIGNAL(clicked(bool)),this,SLOT(slotBrowsePath()));
+
   OpenProj = new QCheckBox(tr("open new project"));
   OpenProj->setChecked(true);
   gbox->addWidget(OpenProj, 1, 1, 1, 2);
+
+
 
   ButtonOk = new QPushButton(tr("Create"));
   gbox->addWidget(ButtonOk,2,1);
@@ -67,4 +75,10 @@ void NewProjDialog::slotTextChanged(const QString &text){
 NewProjDialog::~NewProjDialog()
 {
   delete gbox;
+}
+
+void NewProjDialog::slotBrowsePath()
+{
+    proj_name = QFileDialog::getSaveFileName(this,tr("Select project path"));
+    ProjName->setText(proj_name);
 }
