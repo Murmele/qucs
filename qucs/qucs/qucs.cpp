@@ -222,15 +222,18 @@ void QucsApp::initView()
   QWidget *ProjButts = new QWidget();
   QPushButton *ProjNew = new QPushButton(tr("New"));
   connect(ProjNew, SIGNAL(clicked()), SLOT(slotButtonProjNew()));
-  QPushButton *ProjOpen = new QPushButton(tr("Open"));
-  connect(ProjOpen, SIGNAL(clicked()), SLOT(slotButtonProjOpen()));
+  QPushButton *ProjAktivate = new QPushButton(tr("Aktivate Project"));
+  connect(ProjAktivate, SIGNAL(clicked()), SLOT(slotButtonProjAct()));
   QPushButton *ProjDel = new QPushButton(tr("Delete"));
   connect(ProjDel, SIGNAL(clicked()), SLOT(slotButtonProjDel()));
+  QPushButton *ProjOpen = new QPushButton(tr("Open Project"));
+  connect(ProjOpen, SIGNAL(clicked()), SLOT(slotButtonProjOpen()));
 
   QHBoxLayout *ProjButtsLayout = new QHBoxLayout();
   ProjButtsLayout->addWidget(ProjNew);
-  ProjButtsLayout->addWidget(ProjOpen);
+  ProjButtsLayout->addWidget(ProjAktivate);
   ProjButtsLayout->addWidget(ProjDel);
+  ProjButtsLayout->addWidget(ProjOpen);
   ProjButts->setLayout(ProjButtsLayout);
 
   ProjGroupLayout->addWidget(ProjButts);
@@ -1116,20 +1119,28 @@ void QucsApp::slotButtonProjNew()
   NewProjDialog *d = new NewProjDialog(this);
   if(d->exec() != QDialog::Accepted) return;
 
-  QDir projDir(QucsSettings.QucsHomeDir.path());
-  QString name = d->ProjName->text();
+
+  QFileInfo fi(d->ProjName->text());
+  QString name =fi.fileName();
+  QString path = fi.path();
+
   bool open = d->OpenProj->isChecked();
 
   if (!name.endsWith("_prj")) {
     name += "_prj";
   }
 
+  QDir projDir(path);
+
   if(!projDir.mkdir(name)) {
     QMessageBox::information(this, tr("Info"),
         tr("Cannot create project directory !"));
   }
   if(open) {
-    openProject(QucsSettings.QucsHomeDir.filePath(name));
+    m_homeDirModel->setRootPath(path);
+    Projects->setModel(m_homeDirModel);
+    Projects->setRootIndex(m_homeDirModel->index(path));
+    openProject(projDir.filePath(name));
   }
 }
 
@@ -1190,7 +1201,7 @@ void QucsApp::slotMenuProjOpen()
 
 // ----------------------------------------------------------
 // Is called, when "Open Project" button is pressed.
-void QucsApp::slotButtonProjOpen()
+void QucsApp::slotButtonProjAct()
 {
   slotHideEdit();
 
@@ -1203,11 +1214,26 @@ void QucsApp::slotButtonProjOpen()
   }
 }
 
+void QucsApp::slotButtonProjOpen()
+{
+    QString proj = QFileDialog::getExistingDirectory(this,tr("Choose project"));
+    //QString path = QucsSettings.QucsHomeDir.absolutePath();
+
+    QFileInfo fi(proj);
+    QString name =fi.fileName();
+    QString path = fi.path();
+
+    m_homeDirModel->setRootPath(path);
+    Projects->setModel(m_homeDirModel);
+    Projects->setRootIndex(m_homeDirModel->index(path));
+}
+
 // ----------------------------------------------------------
 // Is called when project is double-clicked to open it.
 void QucsApp::slotListProjOpen(const QModelIndex &idx)
 {
-  openProject(QucsSettings.QucsHomeDir.filePath(
+  QDir path(m_homeDirModel->rootPath());
+  openProject(path.filePath(
       idx.data().toString()));
 }
 
@@ -1324,8 +1350,8 @@ void QucsApp::slotButtonProjDel()
         tr("No project is selected!"));
     return;
   }
-
-  deleteProject(QucsSettings.QucsHomeDir.filePath(idx.data().toString()));
+  QDir path(m_homeDirModel->rootDirectory());
+  deleteProject(path.filePath(idx.data().toString()));
 }
 
 

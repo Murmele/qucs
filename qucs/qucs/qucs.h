@@ -229,8 +229,9 @@ private slots:
   void slotOpenContent(const QModelIndex &);
   void slotSetCompView(int);
   void slotButtonProjNew();
-  void slotButtonProjOpen();
+  void slotButtonProjAct();
   void slotButtonProjDel();
+  void slotButtonProjOpen();
   void slotChangeView(QWidget*);
   void slotSimulate();
   void slotAfterSimulation(int, SimMessage*);
