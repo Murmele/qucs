@@ -36,7 +36,7 @@ NewProjDialog::NewProjDialog(QWidget *parent)
 
   ProjName = new QLineEdit(this);
   ProjName->setMinimumWidth(250);
-  ProjName->setEnabled(false);
+  ProjName->setEnabled(true);
   connect(ProjName, SIGNAL(textChanged(const QString&)), SLOT(slotTextChanged(const QString&)));
   gbox->addWidget(ProjName, 0, 1, 1, 2);
 
