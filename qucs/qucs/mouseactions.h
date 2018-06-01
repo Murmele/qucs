@@ -66,6 +66,7 @@ public:
   void MMoveWire2(Schematic*, QMouseEvent*);
   void MMoveMoving(Schematic*, QMouseEvent*);
   void MMoveMoving2(Schematic*, QMouseEvent*);
+  void MMoveView(Schematic*, QMouseEvent*);
   void MMovePaste(Schematic*, QMouseEvent*);
   void MMoveDelete(Schematic*, QMouseEvent*);
   void MMoveLabel(Schematic*, QMouseEvent*);
@@ -96,6 +97,7 @@ public:
   void MPressOnGrid(Schematic*, QMouseEvent*, float, float);
   void MPressMoveText(Schematic*, QMouseEvent*, float, float);
   void MPressZoomIn(Schematic*, QMouseEvent*, float, float);
+  void MPressMoveView(Schematic*, QMouseEvent*,float,float);
 
   void MDoubleClickSelect(Schematic*, QMouseEvent*);
   void MDoubleClickWire2(Schematic*, QMouseEvent*);
@@ -109,6 +111,7 @@ public:
   void MReleaseResizePainting(Schematic*, QMouseEvent*);
   void MReleaseMoveText(Schematic*, QMouseEvent*);
   void MReleaseZoomIn(Schematic*, QMouseEvent*);
+  void MReleaseMovingView(Schematic*, QMouseEvent*);
 
   void paintElementsScheme(Schematic*);
   void rotateElements(Schematic*, int&, int&);
@@ -116,6 +119,7 @@ public:
   void moveElements(Q3PtrList<Element>*, int, int);
   void endElementMoving(Schematic*, Q3PtrList<Element>*);
   void rightPressMenu(Schematic*, QMouseEvent*, float, float);
+  void middlePressMenu(Schematic*, QMouseEvent*, float, float);
 };
 
 #endif

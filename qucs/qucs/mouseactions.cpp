@@ -425,6 +425,24 @@ void MouseActions::MMoveResizePainting(Schematic *Doc, QMouseEvent *Event)
   ((Painting*)focusElement)->MouseResizeMoving(MAx1, MAy1, Doc);
 }
 
+/**
+ * @brief MouseActions::MMoveView
+ *
+ * Moves View when Button (Middle Button) pressed
+ */
+void MouseActions::MMoveView(Schematic *Doc, QMouseEvent*Event)
+{
+    MAx2 = DOC_X_POS(Event->pos().x());
+    MAy2 = DOC_Y_POS(Event->pos().y());
+
+    MAx1 = MAx2 - MAx1;
+    MAy1 = MAy2 - MAy1;
+    Doc->scrollBy(-MAx1,-MAy1);
+    //Doc->setContentsPos(MAx2,MAy2);
+    MAx1 = MAx2;
+    MAy1 = MAy2;
+}
+
 // -----------------------------------------------------------
 // Moves components by keeping the mouse button pressed.
 void MouseActions::MMoveMoving(Schematic *Doc, QMouseEvent *Event)
@@ -758,6 +776,11 @@ void MouseActions::MMoveZoomIn(Schematic *Doc, QMouseEvent *Event)
 // **********                                                    **********
 // ************************************************************************
 
+void middlePressMenu(Schematic*, QMouseEvent*, float, float)
+{
+
+}
+
 // Is called from several MousePress functions to show right button menu.
 void MouseActions::rightPressMenu(Schematic *Doc, QMouseEvent *Event, float fX, float fY)
 {
@@ -1089,6 +1112,15 @@ void MouseActions::MPressSelect(Schematic *Doc, QMouseEvent *Event, float fX, fl
   }
   // Update matching wire label highlighting
   Doc->highlightWireLabels ();
+}
+
+// -----------------------------------------------------------
+void MouseActions::MPressMoveView(Schematic*, QMouseEvent*,float fX ,float fY)
+{
+    MAx1 = int(fX);
+    MAy1 = int(fY);
+    App->MouseMoveAction = &MouseActions::MMoveView;
+    App->MouseReleaseAction = &MouseActions::MReleaseMovingView;
 }
 
 // -----------------------------------------------------------
@@ -1614,6 +1646,18 @@ void MouseActions::MReleaseMoving(Schematic *Doc, QMouseEvent*)
   QucsMain->MousePressAction = &MouseActions::MPressSelect;
   QucsMain->MouseReleaseAction = &MouseActions::MReleaseSelect;
   QucsMain->MouseDoubleClickAction = &MouseActions::MDoubleClickSelect;
+}
+
+// ------------------------------------------------------------
+// Is called after moving the view with the middle button
+void MouseActions::MReleaseMovingView(Schematic *Doc, QMouseEvent*)
+{
+    Doc->releaseKeyboard();  // allow keyboard inputs again
+
+    QucsMain->MouseMoveAction = 0;
+    QucsMain->MousePressAction = &MouseActions::MPressSelect;
+    QucsMain->MouseReleaseAction = &MouseActions::MReleaseSelect;
+    QucsMain->MouseDoubleClickAction = &MouseActions::MDoubleClickSelect;
 }
 
 // -----------------------------------------------------------
