@@ -222,14 +222,14 @@ void QucsApp::initView()
   QWidget *ProjButts = new QWidget();
   QPushButton *ProjNew = new QPushButton(tr("New"));
   connect(ProjNew, SIGNAL(clicked()), SLOT(slotButtonProjNew()));
-  QPushButton *ProjAktivate = new QPushButton(tr("Aktivate Project"));
+  QPushButton *ProjAktivate = new QPushButton(tr("Aktivate"));
   connect(ProjAktivate, SIGNAL(clicked()), SLOT(slotButtonProjAct()));
   QPushButton *ProjDel = new QPushButton(tr("Delete"));
   connect(ProjDel, SIGNAL(clicked()), SLOT(slotButtonProjDel()));
-  QPushButton *ProjOpen = new QPushButton(tr("Open Project"));
+  QPushButton *ProjOpen = new QPushButton(tr("Open"));
   connect(ProjOpen, SIGNAL(clicked()), SLOT(slotButtonProjOpen()));
 
-  QHBoxLayout *ProjButtsLayout = new QHBoxLayout();
+  QVBoxLayout *ProjButtsLayout = new QVBoxLayout();
   ProjButtsLayout->addWidget(ProjNew);
   ProjButtsLayout->addWidget(ProjAktivate);
   ProjButtsLayout->addWidget(ProjDel);
@@ -1200,7 +1200,7 @@ void QucsApp::slotMenuProjOpen()
 }
 
 // ----------------------------------------------------------
-// Is called, when "Open Project" button is pressed.
+// Is called, when "Activate" button is pressed.
 void QucsApp::slotButtonProjAct()
 {
   slotHideEdit();
@@ -1214,6 +1214,13 @@ void QucsApp::slotButtonProjAct()
   }
 }
 
+// ----------------------------------------------------------
+// Is called, when "Open" button is pressed.
+/**
+ * @brief QucsApp::slotButtonProjOpen
+ *
+ * Opens a new project from a choosen path
+ */
 void QucsApp::slotButtonProjOpen()
 {
     QString proj = QFileDialog::getExistingDirectory(this,tr("Choose project"));
