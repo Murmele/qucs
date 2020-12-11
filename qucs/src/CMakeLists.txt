@@ -123,13 +123,16 @@ include(../../cmake/readMakeList.txt)
 
 include_directories(
   ${qucs_SOURCE_DIR}
-  ${qucs_SOURCE_DIR}/../include
   # ${qucs_SOURCE_DIR}/bitmaps ->no sources here
   ${qucs_SOURCE_DIR}/components
   ${qucs_SOURCE_DIR}/diagrams
   ${qucs_SOURCE_DIR}/dialogs
   # ${qucs_SOURCE_DIR}/octave ->no sources here
   ${qucs_SOURCE_DIR}/paintings)
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../includes)
+
+ get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+ message("DIRECTORIES: ${dirs}")
 
 add_subdirectory( bitmaps ) #-> added as resources
 add_subdirectory(components)
@@ -229,6 +232,8 @@ set(UIC_HDRS searchdialog.ui)
 
 ## schematic library
 add_library(coreSchematic OBJECT ${QUCS_SRCS} ${QUCS_RESOURCES} ${UIC_HDRS})
+target_link_directories(coreSchematic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../includes)
+
 target_link_libraries(coreSchematic Qt5::Core)
 target_link_libraries(coreSchematic Qt5::Gui)
 target_link_libraries(coreSchematic Qt5::Widgets)
