@@ -190,3 +190,5 @@ DIALOG_SRC+= \
 	simmessage.cpp \
 	sweepdialog.cpp \
 	vasettingsdialog.cpp
+	
+UI_FILES = searchdialog.ui
