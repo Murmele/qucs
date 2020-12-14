@@ -71,12 +71,12 @@ Dispatcher<Command>::INSTALL p(&command_dispatcher, "attach", &my_plugins);
 
 static std::string plugpath()
 { untested();
-  const char* ppenv=getenv("QUCS_PLUGPATH");
-  if(!ppenv){ untested();
+  QString ppenv = QString::fromLocal8Bit(qgetenv("QUCS_PLUGPATH"));
+  if(ppenv == ""){ untested();
     unreachable();
 	 return "";
   }else{ untested();
-    return ppenv;
+    return ppenv.toStdString();
   }
 }
 
