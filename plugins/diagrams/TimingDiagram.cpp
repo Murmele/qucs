@@ -1,5 +1,5 @@
 /***************************************************************************
-                             timingdiagram.cpp
+                             TimingDiagram.cpp
                             -------------------
     begin                : Sat Oct 22 2005
     copyright            : (C) 2005 by Michael Margraf
@@ -20,7 +20,7 @@
   \brief The TimingDiagram class implements the Timing diagram
 */
 
-#include "timingdiagram.h"
+#include "TimingDiagram.h"
 #include "qucs.h"
 #include "misc.h"
 

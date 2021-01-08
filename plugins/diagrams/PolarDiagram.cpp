@@ -29,7 +29,7 @@
 # include <ieeefp.h>
 #endif
 
-#include "polardiagram.h"
+#include "PolarDiagram.h"
 #include "obsolete_paintings.h"
 
 

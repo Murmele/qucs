@@ -30,7 +30,7 @@
 # include <ieeefp.h>
 #endif
 
-#include "waveac.h"
+#include "Waveac.h"
 #include "qucs.h"
 #include "misc.h"
 #include "some_font_stuff.h"

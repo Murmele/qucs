@@ -1,5 +1,5 @@
 /*
- * waveac.h - Header file for the temporal diagram
+ * Waveac.h - Header file for the temporal diagram
  *
  * Copyright (C) 2016, Nelson Martins, macedo.pp@gmail.com
  *		 2017, Alberto Silva, 1120196@isep.ipp.pt	

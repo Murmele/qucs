@@ -3,12 +3,17 @@ macro(configureDiagramLibrary FILE DIAGRAMS)
 
 	file(WRITE ${FILE} "")
 
-## # availableDiagrams()
+## diagram includes
+foreach(DIAGRAM ${DIAGRAMS})
+	file(APPEND ${FILE} "#include \"${DIAGRAM}.h\"\n")
+endforeach()
+
+## availableDiagrams()
 set(PREFIX_AVAILABLE_DIAGRAMS "#include <QStringList>
 #include \"diagram.h\"
 extern \"C\" QStringList availableDiagrams() {
 return {")
-set(POSTFIX_AVAILABLE_DIAGRAMS "\t};\n}")
+set(POSTFIX_AVAILABLE_DIAGRAMS "\t}\;\n}")
 
 
 file(APPEND ${FILE} ${PREFIX_AVAILABLE_DIAGRAMS})
@@ -17,7 +22,7 @@ foreach(DIAGRAM ${DIAGRAMS})
 endforeach()
 file(APPEND ${FILE} ${POSTFIX_AVAILABLE_DIAGRAMS} "\n\n")
 
-# create object
+## create object
 set(BASECLASS "Diagram")
 set(ARGS "int _cx=0, int _cy=0")
 set(ARGS_FUNCTION_CALL "_cx, _cy")
@@ -25,7 +30,7 @@ foreach(DIAGRAM ${DIAGRAMS})
 	file(APPEND ${FILE} "extern \"C\" ${BASECLASS}* create_${DIAGRAM}(${ARGS}) {return new ${DIAGRAM}(${ARGS_FUNCTION_CALL});}\n")
 endforeach()
 
-#destroy object
+## destroy object
 file(APPEND ${FILE} "extern \"C\" void destroy_diagram(${BASECLASS}* d) {delete d;}")
 
 endmacro()

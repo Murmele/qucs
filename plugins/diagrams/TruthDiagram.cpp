@@ -1,5 +1,5 @@
 /***************************************************************************
-                              truthdiagram.cpp
+                              TruthDiagram.cpp
                              ------------------
     begin                : Sat Nov 12 2005
     copyright            : (C) 2005 by Michael Margraf

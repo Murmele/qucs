@@ -2,31 +2,31 @@
 TARGET = diagrams
 
 RAW_SRCS = \
-	rectdiagram.cpp
+	RectDiagram.cpp
 
 NOTYET = \
-	curvediagram.cpp \
-	phasordiagram.cpp \
-	polardiagram.cpp \
-	psdiagram.cpp \
-	rect3ddiagram.cpp \
-	smithdiagram.cpp \
-	timingdiagram.cpp \
-	truthdiagram.cpp \
-	waveac.cpp
+	CurveDiagram \
+	PhasorDiagram \
+	PolarDiagram \
+	PSDiagram \
+	Rect3DDiagram \
+	SmithDiagram \
+	TimingDiagram \
+	TruthDiagram \
+	Waveac
 
 # add here the new diagrams. In cmake the other source files will not be taken in account
 DIAGRAMS = \
-	rectdiagram \
-	curvediagram \
-	phasordiagram \
-	polardiagram \
-	psdiagram \
-	rect3ddiagram \
-	smithdiagram \
-	timingdiagram \
-	truthdiagram \
-	waveac
+	#RectDiagram \
+	CurveDiagram \
+	PhasorDiagram \
+	PolarDiagram \
+	PSDiagram \
+	Rect3DDiagram \
+	SmithDiagram \
+	TimingDiagram \
+	TruthDiagram \
+	Waveac
 
 EXTRA_DIST =
 

@@ -33,7 +33,7 @@
 
 #include <QMessageBox>
 
-#include "phasordiagram.h"
+#include "PhasorDiagram.h"
 #include "qucs.h"
 #include "misc.h"
 #include "obsolete_paintings.h"

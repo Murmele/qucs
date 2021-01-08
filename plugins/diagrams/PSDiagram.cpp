@@ -29,7 +29,7 @@
 # include <ieeefp.h>
 #endif
 
-#include "psdiagram.h"
+#include "PSDiagram.h"
 #include "obsolete_paintings.h"
 
 // mixed polar and smith diagram

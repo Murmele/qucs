@@ -1,5 +1,5 @@
 /***************************************************************************
-                              curvediagram.cpp
+                              CurveDiagram.cpp
                              ------------------
     begin                : Sat Apr 9 2005
     copyright            : (C) 2005 by Michael Margraf
@@ -31,7 +31,7 @@
 
 #include <QMessageBox>
 
-#include "curvediagram.h"
+#include "CurveDiagram.h"
 //#include "qucs.h"
 #include "misc.h"
 #include "some_font_stuff.h"

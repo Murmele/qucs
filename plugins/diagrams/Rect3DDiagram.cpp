@@ -31,7 +31,7 @@
 # include <ieeefp.h>
 #endif
 
-#include "rect3ddiagram.h"
+#include "Rect3DDiagram.h"
 #include "qucs.h"
 #include "misc.h"
 #include "qt_compat.h"

@@ -16,7 +16,7 @@ foreach(DIAGRAM ${DIAGRAMS})
 	set(SRC ${SRC} "${DIAGRAM}.cpp")
 endforeach()
 
-add_library(diagrams SHARED ${SRC} ${NOTYET} ${CONFIG_FILE}
+add_library(diagrams SHARED ${SRC} ${NOTYET} ${CONFIG_FILE} RectDiagram.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/../../src/diagram.cpp # interface class
 	)
 

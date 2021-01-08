@@ -29,7 +29,7 @@
 # include <ieeefp.h>
 #endif
 
-#include "smithdiagram.h"
+#include "SmithDiagram.h"
 #include "misc.h"
 // #include "../dialogs/matchdialog.h" // For r2z function
 //
