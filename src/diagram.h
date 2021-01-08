@@ -187,4 +187,10 @@ protected:
   QString Name; // the label, but sometimes the type. yikes.
 }; // Diagram
 
+// the types of the class factories
+// https://tldp.org/HOWTO/html_single/C++-dlopen/
+// Need for loading dynamic libraries
+typedef Diagram* create_t();
+typedef void destroy_t(Diagram*);
+
 #endif

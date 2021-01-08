@@ -3,10 +3,20 @@ include(../../cmake/readMakeList.txt)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-readVariable(MakeList SRCS SRCS)
-readVariable(MakeList NOTYET NOTYET)
+readVariable(MakeList DIAGRAMS DIAGRAMS)
+message(STATUS "Available diagrams: ${DIAGRAMS}")
 
-add_library(diagrams SHARED ${SRC} ${NOTYET}
+include(configure.cmake)
+set(CONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/diagrams.cpp)
+configureDiagramLibrary(${CONFIG_FILE} "${DIAGRAMS}")
+
+# for each diagram its own source file must exist
+set(SRC "")
+foreach(DIAGRAM ${DIAGRAMS})
+	set(SRC ${SRC} "${DIAGRAM}.cpp")
+endforeach()
+
+add_library(diagrams SHARED ${SRC} ${NOTYET} ${CONFIG_FILE}
 	${CMAKE_CURRENT_SOURCE_DIR}/../../src/diagram.cpp # interface class
 	)
 

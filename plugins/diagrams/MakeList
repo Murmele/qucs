@@ -15,6 +15,19 @@ NOTYET = \
 	truthdiagram.cpp \
 	waveac.cpp
 
+# add here the new diagrams. In cmake the other source files will not be taken in account
+DIAGRAMS = \
+	rectdiagram \
+	curvediagram \
+	phasordiagram \
+	polardiagram \
+	psdiagram \
+	rect3ddiagram \
+	smithdiagram \
+	timingdiagram \
+	truthdiagram \
+	waveac
+
 EXTRA_DIST =
 
 SRCS = \
