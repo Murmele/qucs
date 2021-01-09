@@ -70,5 +70,4 @@ private:
 }D;
 Dispatcher<Diagram>::INSTALL p(&diagram_dispatcher, "Rect", &D);
 Module::INSTALL pp("diagrams", &D);
-
 }

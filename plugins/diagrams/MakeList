@@ -17,7 +17,7 @@ NOTYET = \
 
 # add here the new diagrams. In cmake the other source files will not be taken in account
 DIAGRAMS = \
-	#RectDiagram \
+	RectDiagram \
 	CurveDiagram \
 	PhasorDiagram \
 	PolarDiagram \

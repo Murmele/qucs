@@ -4,13 +4,14 @@ macro(configureDiagramLibrary FILE DIAGRAMS)
 	file(WRITE ${FILE} "")
 
 ## diagram includes
-foreach(DIAGRAM ${DIAGRAMS})
-	file(APPEND ${FILE} "#include \"${DIAGRAM}.h\"\n")
-endforeach()
+#foreach(DIAGRAM ${DIAGRAMS})
+#	file(APPEND ${FILE} "#include \"${DIAGRAM}.h\"\n")
+#endforeach()
+#file(APPEND ${FILE} "\n\n")
 
 ## availableDiagrams()
 set(PREFIX_AVAILABLE_DIAGRAMS "#include <QStringList>
-#include \"diagram.h\"
+#include \"diagram.h\"\n\n
 extern \"C\" QStringList availableDiagrams() {
 return {")
 set(POSTFIX_AVAILABLE_DIAGRAMS "\t}\;\n}")
@@ -22,8 +23,8 @@ foreach(DIAGRAM ${DIAGRAMS})
 endforeach()
 file(APPEND ${FILE} ${POSTFIX_AVAILABLE_DIAGRAMS} "\n\n")
 
+set(BASECLASS "Diagram") # baseclass of all diagrams
 ## create object
-set(BASECLASS "Diagram")
 set(ARGS "int _cx=0, int _cy=0")
 set(ARGS_FUNCTION_CALL "_cx, _cy")
 foreach(DIAGRAM ${DIAGRAMS})
