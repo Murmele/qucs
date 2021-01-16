@@ -22,7 +22,7 @@ QUndoCommand* MouseAction::handle(QEvent* e)
 //    e->ignore();
 //  }
   assert(e);
-  auto* m = prechecked_cast<QMouseEvent*>(e);
+  auto* m = prechecked_cast<QGraphicsSceneMouseEvent*>(e);
 //  auto* s = prechecked_cast<QGraphicsSceneEvent*>(e);
   auto a = ComponentWidget::itemMimeType();
 
