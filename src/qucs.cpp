@@ -65,6 +65,7 @@
 #include "octave_window.h"
 #include "printerwriter.h"
 #include "imagewriter.h"
+#include "schematic_doc.h"
 
 #include "settings.h"
 #include "../qucs-lib/qucslib_common.h" // BUG
@@ -2828,15 +2829,12 @@ void QucsApp::slotSaveSchematicToGraphicsFile(bool diagram)
 
 // #########################################################################
 
-
-QucsDoc* newSchematicDoc(QucsApp*, QString const&, QWidget*); // tmp hack.
-
 QucsDoc *QucsTabWidget::createEmptySchematic(const QString &name)
 {itested();
   // create a schematic
   QFileInfo Info(name);
   assert(App);
-  QucsDoc *d = newSchematicDoc(App, name, this);
+  QucsDoc *d = new SchematicDoc(App, name, this);
   QWidget* w = dynamic_cast<QWidget*>(d);
   assert(w);
   int i = addTab(w, QPixmap(":/bitmaps/empty.xpm"), name.isEmpty() ? QObject::tr("untitled") : Info.fileName());

@@ -71,7 +71,6 @@ QUndoCommand* MouseAction::handle(QEvent* e)
     return move(e);
   case QEvent::GraphicsSceneMouseRelease:itested();
     //fallthrough
-  case QEvent::MouseButtonRelease:itested();
     return release(e);
   case QEvent::GrabMouse:itested();
     return nullptr;
@@ -79,10 +78,13 @@ QUndoCommand* MouseAction::handle(QEvent* e)
   case QEvent::DragEnter: untested();
     unreachable(); // proper type check above
     return nullptr;
-  case QEvent::MouseButtonPress: untested();
     // fallthrough
   case QEvent::GraphicsSceneMousePress:itested();
     return press(e);
+  case QEvent::MouseButtonPress: // fall through
+  case QEvent::MouseButtonRelease:
+      // should not occur
+      trace0("Should never occur");
   default:
     // It is not a mouse action, so ignore it.
     return nullptr;

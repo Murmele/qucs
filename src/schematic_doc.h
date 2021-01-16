@@ -83,6 +83,10 @@ class ElementGraphics;
 /* -------------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------------- */
 // TODO: add SymbolDocument (some other place)
+/*!
+ * \brief The SchematicDoc class
+ * View of the schematics . Shows the schematic
+ */
 class SchematicDoc : public QGraphicsView, public QucsDoc {
   Q_OBJECT
 private:
@@ -564,11 +568,11 @@ public: // need access to SchematicModel. grr
   friend class SchematicScene;
 
 private:
-  SubcktBase* _root;
-  SchematicModel* _model;
-  SubcktBase* _main;
+  SubcktBase* _root{nullptr};
+  SchematicModel* _model{nullptr};
+  SubcktBase* _main{nullptr};
   CmdEltList _commands;
-  QUndoStack* _undoStack;
+  QUndoStack* _undoStack{nullptr};
   std::map<std::string, SimProcess*> _simProcess; // QucsDoc?
 }; // SchematicDocument
 /* -------------------------------------------------------------------------------- */

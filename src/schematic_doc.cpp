@@ -21,19 +21,10 @@
 #include "docfmt.h" // copy&paste
 #include "sckt_base.h"
 
-// tmp hack.
-QucsDoc* newSchematicDoc(QucsApp* a, QString const& b, QWidget* o)
-{
-	return new SchematicDoc(a, b, o);
-}
 /*--------------------------------------------------------------------------*/
 SchematicDoc::SchematicDoc(QucsApp* App_/*BUG?*/, const QString& Name_, QWidget* owner)
    : QGraphicsView(),
-     QucsDoc(App_, Name_, owner),
-     _root(nullptr),
-     _model(nullptr),
-     _main(nullptr),
-     _undoStack(nullptr)
+     QucsDoc(App_, Name_, owner)
 {itested();
   qDebug() << "SchematicDoc::SchematicDoc" << Name_;
 
