@@ -50,7 +50,7 @@ private: // override
 //	cmd* activate(QAction* sender) override;
 	cmd* move(QEvent*) override;
 	cmd* press(QEvent*) override;
-	cmd* release(QMouseEvent*) override;
+    cmd* release(QEvent*) override;
 	//	cmd* release2(QMouseEvent*); // what is this?
 	// cmd* enter(QEvent*) override;
 	cmd* dblclk(QEvent*) override;
@@ -64,7 +64,7 @@ private: // rectangles?  // this was in MouseActions. BUG. remove
 #endif
 private:
 	void showSchematicWidget(QWidget*, ElementGraphics*);
-	cmd* release_left(QMouseEvent*);
+    cmd* release_left(QEvent*);
 
 protected:
 	void setPos1(QPointF pos){ untested();
@@ -140,7 +140,7 @@ private:
 	cmd* deactivate() override;
 //	cmd* move(QEvent*) override;
 	cmd* press(QEvent*) override;
-	cmd* release(QMouseEvent*) override;
+    cmd* release(QEvent*) override;
 //	cmd* generic(QEvent*) override;
 private:
 	QCursor _oldcursor;
@@ -188,7 +188,7 @@ QUndoCommand* MouseActionSelCmd<CMD>::press(QEvent* e)
 } // select::press
 /*--------------------------------------------------------------------------*/
 template<class CMD>
-QUndoCommand* MouseActionSelCmd<CMD>::release(QMouseEvent*)
+QUndoCommand* MouseActionSelCmd<CMD>::release(QEvent*)
 { untested();
 	incomplete(); // why?
 	return nullptr;
@@ -379,10 +379,10 @@ private:
 	cmd* press(QEvent*) override;
 	cmd* enter(QEvent*) override;
 	cmd* leave(QEvent*) override;
-	cmd* release(QMouseEvent*) override;
+    cmd* release(QEvent*) override;
 
 private:
-	cmd* makeNew(QMouseEvent*);
+    cmd* makeNew(QEvent*);
 	cmd* rotate(QEvent*);
 
 private:
@@ -419,10 +419,10 @@ QUndoCommand* MouseActionNewElement::activate(QObject* sender)
 	return MouseAction::activate(sender);
 }
 /*--------------------------------------------------------------------------*/
-QUndoCommand* MouseActionNewElement::release(QMouseEvent* ev)
+QUndoCommand* MouseActionNewElement::release(QEvent* ev)
 { untested();
 	QUndoCommand* cmd = nullptr;
-	auto m = dynamic_cast<QMouseEvent*>(ev);
+    auto m = dynamic_cast<QGraphicsSceneMouseEvent*>(ev);
 	if(!m){ untested();
 	}else if(m->button() == Qt::LeftButton){ untested();
 		cmd = makeNew(ev);
@@ -431,7 +431,7 @@ QUndoCommand* MouseActionNewElement::release(QMouseEvent* ev)
 	return cmd;
 }
 /*--------------------------------------------------------------------------*/
-QUndoCommand* MouseActionNewElement::makeNew(QMouseEvent* ev)
+QUndoCommand* MouseActionNewElement::makeNew(QEvent* ev)
 { untested();
 	// assert(ev->widget=doc->scene()) // or so.
 	trace1("RELEASE", ev->type());
@@ -773,10 +773,10 @@ QUndoCommand* MouseActionSelect::press(QEvent*)
 } // select::press
 /*--------------------------------------------------------------------------*/
 // was MouseActions::MReleaseSelect(SchematicDoc *Doc, QMouseEvent *Event)
-QUndoCommand* MouseActionSelect::release(QMouseEvent *ev)
+QUndoCommand* MouseActionSelect::release(QEvent *ev)
 {itested();
 	QUndoCommand* cmd = nullptr;
-	auto m = dynamic_cast<QMouseEvent*>(ev);
+    auto m = dynamic_cast<QGraphicsSceneMouseEvent*>(ev);
 	if(!m){ untested();
 	}else if(m->button() == Qt::LeftButton){itested();
 		cmd = release_left(ev);
@@ -854,9 +854,10 @@ static void selectWireLine(ElementGraphics *g)
 	}
 }
 /*--------------------------------------------------------------------------*/
-QUndoCommand* MouseActionSelect::release_left(QMouseEvent *Event)
+QUndoCommand* MouseActionSelect::release_left(QEvent *e)
 {itested();
-	bool ctrl = Event->modifiers().testFlag(Qt::ControlModifier);
+    auto m =prechecked_cast<QGraphicsSceneMouseEvent*>(e);
+    bool ctrl = m->modifiers().testFlag(Qt::ControlModifier);
 
 	if(!ctrl) {itested();
 		incomplete();
@@ -889,7 +890,7 @@ QUndoCommand* MouseActionSelect::release_left(QMouseEvent *Event)
 	if(c){
 	}else if(s.size()!=1){
 	}else if(!symbol(s.front())){
-	}else if(Event->button() == Qt::LeftButton){itested();
+    }else if(m->button() == Qt::LeftButton){itested();
 			// if it's a wire, select the whole thing?
 			// (what is a wire?)
 		if(isWire(symbol(s.front()))) { untested();
