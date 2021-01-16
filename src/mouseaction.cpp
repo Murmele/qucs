@@ -70,11 +70,9 @@ QUndoCommand* MouseAction::handle(QEvent* e)
   case QEvent::MouseMove:
     return move(e);
   case QEvent::GraphicsSceneMouseRelease:itested();
-    return nullptr;
     //fallthrough
   case QEvent::MouseButtonRelease:itested();
-    assert(m);
-    return release(m);
+    return release(e);
   case QEvent::GrabMouse:itested();
     return nullptr;
 //    return grab(s);
