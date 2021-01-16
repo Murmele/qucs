@@ -553,8 +553,8 @@ bool SchematicDoc::event(QEvent* e)
 
 bool SchematicDoc::handleMouseActions(QEvent* e)
 {
-//    if (e->isAccepted())
-//        return false;
+    if (e->isAccepted())
+        return false;
 	assert(mouseActions());
 	return mouseActions()->handle(e);
 }
