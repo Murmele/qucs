@@ -38,6 +38,8 @@ class ElementGraphics;
 class Node;
 class SchematicDoc;
 class SchematicModel;
+class MouseActions;
+class SchematicActions;
 
 // TODO: merge schematic mouse actions into this.
 /*!
@@ -78,6 +80,7 @@ public:
   void selectedItemsAndBoundingBox(QList<ElementGraphics*>& ElementCache, QRectF& BB);
 //  void removeItem(Element const*);
   bool itemEvent(QEvent*);
+  bool handleMouseActions(QEvent* e);
 
   QPoint gridSize() const;
   QPoint snapToGrid(QPointF const&) const;
@@ -102,7 +105,8 @@ public: // wrap items
 
 private:
   void selectAll(bool v=true);
-
+  MouseActions* mouseActions() { assert(_mouseActions); return _mouseActions; }
+  SchematicActions* _mouseActions;
 protected:
 	SchematicDoc* doc();
 	SchematicDoc const* doc() const;

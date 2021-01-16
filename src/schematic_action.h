@@ -22,7 +22,7 @@ class SchematicDoc;
 // merge into scene altogether?
 class SchematicActions : public MouseActions{
 public:
-	explicit SchematicActions(SchematicDoc& d);
+	explicit SchematicActions(SchematicScene* d);
 	~SchematicActions();
 
 private: // MouseActions

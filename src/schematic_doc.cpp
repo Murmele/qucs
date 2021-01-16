@@ -45,12 +45,8 @@ SchematicDoc::SchematicDoc(QucsApp* App_/*BUG?*/, const QString& Name_, QWidget*
   }
   // ...........................................................
 
-  _mouseActions = new SchematicActions(*this);
-  _undoStack = new QUndoStack();
 
-//  what is the viewport, and where is it initialised?
-  assert(viewport());
-  viewport()->installEventFilter(_mouseActions);
+  _undoStack = new QUndoStack();
 
   // ...........................................................
   GridX  = GridY  = 10;

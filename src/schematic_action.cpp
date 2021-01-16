@@ -911,7 +911,7 @@ QUndoCommand* MouseActionSelect::release_left(QEvent *e)
 } // select::release
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
-SchematicActions::SchematicActions(SchematicDoc& ctx)
+SchematicActions::SchematicActions(SchematicScene *ctx)
   : MouseActions(ctx)
 {itested();
 

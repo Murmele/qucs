@@ -210,7 +210,7 @@ class MouseActions : public QObject {
 public:
   typedef QList<ElementGraphics*> EGPList;
 public:
-  MouseActions(QucsDoc&);
+  MouseActions(SchematicScene *);
   virtual ~MouseActions();
 
   void setPainter(SchematicDoc*);

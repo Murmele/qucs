@@ -25,7 +25,6 @@
 #include "schematic_scene.h"
 #include "schematic_model.h"
 #include "schematic_lang.h"
-#include "schematic_action.h"
 #include "qt_compat.h"
 
 #include <QGraphicsView>
@@ -45,14 +44,10 @@ class QMouseEvent;
 class QDragEnterEvent;
 class QPainter;
 class QUndoCommand;
-class MouseAction;
 class SimProcess;
 
 class SchematicDoc;
-class MouseActions;
 typedef bool (SchematicDoc::*pToggleFunc) ();
-typedef void (MouseActions::*pMouseFunc) (SchematicDoc*, QMouseEvent*);
-typedef void (MouseActions::*pMouseFunc2) (SchematicDoc*, QMouseEvent*);
 
 // digital signal data
 struct DigSignal {
@@ -541,11 +536,6 @@ public:
 	bool handleMouseActions(QEvent* e);
 private:
   bool performToggleAction(bool, QAction*, pToggleFunc, pMouseFunc, pMouseFunc2); // this is nuts.
-
-  SchematicActions* _mouseActions; //needed? no. FIXME
-  MouseActions* mouseActions() override { assert(_mouseActions); return _mouseActions; }
-  SchematicActions& schematicActions() { assert(_mouseActions); return *_mouseActions; }
-//  MouseAction* mouseAction(); QucsDoc
 
   void setDrawn(bool b=true){mouseActions()->setDrawn(b);}
   QUndoStack* undoStack() override{ return _undoStack; }

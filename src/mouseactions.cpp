@@ -55,7 +55,7 @@ void MouseAction::sceneRemoveItem(ElementGraphics* x)
 QAction *formerAction;   // remember action before drag n'drop etc.
 
 // only mouse actions? how about undoable keyboard actions?
-MouseActions::MouseActions(QucsDoc& d)
+MouseActions::MouseActions(SchematicScene* d)
   : _doc(d)
 {itested();
   //selElem  = 0;  // no component/diagram is selected

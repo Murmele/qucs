@@ -14,6 +14,7 @@
 #include "schematic_scene.h"
 #include "schematic_doc.h"
 #include "qt_compat.h"
+#include "schematic_action.h"
 
 #include <QFileInfo>
 #include <QGraphicsSceneDragDropEvent>
@@ -93,8 +94,10 @@ Marker* marker(QGraphicsItem* g)
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
 SchematicScene::SchematicScene(QObject *parent)
-  : QGraphicsScene(parent)
+  : QGraphicsScene(parent), _mouseActions(new SchematicActions(this))
 {
+      installEventFilter(_mouseActions);
+
 }
 /*--------------------------------------------------------------------------*/
 SchematicDoc* SchematicScene::doc()
@@ -242,8 +245,16 @@ bool SchematicScene::itemEvent(QEvent* e)
 		return false;
 	}else{
 		trace1("scene::itemEvent", e->type());
-		return doc()->handleMouseActions(e);
+        return handleMouseActions(e);
 	}
+}
+
+bool SchematicScene::handleMouseActions(QEvent* e)
+{
+    if (e->isAccepted())
+        return false;
+    assert(mouseActions());
+    return mouseActions()->handle(e);
 }
 
 //
