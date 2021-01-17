@@ -134,6 +134,7 @@ void QucsDoc::setActiveAction(MouseAction* a)
 MouseActionsHandler const* QucsDoc::mouseActions() const
 { untested();
     auto ma = const_cast<MouseActionsHandler*>(mouseActions());
+    assert(ma);
 	return ma;
 }
 

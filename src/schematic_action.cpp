@@ -389,7 +389,7 @@ private:
 	cmd* rotate(QEvent*);
 
 private:
-	ElementGraphics* _gfx;
+    ElementGraphics* _gfx{nullptr};
 	Element const* _proto;
 };
 /*--------------------------------------------------------------------------*/
@@ -997,7 +997,8 @@ QRegExpValidator Val_CompProp(Expr_CompProp, 0);
 // forward to mouseActions... TODO rearrange.
 void SchematicDoc::actionInsertGround(QAction* sender)
 { untested();
-    possiblyToggleAction(schematicActions().maInsertGround, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    possiblyToggleAction(actions->maInsertGround, sender);
 }
 
 void SchematicDoc::setDrawn(bool b){
@@ -1184,10 +1185,16 @@ void SchematicDoc::actionEditPaste(QAction* sender)
 #endif
 }
 
+MouseActionsHandler* SchematicDoc::mouseActions() {
+    return scene()->mouseActions();
+}
+
 void SchematicDoc::actionSelectElement(QObject*e)
 { untested();
-  //schematicActions().maInsertElement->activate(e);
-  //possiblyToggleAction(schematicActions().maInsertElement, nullptr);
+  auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+  assert(actions);
+  actions->maInsertElement->activate(e);
+  possiblyToggleAction(actions->maInsertElement, nullptr);
 }
 
 // is this still in use?
