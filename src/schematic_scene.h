@@ -40,6 +40,11 @@ class SchematicDoc;
 class SchematicModel;
 
 // TODO: merge schematic mouse actions into this.
+/*!
+ * \brief The SchematicScene class
+ * Shows the content of the schematic. This scene set
+ * in the \p SchematicDoc
+ */
 class SchematicScene : public QGraphicsScene
 {
 Q_OBJECT
