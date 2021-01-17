@@ -11,17 +11,9 @@
 #include <QMimeData> //bug
 QUndoCommand* MouseAction::handle(QEvent* e)
 {itested();
-
-    if (e->isAccepted())
-    {
-        trace0("MouseAction::handle: event was already accepted.");
-    }
-//  {
-//    // pass to other places unless accepted somewhere else.
-//    // assert(is_ignored) instead!
-//    e->ignore();
-//  }
   assert(e);
+
+  trace1("MouseAction::handle: event type:", e->type());
   auto* m = prechecked_cast<QGraphicsSceneMouseEvent*>(e);
 //  auto* s = prechecked_cast<QGraphicsSceneEvent*>(e);
   auto a = ComponentWidget::itemMimeType();

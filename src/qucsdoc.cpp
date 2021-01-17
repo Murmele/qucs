@@ -146,39 +146,39 @@ MouseActionsHandler* QucsDoc::mouseActions()
 // and deal with undoable commands.
 // https://www.walletfox.com/course/qundocommandexample.php?
 // https://stackoverflow.com/questions/32973326/qgraphicsscene-how-to-map-item-movements-into-qundocommand
-//void QucsDoc::possiblyToggleAction(MouseAction* a, QAction* sender)
-//{
-//	QUndoCommand* cmd = nullptr;
-//	assert(a);
-//	if(!sender){ untested();
-//		setActiveAction(nullptr);
-//		// cmd = a->activate(sender);
-//		setActiveAction(a);
-//	}else if(!sender->isCheckable()){ untested();
-//		cmd = a->activate(sender);
-//	}else if(sender->isChecked()){itested();
-//		cmd = a->activate(sender);
+void QucsDoc::possiblyToggleAction(MouseAction* a, QAction* sender)
+{
+    QUndoCommand* cmd = nullptr;
+    assert(a);
+    if(!sender){ untested();
+        setActiveAction(nullptr);
+        // cmd = a->activate(sender);
+        setActiveAction(a);
+    }else if(!sender->isCheckable()){ untested();
+        cmd = a->activate(sender);
+    }else if(sender->isChecked()){itested();
+        cmd = a->activate(sender);
 
-//		if(cmd){itested();
-//			sender->blockSignals(true);
-//			sender->setChecked(false);
-//			sender->blockSignals(false);
-//			// possible 'delete' after select.
-//			// don't do anything else
-//			a->deactivate();
-//		}else{itested();
-//			// sender->setChecked(true); // assert?
-//			setActiveAction(a);
-//		}
-//	}else{itested();
-//		setActiveAction(nullptr);
-//	}
+        if(cmd){itested();
+            sender->blockSignals(true);
+            sender->setChecked(false);
+            sender->blockSignals(false);
+            // possible 'delete' after select.
+            // don't do anything else
+            a->deactivate();
+        }else{itested();
+            // sender->setChecked(true); // assert?
+            setActiveAction(a);
+        }
+    }else{itested();
+        setActiveAction(nullptr);
+    }
 
-//	if(cmd){itested();
-//		executeCommand(cmd);
-//	}else{itested();
-//	}
-//}
+    if(cmd){itested();
+        executeCommand(cmd);
+    }else{itested();
+    }
+}
 /* -------------------------------------------------------------------------------- */
 // maybe this only works for SchematicDoc.
 // SchematicDoc has input modes coupled to "MouseActionsHandler" that deal with user input.

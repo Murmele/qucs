@@ -132,7 +132,7 @@ public: // actions: These somehow correspond to buttons.
 	virtual void slotSimulate(); // why "slot"? maybe later.
 	virtual void slotDCbias(); // why "slot"? maybe later.
 
-	//void possiblyToggleAction(MouseAction* a, QAction* sender);
+	void possiblyToggleAction(MouseAction* a, QAction* sender);
 	MouseAction const* activeAction() const;
 
 	CommonData* qucsData(std::string const& key);

@@ -997,7 +997,7 @@ QRegExpValidator Val_CompProp(Expr_CompProp, 0);
 // forward to mouseActions... TODO rearrange.
 void SchematicDoc::actionInsertGround(QAction* sender)
 { untested();
-    //possiblyToggleAction(schematicActions().maInsertGround, sender);
+    possiblyToggleAction(schematicActions().maInsertGround, sender);
 }
 
 void SchematicDoc::setDrawn(bool b){
