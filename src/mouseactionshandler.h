@@ -34,39 +34,9 @@ public:
   MouseActionsHandler(QucsDoc &);
   virtual ~MouseActionsHandler();
 
-#if 0 //gone now?
-private:
-public: // BUG? called from MouseAction.
-  void Set1(QMouseEvent*, SchematicDoc*ignore=nullptr);
-  void Set2(QMouseEvent*, SchematicDoc*ignore=nullptr);
-  void Set3(QMouseEvent*, SchematicDoc*ignore=nullptr);
-public: // BUG
-  int MAx1, MAy1, MAx2, MAy2;
-  int MAx3, MAy3;
-private:
-  QList<ElementGraphics*> movingElements;
 public:
-  int movingRotated;
-#endif
-
-  // menu appearing by right mouse button click on component
-  QMenu *ComponentMenu;
-
-private:
-  // former SchematicDoc::select*
-  // but that does not work, because ElementMouseAction lives here.
-  // (does it matter?)
-public:
-  // Component* selectCompText(SchematicDoc*, int, int, int&, int&);
-//  void     deselectElements(ElementMouseAction);
-
-public: // really?
   QucsDoc& doc() const;
   void updateViewport();
-
-public:
-  // obsolete
-//  void rightPressMenu(QMouseEvent*);
 
   bool eventFilter(QObject *obj, QEvent *event);
   /*!
@@ -75,7 +45,18 @@ public:
    * \return
    */
   virtual bool handle(QEvent*);
+  /*!
+   * \brief activeAction
+   * Returns the currently active action which is handled when handle()
+   * is called
+   * \return
+   */
   MouseAction* activeAction(){ return _maCurrent; }
+  /*!
+   * \brief setActive
+   * Set new mouse action as active. So when any mouse event occurs, the mouse action \p a gets it
+   * \param a New active mouse action
+   */
   void setActive(MouseAction* a);
   void undo();
   void redo();
@@ -96,8 +77,6 @@ protected:
    * This object stores the current action, because only one action can be active at the time.
    */
   MouseAction* _maCurrent;
-private:
-  // QUndoStack* _undoStack; // Doc
 private:
   QucsDoc& mDoc;
 }; // MouseActions

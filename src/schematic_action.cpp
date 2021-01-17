@@ -22,6 +22,7 @@
 #include <QUndoCommand>
 #include <QGraphicsSceneEvent>
 #include <QGraphicsItem>
+#include <QMenu>
 
 #include "schematic_doc.h"
 #include "qucs.h"
@@ -952,6 +953,16 @@ SchematicActions::SchematicActions(SchematicScene* ctx)
 	// this was in App previously, and scattered across a couple of pointer hacks.
 	// possibly initialised to "select". recheck.
 	_maCurrent = maSelect;
+
+    //selElem  = 0;  // no component/diagram is selected
+    //focusElement.clear(); //element being interacted with mouse
+
+    // ...............................................................
+    // initialize menu appearing by right mouse button click on component
+    ComponentMenu = new QMenu();
+    // focusMEvent   = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0),
+    //                 Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+
 }
 /*--------------------------------------------------------------------------*/
 SchematicActions::~SchematicActions()
@@ -966,6 +977,9 @@ SchematicActions::~SchematicActions()
 	delete maSelect;
 	delete maWire;
 	delete maZoomIn;
+
+    delete ComponentMenu;
+  //  delete focusMEvent;
 }
 /*--------------------------------------------------------------------------*/
 const SchematicScene* SchematicActions::scene() const

@@ -27,6 +27,35 @@ public:
 private: // MouseActions
 	// void handle(QEvent*) override;
 
+#if 0 //gone now?
+private:
+public: // BUG? called from MouseAction.
+  void Set1(QMouseEvent*, SchematicDoc*ignore=nullptr);
+  void Set2(QMouseEvent*, SchematicDoc*ignore=nullptr);
+  void Set3(QMouseEvent*, SchematicDoc*ignore=nullptr);
+public: // BUG
+  int MAx1, MAy1, MAx2, MAy2;
+  int MAx3, MAy3;
+private:
+  QList<ElementGraphics*> movingElements;
+public:
+  int movingRotated;
+#endif
+
+  // menu appearing by right mouse button click on component
+  QMenu *ComponentMenu;
+
+private:
+  // former SchematicDoc::select*
+  // but that does not work, because ElementMouseAction lives here.
+  // (does it matter?)
+public:
+  // Component* selectCompText(SchematicDoc*, int, int, int&, int&);
+//  void     deselectElements(ElementMouseAction);
+public:
+  // obsolete
+//  void rightPressMenu(QMouseEvent*);
+
 protected: // Doc stuff
 	SchematicDoc* doc(); // TODO: scene!!
 	SchematicScene const* scene()const;

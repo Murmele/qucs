@@ -7,7 +7,6 @@
 #include "QGraphicsSceneMouseEvent"
 #include <QApplication>
 #include <QClipboard>
-#include <QMenu>
 
 
 void MouseActionsHandler::updateViewport()
@@ -25,10 +24,9 @@ QucsDoc& MouseActionsHandler::doc() const
   return mDoc;
 }
 
-// TODO: move to schematic_doc or _scene
-// what does it return?
 bool MouseActionsHandler::handle(QEvent*e)
 {itested();
+    LOG() << "Hallo" << VAR(e->type());
     QUndoCommand* c=nullptr;
     if(_maCurrent){itested();
     // creates a new undo command
@@ -50,26 +48,14 @@ bool MouseActionsHandler::executeCommand(QUndoCommand* c)
   return mDoc.pushUndoStack(c);
 }
 
-// only mouse actions? how about undoable keyboard actions?
 MouseActionsHandler::MouseActionsHandler(QucsDoc &d) :
     mDoc(d)
 {
     itested();
-  //selElem  = 0;  // no component/diagram is selected
-  //focusElement.clear(); //element being interacted with mouse
-
-  // ...............................................................
-  // initialize menu appearing by right mouse button click on component
-  ComponentMenu = new QMenu();
-  // focusMEvent   = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0),
-  //                 Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-
 }
 
 MouseActionsHandler::~MouseActionsHandler()
 {itested();
-  delete ComponentMenu;
-//  delete focusMEvent;
 }
 void MouseActionsHandler::setActive(MouseAction* a)
 {
@@ -83,6 +69,7 @@ void MouseActionsHandler::setActive(MouseAction* a)
 // not sure why this is needed
 bool MouseActionsHandler::eventFilter(QObject *, QEvent *e)
 {
+    untested();
   if(e->isAccepted()){itested();
   }else{itested();
     // drop event?
