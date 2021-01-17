@@ -124,8 +124,6 @@ SchematicDoc::SchematicDoc(QucsApp* App_/*BUG?*/, const QString& Name_, QWidget*
 SchematicDoc::~SchematicDoc()
 {itested();
 	delete _root;
-	delete _undoStack;
-	delete _mouseActions;
 //	delete Scene; ???
 }
 /*--------------------------------------------------------------------------*/
@@ -467,6 +465,16 @@ float SchematicDoc::zoom(float)
 	return 0;
 }
 
+bool SchematicDoc::pushUndoStack(QUndoCommand* cmd)
+{
+    if (QucsDoc::pushUndoStack(cmd)) {
+        emit undoStackUpdated(_undoStack->canUndo(), _undoStack->canRedo());
+        return true;
+    }
+
+    return false;
+}
+
 
 
 // why is this here and not in SchematicScene?
@@ -514,7 +522,6 @@ void SchematicDoc::mouseMoveEvent(QMouseEvent *e)
 // getting here *after* the event has passed through Scene
 bool SchematicDoc::event(QEvent* e)
 {itested();
-	assert(mouseActions());
 	trace2("SchematicDoc::event", e->type(), e->isAccepted());
 //	e->ignore();
 
@@ -536,14 +543,6 @@ bool SchematicDoc::event(QEvent* e)
 
 //	mouseActions()->handle(e); // try scene
 	return a;
-}
-
-bool SchematicDoc::handleMouseActions(QEvent* e)
-{
-    if (e->isAccepted())
-        return false;
-	assert(mouseActions());
-	return mouseActions()->handle(e);
 }
 
 #if 0

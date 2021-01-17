@@ -15,13 +15,17 @@
  *
  */
 /*--------------------------------------------------------------------------*/
+#include "mouseactions.h"
 
 #include <QEvent>
 #include <QUndoCommand>
 
+class MouseActionsHandler;
+class QGraphicsSceneMouseEvent;
+
 class MouseActionZoomIn : public MouseAction{
 public:
-	explicit MouseActionZoomIn(MouseActions& ctx)
+	explicit MouseActionZoomIn(MouseActionsHandler& ctx)
 		: MouseAction(ctx) {itested();
 	}
 private: // MouseAction

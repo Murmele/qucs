@@ -114,15 +114,6 @@ void MouseAction::updateViewport()
 {itested();
   ctx().updateViewport(); // use a signal?
 }
-void MouseActionsHandler::updateViewport()
-{itested();
-
-  SchematicDoc* s = dynamic_cast<SchematicDoc*>(&doc());
-  if(s){
-    s->updateViewport(); // use a signal?
-  }else{ untested();
-  }
-}
 
 QUndoCommand* MouseAction::activate(QObject* sender)
 {itested();

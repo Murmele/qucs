@@ -99,6 +99,10 @@ SchematicScene::SchematicScene(QObject *parent)
       installEventFilter(_mouseActions);
 
 }
+
+SchematicScene::~SchematicScene () {
+    delete _mouseActions;
+};
 /*--------------------------------------------------------------------------*/
 SchematicDoc* SchematicScene::doc()
 {
@@ -110,10 +114,6 @@ SchematicDoc const* SchematicScene::doc() const
 {
 	assert(parent());
 	return dynamic_cast<SchematicDoc const*>(parent());
-}
-/*--------------------------------------------------------------------------*/
-SchematicScene::~SchematicScene()
-{
 }
 /*--------------------------------------------------------------------------*/
 QPoint SchematicScene::snapToGrid(QPointF const& p) const
@@ -276,7 +276,7 @@ bool SchematicScene::event(QEvent* e)
 	}else{ itested();
 	}
 
-	doc()->handleMouseActions(e);
+    handleMouseActions(e);
 	bool r = false;
     if (e->type() == QEvent::MetaCall)
     {

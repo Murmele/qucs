@@ -30,6 +30,7 @@ CPP_SRC = \
 	module.cpp \
 	mouseaction.cpp \
 	mouseactions.cpp \
+	mouseactionshandler.cpp \
 	netlist.cpp \
 	node.cpp \
 	nodelabel.cpp \

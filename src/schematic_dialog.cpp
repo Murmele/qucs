@@ -15,7 +15,8 @@
 /*--------------------------------------------------------------------------*/
 void SchematicDialog::execute(QUndoCommand* c)
 {
-	Doc->executeCommand(c);
+    if (!Doc->executeCommand(c))
+        delete c;
 }
 /*--------------------------------------------------------------------------*/
 SchematicDialog::SchematicDialog(QucsDoc* d)

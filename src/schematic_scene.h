@@ -33,12 +33,14 @@
 #include "qt_compat.h"
 #include "viewpainter.h"
 
+#include "schematic_action.h"
+
 class Element;
 class ElementGraphics;
 class Node;
 class SchematicDoc;
 class SchematicModel;
-class MouseActions;
+class MouseActionsHandler;
 class SchematicActions;
 
 // TODO: merge schematic mouse actions into this.
@@ -52,7 +54,7 @@ class SchematicScene : public QGraphicsScene
 Q_OBJECT
 public:
   SchematicScene (QObject* parent);
-  virtual ~SchematicScene ();
+  ~SchematicScene ();
 
 #if 0
 //  void addItem(ElementGraphics*);
@@ -66,6 +68,9 @@ public:
 
   void attachToModel(Element*);
   Element* detachFromModel(Element*);
+
+  SchematicDoc* doc();
+  SchematicDoc const* doc() const;
 
 private:
   SchematicModel* scope();
@@ -105,11 +110,8 @@ public: // wrap items
 
 private:
   void selectAll(bool v=true);
-  MouseActions* mouseActions() { assert(_mouseActions); return _mouseActions; }
-  SchematicActions* _mouseActions;
-protected:
-	SchematicDoc* doc();
-	SchematicDoc const* doc() const;
+  MouseActionsHandler* mouseActions() { assert(_mouseActions); return _mouseActions; }
+  SchematicActions* _mouseActions{nullptr};
 
 private:
   bool event(QEvent* e) override;

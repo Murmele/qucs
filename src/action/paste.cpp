@@ -14,6 +14,7 @@
 #include <QClipboard>
 #include "docfmt.h"
 #include "sckt_base.h"
+#include "mouseactions.h"
 
 static const std::string cnp_lang = "leg_sch";
 /*--------------------------------------------------------------------------*/
@@ -61,7 +62,7 @@ public:
 /*--------------------------------------------------------------------------*/
 class MouseActionPaste : public MouseAction{
 public:
-	explicit MouseActionPaste(MouseActions& ctx, Element const* proto=nullptr)
+	explicit MouseActionPaste(MouseActionsHandler& ctx, Element const* proto=nullptr)
 		: MouseAction(ctx), _gfx(nullptr), _proto(proto)
   	{}
 private:

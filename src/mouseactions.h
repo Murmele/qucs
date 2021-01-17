@@ -23,7 +23,7 @@
 #include <QAction>
 
 class Label;
-class MouseActions;
+class MouseActionsHandler;
 class QAction;
 class QMenu;
 class QMouseEvent;
@@ -34,12 +34,17 @@ class Schematic;
 // something happens to the mouse on a schematic
 // BUG: wrong file. schematic_mouse.h maybe?
 // FIXME: why Mouse? User??
+/*!
+ * \brief The MouseAction class
+ * This is the base MouseAction class. Every mouse action is derived from this one.
+ *
+ */
 class MouseAction {
 public:
 	typedef QUndoCommand cmd;
 protected:
 public:
-	explicit MouseAction(MouseActions& ctx)
+	explicit MouseAction(MouseActionsHandler& ctx)
 		:_ctx(ctx), _sender(nullptr){}
 	MouseAction(MouseAction const&) = delete;
 
@@ -47,6 +52,12 @@ public:
 	virtual ~MouseAction(){}
 
 public:
+	/*!
+	 * \brief handle
+	 * Handles the current event and returns a new Undo command if event is handled in this function
+	 * The Undo command must be freed when not used
+	 * \return
+	 */
 	cmd* handle(QEvent*);
 
 	virtual cmd* activate(QObject* sender);
@@ -66,7 +77,7 @@ public:
 	void uncheck();
 
 protected:
-	MouseActions& ctx(){return _ctx;}
+	MouseActionsHandler& ctx(){return _ctx;}
 
 protected: // bug. private
 	SchematicDoc const& doc() const;
@@ -95,7 +106,7 @@ protected: // UC
 	Node const* nodeAt(pos_t) const;
 
 private:
-	MouseActions& _ctx;
+	MouseActionsHandler& _ctx;
 	QAction* _sender;
 };
 
@@ -202,122 +213,6 @@ Label* label(ElementMouseAction e);
 
 
 extern QAction *formerAction;
-
-// must be QObject so it can receive/filter events
-// // merge into schematic_scene?
-class MouseActionsHandler : public QObject {
-	Q_OBJECT
-public:
-  typedef QList<ElementGraphics*> EGPList;
-public:
-  MouseActionsHandler(SchematicScene *);
-  virtual ~MouseActionsHandler();
-
-  void setPainter(SchematicDoc*);
-  bool pasteElements(SchematicDoc*);
-  void editElement(SchematicDoc*, QMouseEvent*);
-  void editLabel(SchematicDoc*, WireLabel*);
-
-  void setDrawn(bool b=true){_drawn = b;}
-  bool wasDrawn() const{return _drawn;}
-
-#if 0 //gone now?
-private:
-public: // BUG? called from MouseAction.
-  void Set1(QMouseEvent*, SchematicDoc*ignore=nullptr);
-  void Set2(QMouseEvent*, SchematicDoc*ignore=nullptr);
-  void Set3(QMouseEvent*, SchematicDoc*ignore=nullptr);
-public: // BUG
-  int MAx1, MAy1, MAx2, MAy2;
-  int MAx3, MAy3;
-private:
-  QList<ElementGraphics*> movingElements;
-public:
-  int movingRotated;
-#endif
-
-  // menu appearing by right mouse button click on component
-  QMenu *ComponentMenu;
-
-private:
-  // former Schematic::select*
-  // but that does not work, because ElementMouseAction lives here.
-  // (does it matter?)
-public:
-  // Component* selectCompText(SchematicDoc*, int, int, int&, int&);
-//  void     deselectElements(ElementMouseAction);
-
-public: // really?
-  QucsDoc& doc();
-  void updateViewport();
-
-public: // TODO. move into mouse actions
-#define Schematic SchematicDoc
-//  void MMoveSelect(Schematic*, QMouseEvent*);
-//  void MMoveElement(Schematic*, QMouseEvent*);
-//  void MMovePaste(Schematic*, QMouseEvent*);
-  void MMoveLabel(Schematic*, QMouseEvent*);
-  void MMoveMarker(Schematic*, QMouseEvent*);
-  void MMoveMirrorY(Schematic*, QMouseEvent*);
-  void MMoveMirrorX(Schematic*, QMouseEvent*);
-  void MMoveRotate(Schematic*, QMouseEvent*);
-  void MMoveActivate(Schematic*, QMouseEvent*);
-  void MMoveOnGrid(Schematic*, QMouseEvent*);
-  void MMoveResizePainting(Schematic*, QMouseEvent*);
-  void MMoveMoveText(Schematic*, QMouseEvent*);
-  void MMoveMoveTextB(Schematic*, QMouseEvent*);
-  void MMoveZoomIn(Schematic*, QMouseEvent*);
-  void MMoveScrollBar(Schematic*, QMouseEvent*);
-
-  void MPressSelect(QMouseEvent*);
-//  void MPressActivate(Schematic*, QMouseEvent*);
-  void MPressMirrorX(Schematic*, QMouseEvent*);
-  void MPressMirrorY(Schematic*, QMouseEvent*);
-  void MPressRotate(Schematic*, QMouseEvent*);
-  void MPressLabel(Schematic*, QMouseEvent*);
-  void MPressPainting(Schematic*, QMouseEvent*);
-  void MPressMarker(Schematic*, QMouseEvent*);
-  void MPressOnGrid(Schematic*, QMouseEvent*);
-  void MPressMoveText(Schematic*, QMouseEvent*);
-  void MPressZoomIn(Schematic*, QMouseEvent*);
-
-  void MDoubleClickSelect(Schematic*, QMouseEvent*);
-  void MDoubleClickWire2(Schematic*, QMouseEvent*);
-
-  void MReleaseSelect(Schematic*, QMouseEvent*);
-  void MReleaseSelect2(Schematic*, QMouseEvent*);
-  void MReleaseActivate(Schematic*, QMouseEvent*);
-  void MReleaseMoving(Schematic*, QMouseEvent*);
-  void MReleaseResizeDiagram(Schematic*, QMouseEvent*);
-  void MReleasePaste(Schematic*, QMouseEvent*);
-  void MReleaseResizePainting(Schematic*, QMouseEvent*);
-  void MReleaseMoveText(Schematic*, QMouseEvent*);
-  void MReleaseZoomIn(Schematic*, QMouseEvent*);
-
-  // obsolete
-//  void rightPressMenu(QMouseEvent*);
-#undef Schematic
-
-  bool eventFilter(QObject *obj, QEvent *event);
-  virtual bool handle(QEvent*);
-  void executeCommand(QUndoCommand* c);
-  MouseAction* activeAction(){ return _maCurrent; }
-  void setActive(MouseAction* a);
-
-public:
-  void undo();
-  void redo();
-
-protected:
-	MouseAction* _maCurrent;
-private:
-	// QUndoStack* _undoStack; // Doc
-  bool _drawn;  // indicates whether the scheme element was drawn last time
-private:
-  bool isMoveEqual;
-protected:
-  QucsDoc& _doc;
-}; // MouseActions
 
 class Label;
 

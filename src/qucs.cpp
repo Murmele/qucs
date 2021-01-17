@@ -2834,7 +2834,8 @@ QucsDoc *QucsTabWidget::createEmptySchematic(const QString &name)
   // create a schematic
   QFileInfo Info(name);
   assert(App);
-  QucsDoc *d = new SchematicDoc(App, name, this);
+  SchematicDoc *d = new SchematicDoc(App, name, this);
+  connect(d, &SchematicDoc::undoStackUpdated, App, [=](bool canUndo, bool canRedo){App->undo->setEnabled(canUndo); App->redo->setEnabled(canRedo);});
   QWidget* w = dynamic_cast<QWidget*>(d);
   assert(w);
   int i = addTab(w, QPixmap(":/bitmaps/empty.xpm"), name.isEmpty() ? QObject::tr("untitled") : Info.fileName());

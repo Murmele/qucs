@@ -62,29 +62,35 @@ QucsDoc::~QucsDoc()
 	for(auto i : _simulators){
 		delete i.second;
 	}
+    delete _undoStack;
 //	assert(_simulators == 0);
 }
 
-// really?!
-void QucsDoc::undo()
-{
-	QUndoStack* u = undoStack();
-	if(u){itested();
-		u->undo();
-		assert(_app);
-		assert(_app->redo);
-		_app->redo->setEnabled(true); // yikes.
-	}else{ untested();
-	}
+bool QucsDoc::pushUndoStack(QUndoCommand* cmd) {
+    if (!_undoStack || !cmd)
+        return false;
+
+    _undoStack->push(cmd);
+    return true;
 }
 
-void QucsDoc::redo()
+// really?!
+bool QucsDoc::undo()
 {
-	QUndoStack* u = undoStack();
-	if(u){
-		u->redo();
-	}else{
-	}
+    if (!_undoStack)
+        return false;
+
+    _undoStack->undo();
+    return true;
+}
+
+bool QucsDoc::redo()
+{
+    if (!_undoStack)
+        return false;
+
+    _undoStack->redo();
+    return true;
 }
 
 QString QucsDoc::fileSuffix (const QString& Name)
@@ -140,39 +146,39 @@ MouseActionsHandler* QucsDoc::mouseActions()
 // and deal with undoable commands.
 // https://www.walletfox.com/course/qundocommandexample.php?
 // https://stackoverflow.com/questions/32973326/qgraphicsscene-how-to-map-item-movements-into-qundocommand
-void QucsDoc::possiblyToggleAction(MouseAction* a, QAction* sender)
-{
-	QUndoCommand* cmd = nullptr;
-	assert(a);
-	if(!sender){ untested();
-		setActiveAction(nullptr);
-		// cmd = a->activate(sender);
-		setActiveAction(a);
-	}else if(!sender->isCheckable()){ untested();
-		cmd = a->activate(sender);
-	}else if(sender->isChecked()){itested();
-		cmd = a->activate(sender);
+//void QucsDoc::possiblyToggleAction(MouseAction* a, QAction* sender)
+//{
+//	QUndoCommand* cmd = nullptr;
+//	assert(a);
+//	if(!sender){ untested();
+//		setActiveAction(nullptr);
+//		// cmd = a->activate(sender);
+//		setActiveAction(a);
+//	}else if(!sender->isCheckable()){ untested();
+//		cmd = a->activate(sender);
+//	}else if(sender->isChecked()){itested();
+//		cmd = a->activate(sender);
 
-		if(cmd){itested();
-			sender->blockSignals(true);
-			sender->setChecked(false);
-			sender->blockSignals(false);
-			// possible 'delete' after select.
-			// don't do anything else
-			a->deactivate();
-		}else{itested();
-			// sender->setChecked(true); // assert?
-			setActiveAction(a);
-		}
-	}else{itested();
-		setActiveAction(nullptr);
-	}
+//		if(cmd){itested();
+//			sender->blockSignals(true);
+//			sender->setChecked(false);
+//			sender->blockSignals(false);
+//			// possible 'delete' after select.
+//			// don't do anything else
+//			a->deactivate();
+//		}else{itested();
+//			// sender->setChecked(true); // assert?
+//			setActiveAction(a);
+//		}
+//	}else{itested();
+//		setActiveAction(nullptr);
+//	}
 
-	if(cmd){itested();
-		executeCommand(cmd);
-	}else{itested();
-	}
-}
+//	if(cmd){itested();
+//		executeCommand(cmd);
+//	}else{itested();
+//	}
+//}
 /* -------------------------------------------------------------------------------- */
 // maybe this only works for SchematicDoc.
 // SchematicDoc has input modes coupled to "MouseActionsHandler" that deal with user input.
@@ -192,10 +198,13 @@ MouseAction const* QucsDoc::activeAction() const
 	return d->activeAction();
 }
 /* -------------------------------------------------------------------------------- */
-void QucsDoc::executeCommand(QUndoCommand* c)
+bool QucsDoc::executeCommand(QUndoCommand* c)
 {
+    assert(c);
+
 	if(mouseActions()){itested();
-		mouseActions()->executeCommand(c);
+        if (!mouseActions()->executeCommand(c))
+            return false;
 		// setChanged();
 		if(!DocChanged){
 			emit signalFileChanged(true);
@@ -207,6 +216,8 @@ void QucsDoc::executeCommand(QUndoCommand* c)
 		showBias = -1;   // schematic changed => bias points may be invalid
 	}else{
 	}
+
+    return true;
 }
 /* -------------------------------------------------------------------------------- */
 CommonData* QucsDoc::qucsData(std::string const& /*key*/)

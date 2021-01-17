@@ -105,6 +105,8 @@ public:
 
   float textCorr();
   bool sizeOfFrame(int&, int&);
+
+  bool pushUndoStack(QUndoCommand* cmd) override;
 private: //temporary/obsolete
   void sizeOfAll(int&a, int&b, int&c, int&d){
 	  assert(_model);
@@ -296,7 +298,7 @@ protected:
 
 protected: // these are the overrides that collect mouse actions
            // forward to mouseAction instances to produce UndoActions
-   bool event(QEvent*) override;
+  bool event(QEvent*) override;
    void mouseMoveEvent(QMouseEvent*) override;
 //   void mousePressEvent(QMouseEvent*) override;
 //   void mouseDoubleClickEvent(QMouseEvent*) override;
@@ -533,12 +535,10 @@ private: // QucsDoc overrides, schematic_action.cpp
   void actionInsertGround(QAction*) override;
 
 public:
-	bool handleMouseActions(QEvent* e);
 private:
-  bool performToggleAction(bool, QAction*, pToggleFunc, pMouseFunc, pMouseFunc2); // this is nuts.
+  //bool performToggleAction(bool, QAction*, pToggleFunc, pMouseFunc, pMouseFunc2); // this is nuts.
 
-  void setDrawn(bool b=true){mouseActions()->setDrawn(b);}
-  QUndoStack* undoStack() override{ return _undoStack; }
+  void setDrawn(bool b=true);
 
   SimProcess* simProcess(std::string name);
 
@@ -552,8 +552,10 @@ protected:
   // HACK
   SchematicModel* model() { return _model; }
 
+signals:
+  void undoStackUpdated(bool canUndo, bool canRedo);
+
 public: // need access to SchematicModel. grr
-  friend class MouseActions;
   friend class ImageWriter;
   friend class SchematicScene;
 
@@ -562,7 +564,6 @@ private:
   SchematicModel* _model{nullptr};
   SubcktBase* _main{nullptr};
   CmdEltList _commands;
-  QUndoStack* _undoStack{nullptr};
   std::map<std::string, SimProcess*> _simProcess; // QucsDoc?
 }; // SchematicDocument
 /* -------------------------------------------------------------------------------- */

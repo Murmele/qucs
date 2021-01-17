@@ -30,7 +30,7 @@ class QucsApp;
 class QAction;
 class QPrinter;
 class QPainter;
-class MouseActions;
+class MouseActionsHandler;
 class MouseAction;
 class QUndoStack;
 class QUndoCommand;
@@ -56,6 +56,14 @@ public:
   virtual float zoomBy(float) { return 1.0; };
   virtual void  showAll() {};
   virtual void  showNoZoom() {};
+  /*!
+   * \brief pushUndoStack
+   * Pushes the cmd on the undostack if it is available. If it was not possible to
+   * push the command on the undo stack, the command \p cmd must be deleted manually
+   * \param cmd
+   * \return Returns true if the cmd was pushed successfully, else false
+   */
+  virtual bool pushUndoStack(QUndoCommand* cmd);
 
   static QString fileSuffix (const QString&);
   QString fileSuffix (void);
@@ -63,26 +71,11 @@ public:
   QString fileBase (void);
 
 private:
-  QString DocName;
+
 
 public:
   void setDocName(QString x){ DocName=x; }
   QString docName() const{ return DocName; }
-
-  QString DataSet;     // name of the default dataset
-  QString DataDisplay; // name of the default data display
-  QString Script;
-  QString SimTime;     // used for VHDL simulation, but stored in datadisplay
-  QDateTime lastSaved;
-
-//  float Scale;
-  QucsApp* _app;
-  bool DocChanged;
-  bool SimOpenDpl;   // open data display after simulation ?
-  bool SimRunScript; // run script after simulation ?
-  int  showBias;     // -1=no, 0=calculation running, >0=show DC bias points
-  bool GridOn;
-  int  tmpPosX, tmpPosY;
 
   void installElement(Element const*);
   Element const* find_proto(std::string const& name) const;
@@ -91,8 +84,8 @@ protected:
   Simulator* simulatorInstance(std::string const& which="");
 
 protected: // why not directly connect to undostack slots?!
-  virtual void undo();
-  virtual void redo();
+  virtual bool undo();
+  virtual bool redo();
   virtual void signalFileChanged(bool){incomplete();}
 
 protected:
@@ -139,27 +132,7 @@ public: // actions: These somehow correspond to buttons.
 	virtual void slotSimulate(); // why "slot"? maybe later.
 	virtual void slotDCbias(); // why "slot"? maybe later.
 
-protected: // cleaning up debris
-	QAction* selectAction();
-	virtual MouseActions* mouseActions();
-public:
-	MouseActions const* mouseActions() const;
-	virtual QMouseEvent snapToGrid(QMouseEvent* e) const{
-		assert(e);
-		return QMouseEvent(*e);
-	}
-	void executeCommand(QUndoCommand*);
-private:
-	void setActiveAction(MouseAction* a);
-	MouseAction* activeAction();
-
-public: // hmm
-	virtual QUndoStack* undoStack(){return nullptr;}
-   virtual void updateViewport() {}
-   virtual void reloadGraphs() {} // fix later.
-
-public:
-	void possiblyToggleAction(MouseAction* a, QAction* sender);
+	//void possiblyToggleAction(MouseAction* a, QAction* sender);
 	MouseAction const* activeAction() const;
 
 	CommonData* qucsData(std::string const& key);
@@ -167,15 +140,57 @@ public:
 	void setOwner(QWidget* o){_owner=o;}
 
 	void setParameter(std::string const&, std::string const&);
+	//virtual QUndoStack* undoStack(){return _undoStack;}
+	virtual void updateViewport() {}
+	virtual void reloadGraphs() {} // fix later.
 
+	MouseActionsHandler const* mouseActions() const;
+	virtual QMouseEvent snapToGrid(QMouseEvent* e) const{
+		assert(e);
+		return QMouseEvent(*e);
+	}
+	/*!
+	 * \brief executeCommand
+	 * Executes the undo command
+	 * If the command was not executed successfully, the undo command must be deleted manually
+	 * \return Returns true if the command was executed successfully, otherwise false.
+	 */
+	bool executeCommand(QUndoCommand*);
+
+protected: // cleaning up debris
+	QAction* selectAction();
+	virtual MouseActionsHandler* mouseActions();
+private:
+	void setActiveAction(MouseAction* a);
+	MouseAction* activeAction();
+
+
+public:
+	QString DataSet;     // name of the default dataset
+	QString DataDisplay; // name of the default data display
+	QString Script;
+	QString SimTime;     // used for VHDL simulation, but stored in datadisplay
+	QDateTime lastSaved;
+
+	//  float Scale;
+	QucsApp* _app{nullptr};
+	bool DocChanged;
+	bool SimOpenDpl;   // open data display after simulation ?
+	bool SimRunScript; // run script after simulation ?
+	int  showBias;     // -1=no, 0=calculation running, >0=show DC bias points
+	bool GridOn;
+	int  tmpPosX, tmpPosY;
+protected:
+	QUndoStack* _undoStack{nullptr};
 private:
 	friend class Simulator;
 
 	std::map<std::string, Element const*> _protos;
 	std::map<std::string, CommonData*> _data;
 	std::map<std::string, Simulator*> _simulators;
+	QString DocName;
 
-	QWidget* _owner;
+	QWidget* _owner{nullptr};
 }; // QucsDoc
 
 #endif
