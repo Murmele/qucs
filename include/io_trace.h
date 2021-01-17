@@ -44,6 +44,18 @@
 /*--------------------------------------------------------------------------*/
 #ifdef DO_TRACE
 
+#include "Logging/debuglogger.h"
+#define SHOW_FILE_NAME 1
+
+// Usage: LOG() << "Message"
+#if SHOW_FILE_NAME == 0
+#define LOG() ErrDebugLogger(__FILE__, __LINE__,__PRETTY_FUNCTION__).get()
+#else
+#define LOG() ErrDebugLogger(nullptr, __PRETTY_FUNCTION__).get()
+#endif
+
+#define VAR(x) #x << "=" << (x) // show argument name and value
+
 #ifdef __cplusplus
 
 #define trace_line() (std::cerr << "@@#\n@#@:" \

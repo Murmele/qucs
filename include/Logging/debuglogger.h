@@ -5,7 +5,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <TCHAR.H>
 
 template<class charT>
 class log_to_cerr : public basic_log_function<charT>
@@ -63,11 +62,11 @@ private:
     static std::string filename_;		
 };
 
-typedef MonoStateFunctor<TCHAR> log_to_file_ex;
-typedef basic_debuglog_stream<TCHAR, log_to_file_ex> FileDebugLoggerEx;
+typedef MonoStateFunctor<char> log_to_file_ex;
+typedef basic_debuglog_stream<char, log_to_file_ex> FileDebugLoggerEx;
 
-typedef basic_debuglog_stream<TCHAR, log_to_file<TCHAR> > FileDebugLogger;
-typedef basic_debuglog_stream<TCHAR, log_to_cerr<TCHAR> > ErrDebugLogger;
+typedef basic_debuglog_stream<char, log_to_file<char> > FileDebugLogger;
+typedef basic_debuglog_stream<char, log_to_cerr<char> > ErrDebugLogger;
 
 //
 // defines for quick access to the debug logger 
@@ -77,9 +76,8 @@ typedef basic_debuglog_stream<TCHAR, log_to_cerr<TCHAR> > ErrDebugLogger;
 // CTXLOG    ... output debug messages with filename, linenumber and context string prefixed
 // LOG       ... output debug messages with filename and linenumber prefixed
 //
-#define RAWLOG() DebugLogger().get()
-#define CTXRAWLOG(text) DebugLogger(text).get()
-#define CTXLOG(text) DebugLogger(text, __FILE__, __LINE__).get()
-#define LOG() ErrDebugLogger(__FILE__, __LINE__).get()
+//#define RAWLOG() DebugLogger().get()
+//#define CTXRAWLOG(text) DebugLogger(text).get()
+//#define CTXLOG(text) DebugLogger(text, __FILE__, __LINE__).get()
 
 #endif 

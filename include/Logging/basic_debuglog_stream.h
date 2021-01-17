@@ -103,13 +103,23 @@ class basic_debuglog_stream : public std::basic_ostream<charT, traits>
     typedef std::basic_ostringstream<charT, traits> stringstream_type;      // shortcut for a stringstream 
 
 public:
+	/*!
+        \brief the default constructor
+        \param file the filename where the debuglogging occured
+        \param line the linenumber where the debuglogging occured
+    */
+    basic_debuglog_stream(const char *file = 0, const char* function = 0)
+        : stream_type(&buf_), file_(file), function(function)
+    {
+        buildContext(); // build the whole context and set it to the streambuffer
+    }
     /*!
         \brief the default constructor
         \param file the filename where the debuglogging occured
         \param line the linenumber where the debuglogging occured
     */
-    basic_debuglog_stream(const char *file = 0, int line = -1)
-        : stream_type(&buf_), file_(file), line_(line)
+    basic_debuglog_stream(const char *file = 0, int line = -1, const char* function=nullptr)
+        : stream_type(&buf_), file_(file), line_(line), function(function)
     {
         buildContext(); // build the whole context and set it to the streambuffer
     }
@@ -173,13 +183,16 @@ private:
             os << "(" << line_ << ")";  // show it in brackets
         if (file_ || line_ >= 0)        // if filename or linenumber given
             os << " : ";                // separate it by a double colon from context or message
+        if (function)
+        	os << function << ":";
         if (!context_.empty())          // if a context string is given
             os << context_ << " : ";    // show it at last separate it by a double colon from the message
         buf_.setContext(os.str());      // set the context to the streambuffer
     }
 
-    const char *file_;					//! name of the sourcefile where the debuglogger was instantiated.
-    const int line_;					//! number of the line in file_ where the debuglogger was instantiated.
+    const char *file_{nullptr};					//! name of the sourcefile where the debuglogger was instantiated.
+    const char* function{nullptr};
+    const int line_{-1};					//! number of the line in file_ where the debuglogger was instantiated.
     string_type context_;				//! additional context for output (after file_ and line_)
     buffer_type buf_;					//! the streambuffer which sends it's content to OutputDebugString
 };
