@@ -114,7 +114,7 @@ void MouseAction::updateViewport()
 {itested();
   ctx().updateViewport(); // use a signal?
 }
-void MouseActions::updateViewport()
+void MouseActionsHandler::updateViewport()
 {itested();
 
   SchematicDoc* s = dynamic_cast<SchematicDoc*>(&doc());

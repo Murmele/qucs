@@ -227,7 +227,7 @@ void QucsApp::initView()
   connect(dock, SIGNAL(visibilityChanged(bool)), SLOT(slotToggleDock(bool)));
 
 #if 0
-  view = new MouseActions(*this);
+  view = new MouseActionsHandler(*this);
 #endif
 
 
@@ -2171,9 +2171,9 @@ void QucsApp::slotOpenContent(const QModelIndex &idx)
     activeAction = select;
     MouseMoveAction = 0;
 #if 0
-    MousePressAction = &MouseActions::MPressSelect;
-    MouseReleaseAction = &MouseActions::MReleaseSelect;
-    MouseDoubleClickAction = &MouseActions::MDoubleClickSelect;
+    MousePressAction = &MouseActionsHandler::MPressSelect;
+    MouseReleaseAction = &MouseActionsHandler::MReleaseSelect;
+    MouseDoubleClickAction = &MouseActionsHandler::MDoubleClickSelect;
 #else
     // MouseAction = actionSelect;
 #endif
@@ -2302,8 +2302,8 @@ void QucsApp::slotSelectSubcircuit(const QModelIndex &idx)
 ///   }else{ untested();
 ///   }
 ///   view->drawn = false;
-  MouseMoveAction = nullptr; // &MouseActions::MMoveElement;
-//  MousePressAction = &MouseActions::MPressElement;
+  MouseMoveAction = nullptr; // &MouseActionsHandler::MMoveElement;
+//  MousePressAction = &MouseActionsHandler::MPressElement;
   incomplete();
   MouseReleaseAction = 0;
   MouseDoubleClickAction = 0;
@@ -2366,9 +2366,9 @@ void QucsApp::switchSchematicDoc (bool SchematicMode)
   // schematic document
   else {itested();
 #if 0
-    MousePressAction = &MouseActions::MPressSelect;
-    MouseReleaseAction = &MouseActions::MReleaseSelect;
-    MouseDoubleClickAction = &MouseActions::MDoubleClickSelect;
+    MousePressAction = &MouseActionsHandler::MPressSelect;
+    MouseReleaseAction = &MouseActionsHandler::MReleaseSelect;
+    MouseDoubleClickAction = &MouseActionsHandler::MDoubleClickSelect;
 #else
     // MouseAction = actionSelect;
 #endif

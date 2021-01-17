@@ -43,7 +43,7 @@
 /*--------------------------------------------------------------------------*/
 class MouseActionSelect : public MouseAction{
 public:
-	explicit MouseActionSelect(MouseActions& ctx)
+    explicit MouseActionSelect(MouseActionsHandler& ctx)
 		: MouseAction(ctx) {}
 
 private: // override
@@ -56,7 +56,7 @@ private: // override
 	cmd* dblclk(QEvent*) override;
 
 #if 0
-private: // rectangles?  // this was in MouseActions. BUG. remove
+private: // rectangles?  // this was in MouseActionsHandler. BUG. remove
 	int MAx1;
 	int MAy1;
 	int MAx2;
@@ -132,7 +132,7 @@ void MouseActionSelect::showSchematicWidget(QWidget* ew, ElementGraphics* gfx)
 template<class CMD>
 class MouseActionSelCmd : public MouseAction{
 public:
-	explicit MouseActionSelCmd(MouseActions& ctx)
+    explicit MouseActionSelCmd(MouseActionsHandler& ctx)
 		: MouseAction(ctx){}
 
 private:
@@ -369,7 +369,7 @@ typedef MouseActionSelCmd<MirrorYaxisSelection> MouseActionMirrorYaxis;
 /*--------------------------------------------------------------------------*/
 class MouseActionNewElement : public MouseAction{
 public:
-	explicit MouseActionNewElement(MouseActions& ctx, Element const* proto=nullptr)
+    explicit MouseActionNewElement(MouseActionsHandler& ctx, Element const* proto=nullptr)
 		: MouseAction(ctx), _gfx(nullptr), _proto(proto)
   	{}
 private:
@@ -579,7 +579,7 @@ QUndoCommand* MouseActionNewElement::press(QEvent* ev)
 #include "action/paste.cpp" // for now.
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
-// was: MouseActions::MMoveSelect
+// was: MouseActionsHandler::MMoveSelect
 QUndoCommand* MouseActionSelect::move(QEvent *)
 {itested();
 	// obsolete?
@@ -591,7 +591,7 @@ QUndoCommand* MouseActionSelect::move(QEvent *)
 	return nullptr;
 }
 /*--------------------------------------------------------------------------*/
-// was: MouseActions::MPressSelect
+// was: MouseActionsHandler::MPressSelect
 QUndoCommand* MouseActionSelect::press(QEvent*)
 {itested();
 
@@ -634,8 +634,8 @@ QUndoCommand* MouseActionSelect::press(QEvent*)
 		incomplete(); // delegate. how?
 #if 0
 		focusElement->Type = isPainting;
-		QucsMain->MouseReleaseAction = &MouseActions::MReleaseResizePainting;
-		QucsMain->MouseMoveAction = &MouseActions::MMoveResizePainting;
+        QucsMain->MouseReleaseAction = &MouseActionsHandler::MReleaseResizePainting;
+        QucsMain->MouseMoveAction = &MouseActionsHandler::MMoveResizePainting;
 		QucsMain->MousePressAction = 0;
 		QucsMain->MouseDoubleClickAction = 0;
 		Doc->grabKeyboard();  // no keyboard inputs during move actions
@@ -672,8 +672,8 @@ QUndoCommand* MouseActionSelect::press(QEvent*)
 		}
 
 		 // diagram_action?
-		QucsMain->MouseReleaseAction = &MouseActions::MReleaseResizeDiagram;
-		QucsMain->MouseMoveAction = &MouseActions::MMoveSelect;
+        QucsMain->MouseReleaseAction = &MouseActionsHandler::MReleaseResizeDiagram;
+        QucsMain->MouseMoveAction = &MouseActionsHandler::MMoveSelect;
 		QucsMain->MousePressAction = 0;
 		QucsMain->MouseDoubleClickAction = 0;
 		Doc->grabKeyboard(); // no keyboard inputs during move actions
@@ -696,7 +696,7 @@ QUndoCommand* MouseActionSelect::press(QEvent*)
 			Doc->setChanged(true, true, 'm'); // 'm' = only the first time
 			break;
 		case 2:  // move scroll bar with mouse cursor
-			QucsMain->MouseMoveAction = &MouseActions::MMoveScrollBar;
+            QucsMain->MouseMoveAction = &MouseActionsHandler::MMoveScrollBar;
 			QucsMain->MousePressAction = 0;
 			QucsMain->MouseDoubleClickAction = 0;
 			Doc->grabKeyboard();  // no keyboard inputs during move actions
@@ -732,8 +732,8 @@ QUndoCommand* MouseActionSelect::press(QEvent*)
 			MAx1 = 0;   // paint wire corner first up, then left/right
 			MAx3 = focusElement->cx_();  // works even if node is not on grid
 			MAy3 = focusElement->cy_();
-			QucsMain->MouseMoveAction = &MouseActions::MMoveWire2;
-			QucsMain->MousePressAction = &MouseActions::MPressWire2;
+            QucsMain->MouseMoveAction = &MouseActionsHandler::MMoveWire2;
+            QucsMain->MousePressAction = &MouseActionsHandler::MPressWire2;
 			QucsMain->MouseReleaseAction = 0; // if function is called from elsewhere
 			QucsMain->MouseDoubleClickAction = 0;
 
@@ -772,7 +772,7 @@ QUndoCommand* MouseActionSelect::press(QEvent*)
 #endif
 } // select::press
 /*--------------------------------------------------------------------------*/
-// was MouseActions::MReleaseSelect(SchematicDoc *Doc, QMouseEvent *Event)
+// was MouseActionsHandler::MReleaseSelect(SchematicDoc *Doc, QMouseEvent *Event)
 QUndoCommand* MouseActionSelect::release(QEvent *ev)
 {itested();
 	QUndoCommand* cmd = nullptr;
@@ -912,7 +912,7 @@ QUndoCommand* MouseActionSelect::release_left(QEvent *e)
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
 SchematicActions::SchematicActions(SchematicScene *ctx)
-  : MouseActions(ctx)
+  : MouseActionsHandler(ctx)
 {itested();
 
 	// not entirely clear how to refactor this
@@ -1017,28 +1017,28 @@ void SchematicDoc::actionOnGrid(QAction* sender)
 { untested();
   possiblyToggleAction(schematicActions().maOnGrid, sender);
 //  performToggleAction(on, App->onGrid, &SchematicDoc::elementsOnGrid,
-//		&MouseActions::MMoveOnGrid, &MouseActions::MPressOnGrid);
+//		&MouseActionsHandler::MMoveOnGrid, &MouseActionsHandler::MPressOnGrid);
 }
 
 void SchematicDoc::actionEditRotate(QAction* sender)
 { untested();
   possiblyToggleAction(schematicActions().maRotate, sender);
 //  performToggleAction(on, App->editRotate, &SchematicDoc::rotateElements,
-//		&MouseActions::MMoveRotate, &MouseActions::MPressRotate);
+//		&MouseActionsHandler::MMoveRotate, &MouseActionsHandler::MPressRotate);
 }
 
 void SchematicDoc::actionEditMirrorX(QAction* sender)
 { untested();
   possiblyToggleAction(schematicActions().maMirrorYaxis, sender);
 //  performToggleAction(on, App->editMirror, &SchematicDoc::mirrorXComponents,
-//		&MouseActions::MMoveMirrorX, &MouseActions::MPressMirrorX);
+//		&MouseActionsHandler::MMoveMirrorX, &MouseActionsHandler::MPressMirrorX);
 }
 
 void SchematicDoc::actionEditMirrorY(QAction* sender)
 { untested();
   possiblyToggleAction(schematicActions().maMirrorXaxis, sender);
 //  performToggleAction(on, App->editMirrorY, &SchematicDoc::mirrorYComponents,
-//		&MouseActions::MMoveMirrorY, &MouseActions::MPressMirrorY);
+//		&MouseActionsHandler::MMoveMirrorY, &MouseActionsHandler::MPressMirrorY);
 }
 
 void SchematicDoc::actionEditActivate(QAction* sender)
@@ -1065,7 +1065,7 @@ void SchematicDoc::actionInsertLabel(QAction*)
 //  possiblyToggleAction(schematicActions().maInsertLabel, sender);
   incomplete();
 //  performToggleAction(on, App->insLabel, 0,
-//		&MouseActions::MMoveLabel, &MouseActions::MPressLabel);
+//		&MouseActionsHandler::MMoveLabel, &MouseActionsHandler::MPressLabel);
   // mouseAction = mouseActions().maInsLabel;
 }
 
@@ -1073,7 +1073,7 @@ void SchematicDoc::actionSetMarker(QAction*)
 { untested();
   incomplete();
 //  performToggleAction(on, App->setMarker, 0,
-//		&MouseActions::MMoveMarker, &MouseActions::MPressMarker);
+//		&MouseActionsHandler::MMoveMarker, &MouseActionsHandler::MPressMarker);
   // mouseAction = mouseActions().maSetMarker;
 }
 
@@ -1081,7 +1081,7 @@ void SchematicDoc::actionMoveText(QAction*)
 { untested();
   incomplete();
 //  performToggleAction(on, App->moveText, 0,
-//		&MouseActions::MMoveMoveTextB, &MouseActions::MPressMoveText);
+//		&MouseActionsHandler::MMoveMoveTextB, &MouseActionsHandler::MPressMoveText);
   // mouseAction = mouseActions().maMoveText;
 }
 
@@ -1126,8 +1126,8 @@ void SchematicDoc::actionInsertEquation(QAction*)
   }else{ untested();
   }
   mouseActions().setDrawn(false);
-  App->MouseMoveAction = &MouseActions::MMoveElement;
-  App->MousePressAction = &MouseActions::MPressElement;
+  App->MouseMoveAction = &MouseActionsHandler::MMoveElement;
+  App->MousePressAction = &MouseActionsHandler::MPressElement;
 }
 #endif
 
@@ -1164,7 +1164,7 @@ void SchematicDoc::actionEditPaste(QAction* sender)
 	App->activeAction = App->editPaste;
 
         mouseActions().setDrawn(false)
-	App->MouseMoveAction = &MouseActions::MMovePaste;
+    App->MouseMoveAction = &MouseActionsHandler::MMovePaste;
 	mouseActions()->movingRotated = 0;
 	App->MousePressAction = 0;
 	App->MouseReleaseAction = 0;

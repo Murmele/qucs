@@ -125,13 +125,13 @@ void QucsDoc::setActiveAction(MouseAction* a)
 	}
 }
 
-MouseActions const* QucsDoc::mouseActions() const
+MouseActionsHandler const* QucsDoc::mouseActions() const
 { untested();
-	auto ma = const_cast<MouseActions*>(mouseActions());
+    auto ma = const_cast<MouseActionsHandler*>(mouseActions());
 	return ma;
 }
 
-MouseActions* QucsDoc::mouseActions()
+MouseActionsHandler* QucsDoc::mouseActions()
 { untested();
 	return nullptr;
 }
@@ -175,7 +175,7 @@ void QucsDoc::possiblyToggleAction(MouseAction* a, QAction* sender)
 }
 /* -------------------------------------------------------------------------------- */
 // maybe this only works for SchematicDoc.
-// SchematicDoc has input modes coupled to "MouseActions" that deal with user input.
+// SchematicDoc has input modes coupled to "MouseActionsHandler" that deal with user input.
 // TextDoc also has modes, but somehow redirects input to another widget.
 MouseAction* QucsDoc::activeAction()
 {

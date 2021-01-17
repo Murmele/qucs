@@ -314,7 +314,7 @@ void SchematicDoc::markerUpDown(bool up, Q3PtrList<ElementGraphics> *Elements)
         if(flag) {
             // The element can be deselected
 	}else if(!index) {
-	    // 'index' is only true if called from MouseActions::MPressSelect()
+	    // 'index' is only true if called from MouseActionsHandler::MPressSelect()
 	}else if(pn->getSelected(x, y)) {
 	    // Return the node pointer, as the selection cannot change
 	    return ElementMouseAction(pn);
@@ -2225,7 +2225,7 @@ void SchematicDoc::setCompPorts(Component *pc)
 // ---------------------------------------------------
 #if 0
 // Returns a pointer of the component on whose text x/y points.
-Component* MouseActions::selectCompText(SchematicDoc* Doc, int x_, int y_, int& w, int& h)
+Component* MouseActionsHandler::selectCompText(SchematicDoc* Doc, int x_, int y_, int& w, int& h)
 {
     incomplete();
     int a, b, dx, dy;

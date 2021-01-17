@@ -565,7 +565,7 @@ void SchematicDoc::mousePressEvent(QMouseEvent *e)
 
 //  App->editText->setHidden(true); // disable text edit of component property
   return;
-  if(App->MouseReleaseAction == &MouseActions::MReleasePaste){ untested();
+  if(App->MouseReleaseAction == &MouseActionsHandler::MReleasePaste){ untested();
     // wtf?
     return;
   }else{ untested();
@@ -587,9 +587,9 @@ void SchematicDoc::mousePressEvent(QMouseEvent *e)
 #else
   //TODO: move cruft to actions.
   if(Event->button() != Qt::LeftButton){ untested();
-    if(App->MousePressAction == &MouseActions::MPressElement){ untested();
+    if(App->MousePressAction == &MouseActionsHandler::MPressElement){ untested();
       // hmm
-    }else if(App->MousePressAction == &MouseActions::MPressWire2) { untested();
+    }else if(App->MousePressAction == &MouseActionsHandler::MPressWire2) { untested();
       // hmm
     }else{ untested();
 	// some action needs to handle right button

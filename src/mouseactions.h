@@ -205,13 +205,13 @@ extern QAction *formerAction;
 
 // must be QObject so it can receive/filter events
 // // merge into schematic_scene?
-class MouseActions : public QObject {
+class MouseActionsHandler : public QObject {
 	Q_OBJECT
 public:
   typedef QList<ElementGraphics*> EGPList;
 public:
-  MouseActions(SchematicScene *);
-  virtual ~MouseActions();
+  MouseActionsHandler(SchematicScene *);
+  virtual ~MouseActionsHandler();
 
   void setPainter(SchematicDoc*);
   bool pasteElements(SchematicDoc*);
