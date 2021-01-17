@@ -481,7 +481,9 @@ bool SchematicDoc::pushUndoStack(QUndoCommand* cmd)
 void SchematicDoc::mouseMoveEvent(QMouseEvent *e)
 {itested();
   assert(e);
+  e->ignore(); // TODO: why sometimes it is accepted?
   if(e->isAccepted()){ itested();
+      trace1("SchematicDoc::mouseMoveEvent: Is accepted!", e->type());
   }else{itested();
 	  auto ee = snapToGrid(e);
 
