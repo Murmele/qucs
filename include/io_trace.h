@@ -49,12 +49,12 @@
 
 // Usage: LOG() << "Message"
 #if SHOW_FILE_NAME == 0
-#define LOG() ErrDebugLogger(__FILE__, __LINE__,__PRETTY_FUNCTION__).get()
+#define trace() ErrDebugLogger(__FILE__, __LINE__,__PRETTY_FUNCTION__).get()
 #else
-#define LOG() ErrDebugLogger(nullptr, __PRETTY_FUNCTION__).get()
+#define trace() ErrDebugLogger(nullptr, __PRETTY_FUNCTION__).get()
 #endif
 
-#define VAR(x) #x << "=" << (x) // show argument name and value
+#define var(x) #x << "=" << (x) // show argument name and value
 
 #ifdef __cplusplus
 
@@ -137,6 +137,8 @@
 #endif // __cplusplus
 
 #else
+#define trace()
+#define var(x)
 #define USE(x) (1)?(void)(0):(void)(x)
 #define trace_line()
 #define trace0(s) USE(s)
