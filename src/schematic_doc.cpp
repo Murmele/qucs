@@ -45,7 +45,6 @@ SchematicDoc::SchematicDoc(QucsApp* App_/*BUG?*/, const QString& Name_, QWidget*
   }
   // ...........................................................
 
-
   _undoStack = new QUndoStack();
 
   // ...........................................................
@@ -70,9 +69,7 @@ SchematicDoc::SchematicDoc(QucsApp* App_/*BUG?*/, const QString& Name_, QWidget*
   Scene->setBackgroundBrush(b);
   // Scene->setBackgroundBrush(Qt::blue);
   // setBackgroundBrush(Qt::blue);
-
   setDragMode(QGraphicsView::RubberBandDrag); // why?
-
   setScene(Scene);
 
   ShowFrame = 0;  // don't show
@@ -467,8 +464,11 @@ float SchematicDoc::zoom(float)
 
 bool SchematicDoc::pushUndoStack(QUndoCommand* cmd)
 {
+    // QucsDoc inherits not from QObject,
+    // Therefore no signal slot is available
     if (QucsDoc::pushUndoStack(cmd)) {
-        emit undoStackUpdated(_undoStack->canUndo(), _undoStack->canRedo());
+        emit signalUndoState(_undoStack->canUndo());
+        emit signalRedoState(_undoStack->canRedo());
         return true;
     }
 

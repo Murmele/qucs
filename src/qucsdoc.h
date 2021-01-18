@@ -60,6 +60,9 @@ public:
    * \brief pushUndoStack
    * Pushes the cmd on the undostack if it is available. If it was not possible to
    * push the command on the undo stack, the command \p cmd must be deleted manually
+   *
+   * Maybe inheriting this class from qobject, so that signal
+   * slots can be used.
    * \param cmd
    * \return Returns true if the cmd was pushed successfully, else false
    */
@@ -102,6 +105,7 @@ public: // actions: These somehow correspond to buttons.
 	virtual void actionSelectAll(QAction*) { unreachable(); }
 	virtual void actionChangeProps(QAction*) { unreachable(); }
 
+        // TODO: they seem to rely to schematic_doc, move them out of this class!
 	// these are not implemented for qucstext, not called perhaps?
 	virtual void actionApplyCompText() { unreachable(); }
 	virtual void actionAlign(int) {unreachable();}
@@ -166,6 +170,8 @@ private:
 
 
 public:
+        // TODO: move out all non generic data and put it into the
+        // docs which need them
 	QString DataSet;     // name of the default dataset
 	QString DataDisplay; // name of the default data display
 	QString Script;
@@ -181,7 +187,7 @@ public:
 	bool GridOn;
 	int  tmpPosX, tmpPosY;
 protected:
-	QUndoStack* _undoStack{nullptr};
+        QUndoStack* _undoStack{nullptr}; // Every document has its own undostack
 private:
 	friend class Simulator;
 

@@ -553,9 +553,6 @@ protected:
   // HACK
   SchematicModel* model() { return _model; }
 
-signals:
-  void undoStackUpdated(bool canUndo, bool canRedo);
-
 public: // need access to SchematicModel. grr
   friend class ImageWriter;
   friend class SchematicScene;
