@@ -14,11 +14,7 @@
 
 #ifndef MOUSEACTIONS_H
 #define MOUSEACTIONS_H
-
-#include "element.h"
 #include "qt_compat.h"
-#include "schematic_scene.h"
-#include "element_graphics.h"
 #include <QEvent>
 #include <QAction>
 
@@ -37,6 +33,7 @@ class Schematic;
 /*!
  * \brief The MouseAction class
  * This is the base MouseAction class. Every mouse action is derived from this one.
+ * This class implements default actions and stores some information
  *
  */
 class MouseAction {
@@ -77,33 +74,7 @@ public:
 	void uncheck();
 
 protected:
-	MouseActionsHandler& ctx(){return _ctx;}
-
-protected: // bug. private
-	SchematicDoc const& doc() const;
-	SchematicScene const* scene() const;
-
-protected:
-	void sceneAddItem(ElementGraphics*);
-	void sceneRemoveItem(ElementGraphics*);
-
-protected:
-	SchematicDoc& doc(); // BUG _ctx.
-	QList<ElementGraphics*> selectedItems(); // BUG. copies.
-	QPointF mapToScene(QPoint const& p) const;
-	void updateViewport(); // why?
-	void setCursor(QCursor const& c);
-   bool isNode(pos_t const&) const; // needed??
-   bool isConductor(pos_t const&) const;
-
-protected: // UC
-	//template<class T>
-	//void possibly_merge_symbols(pos_t remove_at, T& rem, T& add);
-	QList<ElementGraphics*> items(const QPointF &pos,
-                                 Qt::ItemSelectionMode mode=Qt::IntersectsItemShape,
-                                 Qt::SortOrder order = Qt::DescendingOrder) const;
-
-	Node const* nodeAt(pos_t) const;
+        MouseActionsHandler& ctx() const {return _ctx;}
 
 private:
 	MouseActionsHandler& _ctx;

@@ -22,12 +22,14 @@
 #include <QUndoStack>
 #include "io.h" // tmp?
 #include "simulator.h"
+#include "mouseactionshandler.h"
 
 
 QucsDoc::QucsDoc(QucsApp* App_, const QString& Name_, QWidget* o)
    : _app(App_),
 	  _owner(o)
 {
+    // TODO: some stuff here has nothing to do with a base class to special
   GridOn = true;
   DocName = Name_;
   QFileInfo Info(DocName);

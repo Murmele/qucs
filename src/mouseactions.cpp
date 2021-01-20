@@ -42,16 +42,6 @@
 #include <stdlib.h>
 
 
-void MouseAction::sceneAddItem(ElementGraphics* x)
-{
-  doc().sceneAddItem(x);
-}
-void MouseAction::sceneRemoveItem(ElementGraphics* x)
-{
-  doc().sceneRemoveItem(x);
-}
-
-
 QAction *formerAction;   // remember action before drag n'drop etc.
 
 
@@ -94,15 +84,6 @@ static void paintGhostLineV(SchematicDoc *Doc, int fx, int fy, int fyy){ unteste
 }
 */
 
-
-
-// -----------------------------------------------------------
-QList<ElementGraphics*> MouseAction::selectedItems()
-{
-   // BUG. copies.
-  unreachable();
-  return doc().selectedItems();
-}
 #if 0
 // Is called after the rectangle for selection is released.
 void MouseActionsHandler::MReleaseSelect2(SchematicDoc *Doc, QMouseEvent *Event)
@@ -131,10 +112,5 @@ void MouseActionsHandler::MReleaseSelect2(SchematicDoc *Doc, QMouseEvent *Event)
   setDrawn(false);
 }
 #endif
-
-void MouseAction::setCursor(QCursor const& c)
-{
-  doc().setCursor(c);
-}
 
 // vim:ts=8:sw=2:noet

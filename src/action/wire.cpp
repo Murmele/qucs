@@ -5,7 +5,7 @@
 #include "symbol.h"
 #include "viewpainter.h"
 #include "schematic_model.h"
-#include "mouseactions.h"
+#include "mouseactionschematic.h"
 /*--------------------------------------------------------------------------*/
 namespace{
 
@@ -217,10 +217,10 @@ private:
     // std::vector<ElementGraphics*> _gfx;
 }; // MakeWire
 /*--------------------------------------------------------------------------*/
-class MouseActionWire : public MouseAction{
+class MouseActionWire : public MouseActionSchematic{
 public:
 	explicit MouseActionWire(MouseActionsHandler& ctx)
-		: MouseAction(ctx), _mode(0), _phase(0) {itested();
+                : MouseActionSchematic(ctx), _mode(0), _phase(0) {itested();
 		_proto = symbol_dispatcher.clone("__ma_ghostwire");
 		assert(_proto);
 	}

@@ -32,7 +32,7 @@
 #include "schematic_dialog.h"
 #include "schematic_edit.h"
 #include "globals.h"
-#include "mouseactions.h"
+#include "mouseactionschematic.h"
 #include "qucsdoc.h"
 
 #include "changedialog.h"
@@ -45,10 +45,10 @@
 #include "action/wire.cpp" // for now.
 /*--------------------------------------------------------------------------*/
 
-class MouseActionSelect : public MouseAction{
+class MouseActionSelect : public MouseActionSchematic{
 public:
     explicit MouseActionSelect(MouseActionsHandler& ctx)
-		: MouseAction(ctx) {}
+        : MouseActionSchematic(ctx) {}
 
 private: // override
 //	cmd* activate(QAction* sender) override;
@@ -134,10 +134,10 @@ void MouseActionSelect::showSchematicWidget(QWidget* ew, ElementGraphics* gfx)
 // stange glue that should perhaps go into a class derived from QAction and
 // replace the button in the toolbar.
 template<class CMD>
-class MouseActionSelCmd : public MouseAction{
+class MouseActionSelCmd : public MouseActionSchematic{
 public:
     explicit MouseActionSelCmd(MouseActionsHandler& ctx)
-		: MouseAction(ctx){}
+        : MouseActionSchematic(ctx){}
 
 private:
 	cmd* activate(QObject* sender) override;
@@ -371,10 +371,10 @@ typedef MouseActionSelCmd<RotateSelectionTransform> MouseActionRotate;
 typedef MouseActionSelCmd<MirrorXaxisSelection> MouseActionMirrorXaxis;
 typedef MouseActionSelCmd<MirrorYaxisSelection> MouseActionMirrorYaxis;
 /*--------------------------------------------------------------------------*/
-class MouseActionNewElement : public MouseAction{
+class MouseActionNewElement : public MouseActionSchematic{
 public:
     explicit MouseActionNewElement(MouseActionsHandler& ctx, Element const* proto=nullptr)
-		: MouseAction(ctx), _gfx(nullptr), _proto(proto)
+        : MouseActionSchematic(ctx), _gfx(nullptr), _proto(proto)
   	{}
 private:
 	cmd* activate(QObject* sender) override;
@@ -1219,7 +1219,7 @@ void SchematicDoc::actionEditUndo(QAction*)
   _app->hideEdit(); // disable text edit of component property
 
   if (undo())
-    undoStackUpdated(_undoStack->canUndo(), _undoStack->canRedo());
+    emit signalUndoState(_undoStack->canUndo());
   updateViewport();
   assert(mouseActions());
   setDrawn(false);
@@ -1232,7 +1232,7 @@ void SchematicDoc::actionEditRedo(QAction*)
   _app->hideEdit(); // disable text edit of component property
 
   if (redo())
-     undoStackUpdated(_undoStack->canUndo(), _undoStack->canRedo());
+     emit signalRedoState(_undoStack->canRedo());
   updateViewport();
   setDrawn(false);
 }

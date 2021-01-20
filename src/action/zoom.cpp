@@ -15,7 +15,7 @@
  *
  */
 /*--------------------------------------------------------------------------*/
-#include "mouseactions.h"
+#include "mouseactionschematic.h"
 
 #include <QEvent>
 #include <QUndoCommand>
@@ -23,10 +23,10 @@
 class MouseActionsHandler;
 class QGraphicsSceneMouseEvent;
 
-class MouseActionZoomIn : public MouseAction{
+class MouseActionZoomIn : public MouseActionSchematic{
 public:
 	explicit MouseActionZoomIn(MouseActionsHandler& ctx)
-		: MouseAction(ctx) {itested();
+                : MouseActionSchematic(ctx) {itested();
 	}
 private: // MouseAction
 	cmd* press(QEvent*) override;
@@ -109,7 +109,9 @@ QUndoCommand* MouseActionZoomIn::release(QEvent* e)
 	  QucsMain->MouseMoveAction = &MouseActions::MMoveZoomIn;
 	  QucsMain->MouseReleaseAction = 0;
 #endif
-	  doc().releaseKeyboard();  // allow keyboard inputs again
+          unreachable();
+          // TODO: move it out
+          //doc().releaseKeyboard();  // allow keyboard inputs again
 
   }else{ untested();
   }

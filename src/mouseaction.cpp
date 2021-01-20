@@ -82,30 +82,6 @@ QUndoCommand* MouseAction::handle(QEvent* e)
     return nullptr;
   }
 }
-// SchematicMouseAction::doc?
-SchematicDoc const& MouseAction::doc() const
-{itested();
-  auto cc = const_cast<MouseAction*>(this);
-  return cc->doc();
-}
-
-SchematicDoc& MouseAction::doc()
-{itested();
-  QucsDoc* c=&_ctx.doc();
-  auto cc = dynamic_cast<SchematicDoc*>(c);
-  assert(cc);
-  return *cc;
-}
-
-QPointF MouseAction::mapToScene(QPoint const& p) const
-{
-  return doc().mapToScene(p);
-}
-
-void MouseAction::updateViewport()
-{itested();
-  ctx().updateViewport(); // use a signal?
-}
 
 QUndoCommand* MouseAction::activate(QObject* sender)
 {itested();
@@ -129,22 +105,3 @@ void MouseAction::uncheck()
 
   deactivate(); // BUG?
 }
-/*--------------------------------------------------------------------------*/
-SchematicScene const* MouseAction::scene() const
-{
-	return doc().scene();
-}
-/*--------------------------------------------------------------------------*/
-bool MouseAction::isNode(pos_t const& p) const
-{
-	// return scene()->isNode(fX, fY);?
-	return doc().isNode(p);
-}
-/*--------------------------------------------------------------------------*/
-bool MouseAction::isConductor(pos_t const&p) const
-{itested();
-	assert(scene());
-	return scene()->isConductor(p);
-}
-/*--------------------------------------------------------------------------*/
-/*--------------------------------------------------------------------------*/

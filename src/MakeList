@@ -29,6 +29,7 @@ CPP_SRC = \
 	mnemo.cpp \
 	module.cpp \
 	mouseaction.cpp \
+    mouseactionschematic.cpp \
 	mouseactions.cpp \
 	mouseactionshandler.cpp \
 	netlist.cpp \
