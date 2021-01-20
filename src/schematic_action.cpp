@@ -391,7 +391,8 @@ private:
 
 private:
     ElementGraphics* _gfx{nullptr};
-	Element const* _proto;
+    /*! Current selected element. This is the element which will be placed in the schematic. */
+    Element const* _proto{nullptr};
 };
 /*--------------------------------------------------------------------------*/
 class NewElementCommand : public SchematicEdit {
@@ -1012,7 +1013,9 @@ QRegExpValidator Val_CompProp(Expr_CompProp, 0);
 void SchematicDoc::actionInsertGround(QAction* sender)
 { untested();
     auto actions = dynamic_cast<SchematicActions*>(mouseActions());
-    possiblyToggleAction(actions->maInsertGround, sender);
+    if (!actions)
+        return;
+    activateAction(actions->maInsertGround, sender);
 }
 
 void SchematicDoc::setDrawn(bool b){
@@ -1023,58 +1026,76 @@ void SchematicDoc::setDrawn(bool b){
 /*--------------------------------------------------------------------------*/
 void SchematicDoc::actionInsertEquation(QAction* sender)
 {
-    //possiblyToggleAction(schematicActions().maInsertEqn, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+    activateAction(actions->maInsertEqn, sender);
 }
 /*--------------------------------------------------------------------------*/
 void SchematicDoc::actionInsertPort(QAction* sender)
 { untested();
-  //possiblyToggleAction(schematicActions().maInsertPort, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maInsertPort, sender);
 }
 /*--------------------------------------------------------------------------*/
 void SchematicDoc::actionSelect(QAction* sender)
 {itested();
   // sender is a button. maSelect is an action. connect the two.
   // this looks a bit redundant (but later...)
-  //possiblyToggleAction(schematicActions().maSelect, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maSelect, sender);
 
-} // SchematicDoc::actionSelect
+}
 /*--------------------------------------------------------------------------*/
 void SchematicDoc::actionOnGrid(QAction* sender)
 { untested();
-  //possiblyToggleAction(schematicActions().maOnGrid, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maOnGrid, sender);
 //  performToggleAction(on, App->onGrid, &SchematicDoc::elementsOnGrid,
 //		&MouseActionsHandler::MMoveOnGrid, &MouseActionsHandler::MPressOnGrid);
 }
 
 void SchematicDoc::actionEditRotate(QAction* sender)
 { untested();
-  //possiblyToggleAction(schematicActions().maRotate, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maRotate, sender);
 //  performToggleAction(on, App->editRotate, &SchematicDoc::rotateElements,
 //		&MouseActionsHandler::MMoveRotate, &MouseActionsHandler::MPressRotate);
 }
 
 void SchematicDoc::actionEditMirrorX(QAction* sender)
 { untested();
-  //possiblyToggleAction(schematicActions().maMirrorYaxis, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maMirrorYaxis, sender);
 //  performToggleAction(on, App->editMirror, &SchematicDoc::mirrorXComponents,
 //		&MouseActionsHandler::MMoveMirrorX, &MouseActionsHandler::MPressMirrorX);
 }
 
 void SchematicDoc::actionEditMirrorY(QAction* sender)
 { untested();
-  //possiblyToggleAction(schematicActions().maMirrorXaxis, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maMirrorXaxis, sender);
 //  performToggleAction(on, App->editMirrorY, &SchematicDoc::mirrorYComponents,
 //		&MouseActionsHandler::MMoveMirrorY, &MouseActionsHandler::MPressMirrorY);
 }
 
 void SchematicDoc::actionEditActivate(QAction* sender)
 { untested();
-  //possiblyToggleAction(schematicActions().maActivate, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maActivate, sender);
 }
 
 void SchematicDoc::actionEditDelete(QAction* sender)
 { untested();
-  //possiblyToggleAction(schematicActions().maDelete, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maDelete, sender);
 
   updateViewport();
 //  assert(mouseActions());
@@ -1083,19 +1104,23 @@ void SchematicDoc::actionEditDelete(QAction* sender)
 
 void SchematicDoc::actionSetWire(QAction* sender)
 {itested();
-  //possiblyToggleAction(schematicActions().maWire, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maWire, sender);
 }
 
-void SchematicDoc::actionInsertLabel(QAction*)
+void SchematicDoc::actionInsertLabel(QAction* sender)
 { untested();
-//  possiblyToggleAction(schematicActions().maInsertLabel, sender);
+//    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+//    assert(actions);
+//  activateAction(actions->maInsertLabel, sender);
   incomplete();
 //  performToggleAction(on, App->insLabel, 0,
 //		&MouseActionsHandler::MMoveLabel, &MouseActionsHandler::MPressLabel);
   // mouseAction = mouseActions().maInsLabel;
 }
 
-void SchematicDoc::actionSetMarker(QAction*)
+void SchematicDoc::actionSetMarker(QAction* sender)
 { untested();
   incomplete();
 //  performToggleAction(on, App->setMarker, 0,
@@ -1113,11 +1138,13 @@ void SchematicDoc::actionMoveText(QAction*)
 
 void SchematicDoc::actionZoomIn(QAction* sender)
 { untested();
-  //possiblyToggleAction(schematicActions().maZoomIn, sender);
+    auto actions = dynamic_cast<SchematicActions*>(mouseActions());
+    assert(actions);
+  activateAction(actions->maZoomIn, sender);
 }
 
 #if 0 // obsolete.
-void SchematicDoc::actionInsertEquation(QAction*)
+void SchematicDoc::actionInsertEquation(QAction* sender)
 { untested();
   App->hideEdit(); // disable text edit of component property
   App->MouseReleaseAction = 0;
@@ -1159,7 +1186,7 @@ void SchematicDoc::actionInsertEquation(QAction*)
 
 void SchematicDoc::actionEditPaste(QAction* sender)
 { untested();
-  //possiblyToggleAction(schematicActions().maEditPaste, sender);
+  //activateAction(schematicActions().maEditPaste, sender);
 #if 0
 	// if it's not a text doc, prevent the user from editing
 	// while we perform the paste operation
@@ -1200,19 +1227,19 @@ void SchematicDoc::actionEditPaste(QAction* sender)
 }
 
 MouseActionsHandler* SchematicDoc::mouseActions() {
-    return scene()->mouseActions();
+    return mouseActions();
 }
 
-void SchematicDoc::actionSelectElement(QObject*e)
+void SchematicDoc::actionSelectElement(QObject* sender)
 { untested();
   auto actions = dynamic_cast<SchematicActions*>(mouseActions());
   assert(actions);
-  actions->maInsertElement->activate(e);
-  possiblyToggleAction(actions->maInsertElement, nullptr);
+  actions->maInsertElement->activate(sender);
+  activateAction(actions->maInsertElement, nullptr);
 }
 
 // is this still in use?
-void SchematicDoc::actionEditUndo(QAction*)
+void SchematicDoc::actionEditUndo(QAction* sender)
 {itested();
   // really?
 	assert(_app);
@@ -1226,7 +1253,7 @@ void SchematicDoc::actionEditUndo(QAction*)
 }
 
 // is this still in use?
-void SchematicDoc::actionEditRedo(QAction*)
+void SchematicDoc::actionEditRedo(QAction* sender)
 { untested();
 	assert(_app);
   _app->hideEdit(); // disable text edit of component property
@@ -1284,7 +1311,7 @@ void SchematicDoc::actionSelectMarker()
   setDrawn(false);
 }
 
-void SchematicDoc::actionChangeProps(QAction*)
+void SchematicDoc::actionChangeProps(QAction* sender)
 { untested();
 	ChangeDialog *d = new ChangeDialog(this);
 	if(d->exec() == QDialog::Accepted) { untested();

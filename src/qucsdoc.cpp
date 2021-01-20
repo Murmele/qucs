@@ -149,17 +149,24 @@ MouseActionsHandler* QucsDoc::mouseActions()
 // and deal with undoable commands.
 // https://www.walletfox.com/course/qundocommandexample.php?
 // https://stackoverflow.com/questions/32973326/qgraphicsscene-how-to-map-item-movements-into-qundocommand
-void QucsDoc::possiblyToggleAction(MouseAction* a, QAction* sender)
+/*!
+ * \brief QucsDoc::activateAction
+ * Set a new mouse action to the mouseAction handler and use undoable commands
+ * \param a
+ * \param sender
+ */
+void QucsDoc::activateAction(MouseAction* a, QAction* sender)
 {
     QUndoCommand* cmd = nullptr;
     assert(a);
     if(!sender){ untested();
-        setActiveAction(nullptr);
-        // cmd = a->activate(sender);
+        // It was not triggered by a sender, but manually called
+        setActiveAction(nullptr); // TODO: why needed?
         setActiveAction(a);
     }else if(!sender->isCheckable()){ untested();
         cmd = a->activate(sender);
     }else if(sender->isChecked()){itested();
+        // TODO: why the action is deactivated after activate?
         cmd = a->activate(sender);
 
         if(cmd){itested();
