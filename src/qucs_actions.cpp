@@ -255,10 +255,14 @@ void QucsApp::slotZoomIn()
   ASSIGN_STUFF
   qd->actionZoomIn(s);
 }
-// -----------------------------------------------------------------------
+
+/*!
+ * \brief QucsApp::slotEscape
+ * When escape was pressed, set the selction tool active
+ * and clear the component search textedit
+ */
 void QucsApp::slotEscape()
 {
-  // what?!
   select->setChecked(true); // calls slotSelect() to change the action
   slotSearchClear();
 }
