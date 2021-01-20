@@ -128,8 +128,8 @@ public:
   QHash<QString,QString> schNameHash; // QHash for the schematic files lookup
   QHash<QString,QString> spiceNameHash; // QHash for the spice files lookup
 
-  QLineEdit *editText;  // for edit component properties on schematic
-  SearchDialog *SearchDia;  // global in order to keep values
+  QLineEdit *editText{nullptr};  // for edit component properties on schematic
+  SearchDialog *SearchDia{nullptr};  // global in order to keep values
 
   // current mouse methods
   void (MouseActions::*MouseMoveAction) (SchematicDoc*, QMouseEvent*);
