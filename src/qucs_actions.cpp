@@ -259,7 +259,7 @@ void QucsApp::slotZoomIn()
 void QucsApp::slotEscape()
 {
   // what?!
-  select->setChecked(true);
+  select->setChecked(true); // calls slotSelect() to change the action
   slotSearchClear();
 }
 // -----------------------------------------------------------------------
