@@ -59,6 +59,8 @@
 #include "component_widget.h"
 #include "qucs_tabs.h"
 
+#include "schematic_doc.h"
+
 #if 0
 // BUG: not QucsApp
 void QucsApp::slotToggle(bool on)
@@ -89,6 +91,14 @@ void QucsApp::slotToggle(bool on)
   auto s = prechecked_cast<QAction*>(sender()); \
   assert(s);
 
+#define ASSIGN_STUFF_SCHEMATIC \
+  QucsDoc *qd = DocumentTab->current(); \
+  assert(qd); \
+  auto schematic = prechecked_cast<SchematicDoc*>(qd); \
+  assert(schematic); \
+  auto s = prechecked_cast<QAction*>(sender()); \
+  assert(s);
+
 #include <QListWidgetItem>
 
 // Is called when the mouse is clicked within the Component QIconView.
@@ -98,11 +108,13 @@ void QucsApp::slotSelectComponent(QListWidgetItem *item)
 
   QucsDoc* qd = DocumentTab->current();
   assert(qd);
+  auto schematic = prechecked_cast<SchematicDoc*>(qd);
+  assert(schematic);
 //  auto s = prechecked_cast<QAction*>(sender());
 //  assert(s);
 
   if(auto ci=dynamic_cast<ComponentListWidgetItem*>(item)){
-    qd->actionSelectElement(ci);
+    schematic->actionSelectElement(ci);
   }
 
   // incomplete(); possibly
@@ -190,26 +202,26 @@ void QucsApp::slotSelectComponent(QListWidgetItem *item)
 // -----------------------------------------------------------------------
 void QucsApp::slotOnGrid()
 {
-  ASSIGN_STUFF
-  qd->actionOnGrid(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionOnGrid(s);
 }
 // -----------------------------------------------------------------------
 void QucsApp::slotEditRotate()
 {
-  ASSIGN_STUFF
-  qd->actionEditRotate(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionEditRotate(s);
 }
 // -----------------------------------------------------------------------
 void QucsApp::slotEditMirrorX()
 { untested();
-  ASSIGN_STUFF
-  qd->actionEditMirrorX(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionEditMirrorX(s);
 }
 // -----------------------------------------------------------------------
 void QucsApp::slotEditMirrorY()
 { untested();
-  ASSIGN_STUFF
-  qd->actionEditMirrorY(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionEditMirrorY(s);
 }
 // -----------------------------------------------------------------------
 // TODO?   comment out the selected text on a text document
@@ -228,26 +240,26 @@ void QucsApp::slotEditDelete()
 // -----------------------------------------------------------------------
 void QucsApp::slotSetWire()
 {
-  ASSIGN_STUFF
-  qd->actionSetWire(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionSetWire(s);
 }
 // -----------------------------------------------------------------------
 void QucsApp::slotInsertLabel()
 {
-  ASSIGN_STUFF
-  qd->actionInsertLabel(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionInsertLabel(s);
 }
 // -----------------------------------------------------------------------
 void QucsApp::slotSetMarker()
 {
-  ASSIGN_STUFF
-  qd->actionSetMarker(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionSetMarker(s);
 }
 // -----------------------------------------------------------------------
 void QucsApp::slotMoveText()
 {
-  ASSIGN_STUFF
-  qd->actionMoveText(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionMoveText(s);
 }
 // -----------------------------------------------------------------------
 void QucsApp::slotZoomIn()
@@ -269,8 +281,8 @@ void QucsApp::slotEscape()
 // -----------------------------------------------------------------------
 void QucsApp::slotSelect()
 {
-  ASSIGN_STUFF
-  qd->actionSelect(s);
+    ASSIGN_STUFF
+    qd->actionSelect(s);
 }
 // --------------------------------------------------------------------
 void QucsApp::slotEditCut()
@@ -308,20 +320,20 @@ void QucsApp::slotInsertEntity ()
 // -----------------------------------------------------------------------
 void QucsApp::slotInsertEquation()
 {
-  ASSIGN_STUFF
-  qd->actionInsertEquation(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionInsertEquation(s);
 }
 // -----------------------------------------------------------------------
 void QucsApp::slotInsertGround()
 {
-  ASSIGN_STUFF
-  qd->actionInsertGround(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionInsertGround(s);
 }
 // -----------------------------------------------------------------------
 void QucsApp::slotInsertPort()
 {
-  ASSIGN_STUFF
-  qd->actionInsertPort(s);
+  ASSIGN_STUFF_SCHEMATIC
+  schematic->actionInsertPort(s);
 }
 // --------------------------------------------------------------
 void QucsApp::slotEditUndo()
@@ -338,78 +350,70 @@ void QucsApp::slotEditRedo()
 // --------------------------------------------------------------
 void QucsApp::slotAlignTop()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionAlign(0); // BUG use enum
+  schematic->actionAlign(0); // TODO: BUG use enum
 }
 // --------------------------------------------------------------
 void QucsApp::slotAlignBottom()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionAlign(1); // BUG use enum
+  schematic->actionAlign(1); // TODO: BUG use enum
 }
 
 // --------------------------------------------------------------
 // Is called, when "Align left" action is triggered.
 void QucsApp::slotAlignLeft()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionAlign(2);
+  schematic->actionAlign(2);
 }
 
 // --------------------------------------------------------------
 // Is called, when "Align right" action is triggered.
 void QucsApp::slotAlignRight()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionAlign(3);
+  schematic->actionAlign(3);
 }
 
 // --------------------------------------------------------------
 // Is called, when "Distribute horizontally" action is triggered.
 void QucsApp::slotDistribHoriz()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+    ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionDistrib(0);
+  schematic->actionDistrib(0);
 }
 
 // --------------------------------------------------------------
 // Is called, when "Distribute vertically" action is triggered.
 void QucsApp::slotDistribVert()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionDistrib(1);
+  schematic->actionDistrib(1);
 }
 
 // --------------------------------------------------------------
 // Is called, when "Center horizontally" action is triggered.
 void QucsApp::slotCenterHorizontal()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionAlign(4);
+  schematic->actionAlign(4);
 }
 
 // --------------------------------------------------------------
 // Is called, when "Center vertically" action is triggered.
 void QucsApp::slotCenterVertical()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionAlign(5);
+  schematic->actionAlign(5);
 }
 
 // ---------------------------------------------------------------------
@@ -427,10 +431,9 @@ void QucsApp::slotSelectAll()
 // schematic only
 void QucsApp::slotSelectMarker()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionSelectMarker();
+  schematic->actionSelectMarker();
 }
 
 
@@ -749,10 +752,9 @@ static Marker const* marker(Element const* e)
 // -----------------------------------------------------------
 void QucsApp::slotCursor(arrow_dir_t dir)
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionCursor(dir);
+  schematic->actionCursor(dir);
 }
 
 // -----------------------------------------------------------
@@ -761,10 +763,9 @@ void QucsApp::slotCursor(arrow_dir_t dir)
 // In "view->MAx3" is the number of the current property.
 void QucsApp::slotApplyCompText()
 {
-  QucsDoc *qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
-  qd->actionApplyCompText();
+  schematic->actionApplyCompText();
 }
 
 
@@ -828,11 +829,10 @@ void QucsApp::slotExportSchematic()
 // // BUG this is a diagram slot.
 void QucsApp::slotExportGraphAsCsv()
 {
-  QucsDoc* qd = DocumentTab->current();
-  assert(qd);
+  ASSIGN_STUFF_SCHEMATIC
 
   hideEdit();
-  qd->actionExportGraphAsCsv();
+  schematic->actionExportGraphAsCsv();
 }
 
 

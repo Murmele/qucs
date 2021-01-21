@@ -147,6 +147,31 @@ public:
   bool scrollLeft(int);
   bool scrollRight(int);
 
+  virtual void actionApplyCompText();
+  virtual void actionAlign(int);
+  virtual void actionDistrib(int); // 0=horiz, 1=vert
+  virtual void actionSelectMarker();
+  virtual void actionCursor(arrow_dir_t);
+  virtual void actionExportGraphAsCsv();
+
+  virtual void actionOnGrid(QAction*);
+  virtual void actionEditActivate(QAction*);
+  virtual void actionEditRotate(QAction*);
+  virtual void actionEditMirrorX(QAction*);
+  virtual void actionEditMirrorY(QAction*);
+  virtual void actionEditDelete(QAction*);
+  virtual void actionEditPaste(QAction*);
+  virtual void actionSetWire(QAction*);
+  virtual void actionInsertLabel(QAction*);
+  virtual void actionInsertEquation(QAction*);
+  virtual void actionInsertEntity(QAction*) {unreachable();} // TODO: where it is defined?
+  virtual void actionInsertPort(QAction*);
+  virtual void actionInsertGround(QAction*);
+  virtual void actionSetMarker(QAction*);
+  virtual void actionMoveText(QAction*);
+  virtual void actionZoomIn(QAction*);
+  virtual void actionSelectElement(QObject*);
+
 public: // scene
   void sceneAddItem(ElementGraphics*);
   void sceneRemoveItem(ElementGraphics*);
@@ -508,32 +533,11 @@ private: // QucsDoc overrides, schematic_action.cpp
   }
   void actionEditUndo(QAction*) override;
   void actionEditRedo(QAction*) override;
-  void actionAlign(int what) override;
-  void actionDistrib(int dir) override; // 0=horiz, 1=vert
 
-  void actionApplyCompText() override;
   void actionSelect(QAction*) override;
-  void actionSelectMarker() override;
   void actionSelectAll(QAction*) override;
   void actionChangeProps(QAction*) override;
-  void actionCursor(arrow_dir_t) override;
 
-  void actionOnGrid(QAction* sender) override;
-  void actionEditRotate(QAction* sender) override;
-  void actionEditMirrorX(QAction* sender) override;
-  void actionEditMirrorY(QAction* sender) override;
-  void actionEditActivate(QAction* sender) override;
-  void actionEditDelete(QAction* sender) override;
-  void actionEditPaste(QAction* sender) override;
-  void actionSetWire(QAction* sender) override;
-  void actionInsertLabel(QAction* sender) override;
-  void actionSetMarker(QAction* sender) override;
-  void actionMoveText(QAction* sender) override;
-  void actionZoomIn(QAction* sender) override;
-  void actionSelectElement(QObject* sender) override;
-  void actionInsertEquation(QAction* sender) override;
-  void actionInsertPort(QAction* sender) override;
-  void actionInsertGround(QAction* sender) override;
 
 public:
 private:

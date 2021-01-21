@@ -72,11 +72,6 @@ public:
   QString fileSuffix (void);
   static QString fileBase (const QString&);
   QString fileBase (void);
-
-private:
-
-
-public:
   void setDocName(QString x){ DocName=x; }
   QString docName() const{ return DocName; }
 
@@ -86,7 +81,7 @@ public:
 protected:
   Simulator* simulatorInstance(std::string const& which="");
 
-protected: // why not directly connect to undostack slots?!
+protected: // TODO: why not directly connect to undostack slots?!
   virtual bool undo();
   virtual bool redo();
   virtual void signalFileChanged(bool){incomplete();}
@@ -99,37 +94,16 @@ public: // actions: These somehow correspond to buttons.
 	virtual void actionSelect(QAction*) { unreachable(); }
 	virtual void actionCopy(QAction*) { unreachable(); }
 	virtual void actionCut(QAction*) { unreachable(); }
-	virtual void actionEditActivate(QAction*) { unreachable(); }
 	virtual void actionEditUndo(QAction*) { unreachable(); }
 	virtual void actionEditRedo(QAction*) { unreachable(); }
 	virtual void actionSelectAll(QAction*) { unreachable(); }
+        virtual void actionEditActivate(QAction*) { unreachable(); }
 	virtual void actionChangeProps(QAction*) { unreachable(); }
+        virtual void actionEditDelete(QAction*) {unreachable();}
+        virtual void actionEditPaste(QAction*) {unreachable();}
+        virtual void actionZoomIn(QAction*) { unreachable(); }
+        virtual void actionInsertEntity(QAction*) {unreachable();}
 
-        // TODO: they seem to rely to schematic_doc, move them out of this class!
-	// these are not implemented for qucstext, not called perhaps?
-	virtual void actionApplyCompText() { unreachable(); }
-	virtual void actionAlign(int) {unreachable();}
-	virtual void actionDistrib(int) {unreachable();}
-	virtual void actionSelectMarker() {unreachable();}
-	virtual void actionCursor(arrow_dir_t) { unreachable();}
-	virtual void actionExportGraphAsCsv(){ unreachable();}
-
-	virtual void actionOnGrid(QAction*) {unreachable();}
-	virtual void actionEditRotate(QAction*) {unreachable();}
-	virtual void actionEditMirrorX(QAction*) {unreachable();}
-	virtual void actionEditMirrorY(QAction*) {unreachable();}
-	virtual void actionEditDelete(QAction*) {unreachable();}
-	virtual void actionEditPaste(QAction*) {unreachable();}
-	virtual void actionSetWire(QAction*) {unreachable();}
-	virtual void actionInsertLabel(QAction*) {unreachable();}
-	virtual void actionInsertEquation(QAction*) {unreachable();}
-	virtual void actionInsertEntity(QAction*) {unreachable();}
-	virtual void actionInsertPort(QAction*) {unreachable();}
-	virtual void actionInsertGround(QAction*) {unreachable();}
-	virtual void actionSetMarker(QAction*) {unreachable();}
-	virtual void actionMoveText(QAction*) {unreachable();}
-	virtual void actionZoomIn(QAction*) { unreachable(); }
-	virtual void actionSelectElement(QObject*) {untested(); }
 
 	void uncheckActive();
 
