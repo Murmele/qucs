@@ -24,14 +24,16 @@
 #include "simulator.h"
 #include "mouseactionshandler.h"
 
-
-QucsDoc::QucsDoc(QucsApp* App_, const QString& Name_, QWidget* o)
+QucsDoc::QucsDoc(QucsApp* App_, const QString& Name_, QWidget* o, MouseActionsHandler* handler)
    : _app(App_),
-	  _owner(o)
+      DocName(Name_), _owner(o), mHandler(handler)
 {
+  init();
+}
+
+void QucsDoc::init() {
     // TODO: some stuff here has nothing to do with a base class to special
   GridOn = true;
-  DocName = Name_;
   QFileInfo Info(DocName);
   if(!DocName.isEmpty()) {
     DocName = Info.absoluteFilePath();
@@ -65,6 +67,7 @@ QucsDoc::~QucsDoc()
 		delete i.second;
 	}
     delete _undoStack;
+    delete mHandler;
 //	assert(_simulators == 0);
 }
 
@@ -133,16 +136,9 @@ void QucsDoc::setActiveAction(MouseAction* a)
 	}
 }
 
-MouseActionsHandler const* QucsDoc::mouseActions() const
+MouseActionsHandler* QucsDoc::mouseActions() const
 { untested();
-    auto ma = const_cast<MouseActionsHandler*>(mouseActions());
-    assert(ma);
-	return ma;
-}
-
-MouseActionsHandler* QucsDoc::mouseActions()
-{ untested();
-	return nullptr;
+    return mHandler;
 }
 
 // similar to former Schematic::performtoggleaction. but take care of actions,

@@ -21,7 +21,7 @@ class SchematicDoc;
 /*--------------------------------------------------------------------------*/
 class SchematicActions : public MouseActionsHandler{
 public:
-	explicit SchematicActions(SchematicScene* d);
+        explicit SchematicActions(SchematicDoc *doc);
 	~SchematicActions();
 
 private: // MouseActions
@@ -131,7 +131,6 @@ public: // actions... private?
 	// MouseAction* maZoomOut; // not a mouseaction
 
 private:
-	SchematicScene* mScene{nullptr};
 	bool _drawn{false};  // indicates whether the scheme element was drawn last time
 };
 /*--------------------------------------------------------------------------*/

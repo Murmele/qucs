@@ -112,7 +112,6 @@ private: //temporary/obsolete
 	  assert(_model);
 	  return _model->sizeOfAll(a, b, c, d, textCorr());
   }
-  MouseActionsHandler* mouseActions();
 public:
 //  void pushBack(Element* what);
   bool  rotateElements();

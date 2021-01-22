@@ -109,7 +109,7 @@ void qucsMessageOutput(QtMsgType type, const char *msg)
 void doNetlist(QString schematic_fn, std::string netlist, Command* fmt)
 {
 	std::string sfn = schematic_fn.toStdString();
-    QucsDoc d(nullptr, "", nullptr); // obsolete?
+    QucsDoc d(nullptr, "", nullptr, nullptr); // obsolete?
 	d.setLabel("main");
 
 	Symbol* root = symbol_dispatcher.clone("schematic_root");

@@ -110,11 +110,7 @@ public: // wrap items
 
 private:
   void selectAll(bool v=true);
-public:
-  // Temporary public
-  MouseActionsHandler* mouseActions() { assert(_mouseActions); return _mouseActions; }
 private:
-  SchematicActions* _mouseActions{nullptr};
 
 private:
   bool event(QEvent* e) override;

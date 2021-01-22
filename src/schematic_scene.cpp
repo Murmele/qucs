@@ -94,14 +94,11 @@ Marker* marker(QGraphicsItem* g)
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
 SchematicScene::SchematicScene(QObject *parent)
-  : QGraphicsScene(parent), _mouseActions(new SchematicActions(this))
+  : QGraphicsScene(parent)
 {
-      installEventFilter(_mouseActions);
-
 }
 
 SchematicScene::~SchematicScene () {
-    delete _mouseActions;
 };
 /*--------------------------------------------------------------------------*/
 SchematicDoc* SchematicScene::doc()
@@ -253,8 +250,9 @@ bool SchematicScene::handleMouseActions(QEvent* e)
 {
     if (e->isAccepted())
         return false;
-    assert(mouseActions());
-    return mouseActions()->handle(e);
+    assert(doc());
+    assert(doc()->mouseActions());
+    return doc()->mouseActions()->handle(e);
 }
 
 //

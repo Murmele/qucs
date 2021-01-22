@@ -916,8 +916,8 @@ QUndoCommand* MouseActionSelect::release_left(QEvent *e)
 } // select::release
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
-SchematicActions::SchematicActions(SchematicScene* ctx)
-  : MouseActionsHandler(*ctx->doc()), mScene(ctx)
+SchematicActions::SchematicActions(SchematicDoc* doc)
+  : MouseActionsHandler(*doc)
 {itested();
 
 	// not entirely clear how to refactor this
@@ -985,12 +985,11 @@ SchematicActions::~SchematicActions()
 /*--------------------------------------------------------------------------*/
 const SchematicScene* SchematicActions::scene() const
 { untested();
-    return mScene;
 }
 /*--------------------------------------------------------------------------*/
 SchematicDoc* SchematicActions::doc()
 { untested();
-    auto d=dynamic_cast<SchematicDoc*>(mScene->doc());
+    auto d=dynamic_cast<SchematicDoc*>(&MouseActionsHandler::doc());
 	assert(d);
 	return d;
 }
@@ -1224,10 +1223,6 @@ void SchematicDoc::actionEditPaste(QAction* sender)
 	App->MouseDoubleClickAction = 0;
 
 #endif
-}
-
-MouseActionsHandler* SchematicDoc::mouseActions() {
-    return mouseActions();
 }
 
 void SchematicDoc::actionSelectElement(QObject* sender)

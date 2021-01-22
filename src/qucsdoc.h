@@ -42,7 +42,7 @@ class QucsDoc : public Object {
 protected:
 	QucsDoc(const QucsDoc&);
 public:
-  explicit QucsDoc(QucsApp*, const QString&, QWidget* owner);
+  explicit QucsDoc(QucsApp*, const QString&, QWidget* owner, MouseActionsHandler* handler);
   virtual ~QucsDoc();
 
 public:
@@ -122,7 +122,7 @@ public: // actions: These somehow correspond to buttons.
 	virtual void updateViewport() {}
 	virtual void reloadGraphs() {} // fix later.
 
-	MouseActionsHandler const* mouseActions() const;
+        MouseActionsHandler *mouseActions() const;
 	virtual QMouseEvent snapToGrid(QMouseEvent* e) const{
 		assert(e);
 		return QMouseEvent(*e);
@@ -137,10 +137,10 @@ public: // actions: These somehow correspond to buttons.
 
 protected: // cleaning up debris
 	QAction* selectAction();
-	virtual MouseActionsHandler* mouseActions();
 private:
 	void setActiveAction(MouseAction* a);
 	MouseAction* activeAction();
+        void init();
 
 
 public:
@@ -171,6 +171,7 @@ private:
 	QString DocName;
 
 	QWidget* _owner{nullptr};
+        MouseActionsHandler* mHandler{nullptr};
 }; // QucsDoc
 
 #endif
