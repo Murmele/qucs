@@ -374,7 +374,7 @@ typedef MouseActionSelCmd<MirrorYaxisSelection> MouseActionMirrorYaxis;
 class MouseActionNewElement : public MouseActionSchematic{
 public:
     explicit MouseActionNewElement(MouseActionsHandler& ctx, Element const* proto=nullptr)
-        : MouseActionSchematic(ctx), _gfx(nullptr), _proto(proto)
+        : MouseActionSchematic(ctx), _proto(proto)
   	{}
 private:
 	cmd* activate(QObject* sender) override;
