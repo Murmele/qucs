@@ -26,7 +26,6 @@ QucsDoc& MouseActionsHandler::doc() const
 
 bool MouseActionsHandler::handle(QEvent*e)
 {itested();
-    trace() << "Hallo" << var(e->type());
     QUndoCommand* c=nullptr;
     if(_maCurrent){itested();
     // creates a new undo command
