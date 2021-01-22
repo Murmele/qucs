@@ -28,7 +28,6 @@ SchematicDoc::SchematicDoc(QucsApp* App_/*BUG?*/, const QString& Name_, QWidget*
 {itested();
   qDebug() << "SchematicDoc::SchematicDoc" << Name_;
 
-  installEventFilter(mouseActions());
   // ...........................................................
   // create empty schematic... (clear?)
   auto root = symbol_dispatcher.clone("schematic_root");

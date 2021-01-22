@@ -96,6 +96,7 @@ Marker* marker(QGraphicsItem* g)
 SchematicScene::SchematicScene(QObject *parent)
   : QGraphicsScene(parent)
 {
+    installEventFilter(doc()->mouseActions());
 }
 
 SchematicScene::~SchematicScene () {
