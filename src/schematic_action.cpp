@@ -562,7 +562,7 @@ QUndoCommand* MouseActionNewElement::enter(QEvent* ev)
 	auto sp = d->mapToScene(wp.toPoint());
 
 	Element* elt;
-	if(!_gfx){ untested();
+    if(!_gfx){ untested(); // should never occur.
 		assert(_proto);
 		elt = _proto->clone_instance();
 		if(auto sym=dynamic_cast<Symbol const*>(elt)){
