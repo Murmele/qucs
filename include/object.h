@@ -19,6 +19,11 @@
 /*--------------------------------------------------------------------------*/
 typedef unsigned index_t;
 /*--------------------------------------------------------------------------*/
+
+/*!
+ * \brief The Object class
+ * Base object of all objects in qt.
+ */
 class Object{
 public:
 	enum QucsMsgType{
