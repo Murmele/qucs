@@ -163,6 +163,9 @@
 
 #ifdef __cplusplus
 
+
+// Unreachable: these function should never be called. So check if they
+// get called
 #if TRACE_LEVEL > 20
 #define unreachable() ( \
     std::cerr << "@@#\n@@@\nunreachable:" \
@@ -189,6 +192,7 @@
 
 #endif // __cplusplus
 
+// All untested function
 #ifdef TRACE_UNTESTED
 
 #ifdef __cplusplus
@@ -219,10 +223,9 @@
 #define untested3(s,x,y,z)
 #endif
 
+// Interactive tested. Testing by trying out
 #ifdef TRACE_ITESTED
-
 #ifdef __cplusplus
-
 #define itested() ( std::cerr << "@@#\n@@@:" \
      << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n" )
 
