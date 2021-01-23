@@ -10,8 +10,10 @@
  *                                                                         *
  ***************************************************************************/
 
-// user interaction, undo commands
-// derived from various Qucs "MouseAction" etc.
+/*!
+ * user interaction with the schematic, undo commands
+ * derived from various Qucs "MouseAction" etc. *
+ */
 
 #include <QAction>
 #include <QMessageBox> // BUG
@@ -206,7 +208,7 @@ public:
 	template<class IT>
 	DeleteSelection(SchematicDoc& ctx, IT deletelist)
 	  : SchematicEdit(*ctx.sceneHACK()) { untested();
-		size_t k = 0;
+        int k = 0;
 
 		qDelete(deletelist);
 
@@ -309,7 +311,7 @@ public:
 	template<class IT>
 	TransformSelection(SchematicDoc& ctx, IT selection, T const& t)
 	: SchematicEdit(*ctx.sceneHACK()){itested();
-		size_t k = 0;
+        int k = 0;
 		// TODO: bounding box center?
 		QRectF bb;
 		std::vector<std::pair<ElementGraphics*,Element*>> buf;
@@ -371,6 +373,11 @@ typedef MouseActionSelCmd<RotateSelectionTransform> MouseActionRotate;
 typedef MouseActionSelCmd<MirrorXaxisSelection> MouseActionMirrorXaxis;
 typedef MouseActionSelCmd<MirrorYaxisSelection> MouseActionMirrorYaxis;
 /*--------------------------------------------------------------------------*/
+
+/*!
+ * \brief The MouseActionNewElement class
+ * Handles all actions related to creating new elements on the schematic
+ */
 class MouseActionNewElement : public MouseActionSchematic{
 public:
     explicit MouseActionNewElement(MouseActionsHandler& ctx, Element const* proto=nullptr)
@@ -446,6 +453,9 @@ QUndoCommand* MouseActionNewElement::release(QEvent* ev)
 /*--------------------------------------------------------------------------*/
 /*!
  * \brief MouseActionNewElement::makeNew
+ * Creates a new ElementCommand with the current graphicsitem.
+ * The current graphicsitem gets cloned so another one can
+ * be placed on the schematic
  * \param ev
  * \return
  */
@@ -458,9 +468,7 @@ QUndoCommand* MouseActionNewElement::makeNew(QEvent* ev)
 		unreachable();
 	}
 
-	assert(element(_gfx));
-	auto elt = element(_gfx);
-	assert(elt);
+    assert(element(_gfx));
 
 	if(auto se=dynamic_cast<QGraphicsSceneMouseEvent*>(ev)){ untested();
 		QPointF pos = se->scenePos();
@@ -470,13 +478,12 @@ QUndoCommand* MouseActionNewElement::makeNew(QEvent* ev)
 	}
 
 	cmd* c = new NewElementCommand(doc(), _gfx);
-	// _gfx = nullptr;
 
-	{ untested();
-        _gfx = _gfx->clone(); // new ElementGraphics(elt); Because _gfx is now part of the schematic
-		doc().sceneAddItem(_gfx); // does not attach.
-		assert(!element(_gfx)->scope());
-	}
+    itested();
+    // clone the element, because the current one gets part of the schematic
+    _gfx = _gfx->clone(); // new ElementGraphics(elt);
+    doc().sceneAddItem(_gfx); // does not attach.
+    assert(!element(_gfx)->scope());
 
 	ev->accept();
 	return c;
@@ -499,6 +506,13 @@ QUndoCommand* MouseActionNewElement::deactivate()
 	return MouseAction::deactivate();
 }
 /*--------------------------------------------------------------------------*/
+
+/*!
+ * \brief MouseActionNewElement::move
+ * Moves the current element attached to the mouse around.
+ * \param ev
+ * \return
+ */
 QUndoCommand* MouseActionNewElement::move(QEvent* ev)
 { untested();
 	QPointF sp;
