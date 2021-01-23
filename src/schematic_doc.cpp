@@ -338,17 +338,17 @@ QMouseEvent SchematicDoc::snapToGrid(QMouseEvent* e)const
 
 void SchematicDoc::mouseReleaseEvent(QMouseEvent *e)
 { untested();
-  if(e->isAccepted()){ itested();
-      return;
-  } else if (e->buttons() & Qt::MiddleButton) {
+  if (e->buttons() & Qt::MiddleButton) {
       // Change mouse cursor back to arrow
       // setCursor->(Qt::ArrorCursor);
       e->accept();
       return;
-  } else { itested();
-	  // not necessary.
-	  // does not mattter where QGraphics* sees the release
-	  //auto ee = snapToGrid(e);
+  }
+
+  { itested();
+      // not necessary.
+      // does not mattter where QGraphics* sees the release
+      //auto ee = snapToGrid(e);
 
   }
   QGraphicsView::mouseReleaseEvent(e);
@@ -406,26 +406,44 @@ void SchematicDoc::showNoZoom()
 
 float SchematicDoc::zoomBy(float s)
 { untested();
-	QTransform matrix = transform();
-	double d = matrix.m11();
-	assert(d == matrix.m22());
-	double Scale = d * s;
+    assert(false); // Not tested yet
+    QTransform matrix = transform();
+    double d = matrix.m11();
+    assert(d == matrix.m22());
+    double Scale = d * s;
 
-	if(Scale > 10.0){ untested();
-		Scale = 10.0f;
-	}else if(Scale < 0.1){ untested();
-		Scale = 0.1f;
-	}else{ untested();
-	}
+    if(Scale > 10.0){ untested();
+        Scale = 10.0f;
+    }else if(Scale < 0.1){ untested();
+        Scale = 0.1f;
+    }else{ untested();
+    }
 
-	s = Scale / d;
+    s = Scale / d;
 
-	scale(s, s); // scale is relative...
-	s -= 1.0;
-	TODO("Fix contentsX");
-	/// todo scrollBy( int(s * float(contentsX()+visibleWidth()/2)),
-	///          int(s * float(contentsY()+visibleHeight()/2)) );
-	return Scale;
+    scale(s, s); // scale is relative...
+    s -= 1.0;
+    TODO("Fix contentsX");
+    /// todo scrollBy( int(s * float(contentsX()+visibleWidth()/2)),
+    ///          int(s * float(contentsY()+visibleHeight()/2)) );
+    return Scale;
+}
+
+/*!
+ * \brief SchematicDoc::pan
+ * Move the view around
+ * Copied from https://gist.github.com/luis-l/5c78488906dc98ce9316
+ * \param delta
+ */
+void SchematicDoc::pan(QPointF delta)
+{
+    // Scale the pan amount by the current zoom.
+    delta *= mScale;
+    setTransformationAnchor(ViewportAnchor::AnchorUnderMouse);
+
+    QPoint newCenter(viewport()->rect().width() / 2 - delta.x(),  viewport()->rect().height() / 2 - delta.y());
+    centerOn(mapToScene(newCenter));
+    setTransformationAnchor(ViewportAnchor::AnchorViewCenter);
 }
 
 void SchematicDoc::drawBackground(QPainter *painter, const QRectF &rect)
@@ -442,29 +460,10 @@ void SchematicDoc::drawBackground(QPainter *painter, const QRectF &rect)
 	}
 }
 
-// directly call scale??
-float SchematicDoc::zoom(float)
-{itested();
-	incomplete();
-#if 0
-
-
-	// "resizeContents()" performs an immediate repaint. So, set widget
-	// to hidden. This causes some flicker, but it is still nicer.
-	assert(viewport());
-	viewport()->setHidden(true);
-	//  setHidden(true);
-	TODO("Fix resizeContents");
-	/// todo resizeContents(int(Scale*float(ViewX2 - ViewX1)),
-	///               int(Scale*float(ViewY2 - ViewY1)));
-	//  setHidden(false);
-	viewport()->setHidden(false);
-
-	viewport()->update();
-	// App->view->drawn = false;
-
-#endif
-	return 0;
+void SchematicDoc::zoom(float s)
+{
+    scale(s, s);
+    mScale *= s;
 }
 
 bool SchematicDoc::pushUndoStack(QUndoCommand* cmd)
@@ -492,9 +491,9 @@ void SchematicDoc::mouseMoveEvent(QMouseEvent *e)
   } else if (e->buttons() & Qt::MiddleButton) {
       QPointF oldPos = mapToScene(mOrigin);
       QPointF newPos = mapToScene(e->pos());
-      QPointF translation = newPos - oldPos;
+      QPointF delta = newPos - oldPos;
 
-      translate(translation.x(), translation.y());
+      pan(delta);
 
       mOrigin = e->pos();
       e->accept();
@@ -619,47 +618,30 @@ void SchematicDoc::mouseDoubleClickEvent(QMouseEvent *Event)
 // possibly manufacture a GraphicsView::wheelEvent (or so) from this.
 // the current qt implementation does not do the modifiers, but scrolling
 // works, including multitouch
-void SchematicDoc::wheelEvent(QWheelEvent * Event)
+void SchematicDoc::wheelEvent(QWheelEvent * e)
 { untested();
 
-    double angleDelta = (double)Event->angleDelta().y()/100;
-    zoomBy(angleDelta);
-#ifndef USE_SCROLLVIEW
-  (void) Event;
-#else
-  App->editText->setHidden(true);  // disable edit of component property
+  double deltaY = (double)e->angleDelta().y();
+  const double panFactor = 10;
+
+  // TODO: why?
+  //App->editText->setHidden(true);  // disable edit of component property
   // use smaller steps; typically the returned delta() is a multiple of 120
 
-  int delta = Event->delta() >> 1;
 
-  // ...................................................................
-  if((Event->modifiers() & Qt::ShiftModifier) ||
-     (Event->orientation() == Qt::Horizontal)) { // scroll horizontally ?
-      if(delta > 0) { if(scrollLeft(delta)) scrollBy(-delta, 0); }
-      else { if(scrollRight(delta)) scrollBy(-delta, 0); }
-      viewport()->update(); // because QScrollView thinks nothing has changed
-      App->view->drawn = false;
+  if(e->modifiers() & Qt::ShiftModifier) { // scroll horizontally
+      pan(QPointF(deltaY/abs(deltaY) * panFactor, 0));
   }
-  // ...................................................................
-  else if(Event->modifiers() & Qt::ControlModifier) {  // use mouse wheel to zoom ?
+  else if(e->modifiers() & Qt::ControlModifier) {  // scroll vertically
+      pan(QPointF(0, deltaY/abs(deltaY) * panFactor));
+  }
+  else {  // zoom
       // zoom factor scaled according to the wheel delta, to accomodate
       //  values different from 60 (slower or faster zoom)
-      float Scaling = pow(1.1, delta/60.0);
+      float Scaling = pow(1.1, deltaY/60.0);
       zoom(Scaling);
-      Scaling -= 1.0;
-      scrollBy( int(Scaling * float(Event->pos().x())),
-                int(Scaling * float(Event->pos().y())) );
   }
-  // ...................................................................
-  else {     // scroll vertically !
-      if(delta > 0) { if(scrollUp(delta)) scrollBy(0, -delta); }
-      else { if(scrollDown(delta)) scrollBy(0, -delta); }
-      viewport()->update(); // because QScrollView thinks nothing has changed
-      App->view->drawn = false;
-  }
-
-  Event->accept();   // QScrollView must not handle this event
-#endif
+    e->accept();
 }
 
 #ifdef INDIVIDUAL_MOUSE_CALLBACKS

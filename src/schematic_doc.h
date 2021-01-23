@@ -122,8 +122,15 @@ public:
   QMouseEvent snapToGrid(QMouseEvent* e) const;
   bool  elementsOnGrid();
 
-  float zoom(float);
+  /*!
+   * \brief zoom
+   * Zoom by the factor \p s
+   * \param s
+   * \return
+   */
+  void zoom(float s);
   float zoomBy(float) override;
+  void pan(QPointF delta);
   void  showAll();
   void  showNoZoom();
   void  enlargeView(int, int, int, int);
@@ -309,6 +316,11 @@ public:
   /*! \brief Set reference to file (schematic) */
 
 signals:
+  /*!
+   * \brief signalCursorPosChanged
+   * Signalizes when the cursor position was changed. Currently used
+   * to show the position in the status bar.
+   */
   void signalCursorPosChanged(int, int);
   void signalUndoState(bool);
   void signalRedoState(bool);
@@ -327,7 +339,7 @@ protected: // these are the overrides that collect mouse actions
    void mousePressEvent(QMouseEvent*) override;
 //   void mouseDoubleClickEvent(QMouseEvent*) override;
    void mouseReleaseEvent(QMouseEvent*) override;
-   void wheelEvent(QWheelEvent*) override;
+   void wheelEvent(QWheelEvent*e) override;
    void dropEvent(QDropEvent*e) override { untested();
 		QGraphicsView::dropEvent(e);
 	}
@@ -567,6 +579,7 @@ private:
   std::map<std::string, SimProcess*> _simProcess; // QucsDoc?
 
   QPoint mOrigin{QPoint(0,0)};
+  double mScale{1}; // Current scale of the view
 }; // SchematicDocument
 /* -------------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------------- */
