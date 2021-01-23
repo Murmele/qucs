@@ -33,6 +33,8 @@ protected:
     bool isNode(pos_t const&) const; // needed??
     bool isConductor(pos_t const&) const;
 
+	virtual QUndoCommand* handle(QEvent* e) override;
+
     //template<class T>
     //void possibly_merge_symbols(pos_t remove_at, T& rem, T& add);
     QList<ElementGraphics*> items(const QPointF &pos,

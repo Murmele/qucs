@@ -13,6 +13,9 @@ QUndoCommand* MouseAction::handle(QEvent* e)
 {itested();
   assert(e);
 
+  //TODO: this function content was moved to MouseActionSchematic::handle()
+  // Is it still needed here?
+
   trace1("MouseAction::handle: event type:", e->type());
   auto* m = prechecked_cast<QGraphicsSceneMouseEvent*>(e);
 //  auto* s = prechecked_cast<QGraphicsSceneEvent*>(e);
@@ -59,10 +62,11 @@ QUndoCommand* MouseAction::handle(QEvent* e)
 	 return dblclk(e);
   case QEvent::GraphicsSceneMouseMove:
     // getting here when moving elements.
+    // fall through
   case QEvent::MouseMove:
     return move(e);
-  case QEvent::GraphicsSceneMouseRelease:itested();
-    //fallthrough
+  case QEvent::GraphicsSceneMouseRelease:
+    itested();
     return release(e);
   case QEvent::GrabMouse:itested();
     return nullptr;

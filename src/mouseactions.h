@@ -53,9 +53,10 @@ public:
 	 * \brief handle
 	 * Handles the current event and returns a new Undo command if event is handled in this function
 	 * The Undo command must be freed when not used
+	 * Override this function to handle different types
 	 * \return
 	 */
-	cmd* handle(QEvent*);
+	virtual cmd* handle(QEvent*);
 
 	virtual cmd* activate(QObject* sender);
 	virtual cmd* deactivate();
