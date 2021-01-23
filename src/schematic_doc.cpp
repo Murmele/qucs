@@ -518,35 +518,6 @@ void SchematicDoc::mouseMoveEvent(QMouseEvent *e)
   }
 }
 
-// "should return true if the event e was recognized and processed."
-// (whatever that means)
-//
-// getting here *after* the event has passed through Scene
-bool SchematicDoc::event(QEvent* e)
-{itested();
-	trace2("SchematicDoc::event", e->type(), e->isAccepted());
-//	e->ignore();
-
-	if(e->isAccepted()){itested();
-		// move actions are highjacked.
-		// (that's okay);
-		// releaseEvent is also here.
-	}else{itested();
-		// need releaseEvent here.
-		// but maybe not.
-		//mouserelease?!
-		// handleMouseActions(e); //
-	}
-
-    //handleMouseActions(e);
-	
-	// TODO: what is this call?
-	bool a = QGraphicsView::event(e);
-
-//	mouseActions()->handle(e); // try scene
-	return a;
-}
-
 #if 0
 QPointF SchematicDoc::mapToScene(QPoint const& p) const
 {

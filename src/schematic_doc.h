@@ -323,7 +323,6 @@ protected:
 
 protected: // these are the overrides that collect mouse actions
            // forward to mouseAction instances to produce UndoActions
-  bool event(QEvent*) override;
    void mouseMoveEvent(QMouseEvent*) override;
 //   void mousePressEvent(QMouseEvent*) override;
 //   void mouseDoubleClickEvent(QMouseEvent*) override;
