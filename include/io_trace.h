@@ -44,14 +44,23 @@
 /*--------------------------------------------------------------------------*/
 #ifdef DO_TRACE
 
+#ifndef TRACE_LEVEL
+// TODO: make it also configurable with cmake
+#define TRACE_LEVEL 999 // show all traces up to this level
+#endif
+
 #include "Logging/debuglogger.h"
 #define SHOW_FILE_NAME 1
 
 // Usage: LOG() << "Message"
-#if SHOW_FILE_NAME == 0
-#define trace() ErrDebugLogger(__FILE__, __LINE__,__PRETTY_FUNCTION__).get()
+#if TRACE_LEVEL >= 999
+    #if SHOW_FILE_NAME == 0
+        #define trace() ErrDebugLogger(__FILE__, __LINE__,__PRETTY_FUNCTION__).get()
+    #else
+        #define trace() ErrDebugLogger(nullptr, __PRETTY_FUNCTION__).get()
+    #endif
 #else
-#define trace() ErrDebugLogger(nullptr, __PRETTY_FUNCTION__).get()
+    #define trace() std::string()
 #endif
 
 #define var(x) #x << "=" << (x) // show argument name and value
@@ -154,13 +163,21 @@
 
 #ifdef __cplusplus
 
+#if TRACE_LEVEL > 20
 #define unreachable() ( \
     std::cerr << "@@#\n@@@\nunreachable:" \
               << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n" )
+#else
+#define unreachable()
+#endif
 
+#if TRACE_LEVEL > 30
 #define incomplete() ( \
     std::cerr << "@@#\n@@@\nincomplete:" \
               << __FILE__ << ":" << __LINE__ << ":" << __func__ << "\n" )
+#else
+#define incomplete()
+#endif
 
 #else // no __cplusplus
 
