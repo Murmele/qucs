@@ -439,11 +439,12 @@ void SchematicDoc::pan(QPointF delta)
 {
     // Scale the pan amount by the current zoom.
     delta *= mScale;
+    ViewportAnchor a = transformationAnchor();
     setTransformationAnchor(ViewportAnchor::AnchorUnderMouse);
 
     QPoint newCenter(viewport()->rect().width() / 2 - delta.x(),  viewport()->rect().height() / 2 - delta.y());
     centerOn(mapToScene(newCenter));
-    setTransformationAnchor(ViewportAnchor::AnchorViewCenter);
+    setTransformationAnchor(a);
 }
 
 void SchematicDoc::drawBackground(QPainter *painter, const QRectF &rect)
@@ -462,8 +463,11 @@ void SchematicDoc::drawBackground(QPainter *painter, const QRectF &rect)
 
 void SchematicDoc::zoom(float s)
 {
+    ViewportAnchor a = transformationAnchor();
+    setTransformationAnchor(ViewportAnchor::AnchorUnderMouse);
     scale(s, s);
     mScale *= s;
+    setTransformationAnchor(a);
 }
 
 bool SchematicDoc::pushUndoStack(QUndoCommand* cmd)
