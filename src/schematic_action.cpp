@@ -424,6 +424,14 @@ QUndoCommand* MouseActionNewElement::activate(QObject* sender)
 	return MouseAction::activate(sender);
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief MouseActionNewElement::release
+ * Called when the mouse button was released
+ * A new element will be created on the schematic if the left mouse button
+ * was released
+ * \param ev
+ * \return
+ */
 QUndoCommand* MouseActionNewElement::release(QEvent* ev)
 { untested();
 	QUndoCommand* cmd = nullptr;
@@ -436,6 +444,11 @@ QUndoCommand* MouseActionNewElement::release(QEvent* ev)
 	return cmd;
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief MouseActionNewElement::makeNew
+ * \param ev
+ * \return
+ */
 QUndoCommand* MouseActionNewElement::makeNew(QEvent* ev)
 { untested();
 	// assert(ev->widget=doc->scene()) // or so.
@@ -460,7 +473,7 @@ QUndoCommand* MouseActionNewElement::makeNew(QEvent* ev)
 	// _gfx = nullptr;
 
 	{ untested();
-		_gfx = _gfx->clone(); // new ElementGraphics(elt);
+        _gfx = _gfx->clone(); // new ElementGraphics(elt); Because _gfx is now part of the schematic
 		doc().sceneAddItem(_gfx); // does not attach.
 		assert(!element(_gfx)->scope());
 	}
@@ -469,6 +482,13 @@ QUndoCommand* MouseActionNewElement::makeNew(QEvent* ev)
 	return c;
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief MouseActionNewElement::deactivate
+ * Called when the action is changed. So the graphicselement
+ * attached to the mouse cursor is anymore needed and we can
+ * delete it
+ * \return
+ */
 QUndoCommand* MouseActionNewElement::deactivate()
 { untested();
 	// assert(!attached);
@@ -507,6 +527,15 @@ QUndoCommand* MouseActionNewElement::move(QEvent* ev)
 	return nullptr;
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief MouseActionNewElement::enter
+ * Called when entering the schematic scene.
+ * This function creates a new element from the selected one and also a
+ * graphics item and assign the element. The graphicsitem is stored in this
+ * class, as long as the element was not placed on the schematic
+ * \param ev
+ * \return
+ */
 QUndoCommand* MouseActionNewElement::enter(QEvent* ev)
 { untested();
 	trace1("new enter", ev->type());
