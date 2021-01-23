@@ -336,18 +336,23 @@ QMouseEvent SchematicDoc::snapToGrid(QMouseEvent* e)const
 	  return ee;
 }
 
-#if 0
 void SchematicDoc::mouseReleaseEvent(QMouseEvent *e)
 { untested();
   if(e->isAccepted()){ itested();
-  }else{ itested();
+      return;
+  } else if (e->buttons() & Qt::MiddleButton) {
+      // Change mouse cursor back to arrow
+      // setCursor->(Qt::ArrorCursor);
+      e->accept();
+      return;
+  } else { itested();
 	  // not necessary.
 	  // does not mattter where QGraphics* sees the release
 	  //auto ee = snapToGrid(e);
-	  QGraphicsView::mouseReleaseEvent(e);
+
   }
+  QGraphicsView::mouseReleaseEvent(e);
 }
-#endif
 void SchematicDoc::showAll()
 { untested();
   fitInView(this->sceneRect(), Qt::KeepAspectRatio);
@@ -484,11 +489,23 @@ void SchematicDoc::mouseMoveEvent(QMouseEvent *e)
   e->ignore(); // TODO: why sometimes it is accepted?
   if(e->isAccepted()){ itested();
       trace1("SchematicDoc::mouseMoveEvent: Is accepted!", e->type());
-  }else{itested();
+  } else if (e->buttons() & Qt::MiddleButton) {
+      QPointF oldPos = mapToScene(mOrigin);
+      QPointF newPos = mapToScene(e->pos());
+      QPointF translation = newPos - oldPos;
+
+      translate(translation.x(), translation.y());
+
+      mOrigin = e->pos();
+      e->accept();
+      return;
+  } else{itested();
 	  auto ee = snapToGrid(e);
 
 	  // move actions go through here.
 	  signalCursorPosChanged(ee.localPos().x(), ee.localPos().y());
+
+      // forwarding the event to the scene.
 	  QGraphicsView::mouseMoveEvent(e);
   }
 
@@ -524,6 +541,19 @@ QPointF SchematicDoc::mapToScene(QPoint const& p) const
 	return QGraphicsView::mapToScene(p);
 }
 #endif
+
+void SchematicDoc::mousePressEvent(QMouseEvent *e) {
+
+    if (e->button() == Qt::MiddleButton)
+    {
+        // Used for moving the view around durring Mouse Middle button
+        // Store original position.
+        mOrigin = e->pos();
+        e->accept();
+        return;
+    }
+    QGraphicsView::mousePressEvent(e);
+}
 
 #ifdef INDIVIDUAL_MOUSE_CALLBACKS
 // -----------------------------------------------------------
@@ -583,12 +613,17 @@ void SchematicDoc::mouseDoubleClickEvent(QMouseEvent *Event)
   mouseActions()->handle(Event);
 }
 
+#endif
+
 // -----------------------------------------------------------
 // possibly manufacture a GraphicsView::wheelEvent (or so) from this.
 // the current qt implementation does not do the modifiers, but scrolling
 // works, including multitouch
 void SchematicDoc::wheelEvent(QWheelEvent * Event)
 { untested();
+
+    double angleDelta = (double)Event->angleDelta().y()/100;
+    zoomBy(angleDelta);
 #ifndef USE_SCROLLVIEW
   (void) Event;
 #else
@@ -626,6 +661,8 @@ void SchematicDoc::wheelEvent(QWheelEvent * Event)
   Event->accept();   // QScrollView must not handle this event
 #endif
 }
+
+#ifdef INDIVIDUAL_MOUSE_CALLBACKS
 
 void SchematicDoc::dropEvent(QDropEvent *Event)
 { untested();

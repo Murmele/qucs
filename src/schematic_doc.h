@@ -324,10 +324,10 @@ protected:
 protected: // these are the overrides that collect mouse actions
            // forward to mouseAction instances to produce UndoActions
    void mouseMoveEvent(QMouseEvent*) override;
-//   void mousePressEvent(QMouseEvent*) override;
+   void mousePressEvent(QMouseEvent*) override;
 //   void mouseDoubleClickEvent(QMouseEvent*) override;
-//   void mouseReleaseEvent(QMouseEvent*) override;
-//   void wheelEvent(QWheelEvent*) override;
+   void mouseReleaseEvent(QMouseEvent*) override;
+   void wheelEvent(QWheelEvent*) override;
    void dropEvent(QDropEvent*e) override { untested();
 		QGraphicsView::dropEvent(e);
 	}
@@ -565,6 +565,8 @@ private:
   SubcktBase* _main{nullptr};
   CmdEltList _commands;
   std::map<std::string, SimProcess*> _simProcess; // QucsDoc?
+
+  QPoint mOrigin{QPoint(0,0)};
 }; // SchematicDocument
 /* -------------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------------- */
