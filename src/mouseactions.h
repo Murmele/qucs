@@ -66,6 +66,11 @@ public:
 	virtual cmd* press(QEvent*) { return nullptr; }
 	// virtual cmd* grab(QGraphicsSceneEvent*) { return nullptr; }
 	virtual cmd* release(QEvent*) { return nullptr; }
+	/*!
+	 * \brief dblclk
+	 * Double click
+	 * \return
+	 */
 	virtual cmd* dblclk(QEvent*) { return nullptr; }
 
 	virtual cmd* generic(QEvent*) { return nullptr; } // remove
