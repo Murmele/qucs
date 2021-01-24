@@ -94,7 +94,7 @@ public: // construct
 
 protected: // Element
 	void paint(ViewPainter*) const;
-	std::unique_ptr<QDialog> schematicWidget(QucsDoc*) const override;
+	std::unique_ptr<QDialog> createSchematicWidget(QucsDoc*) const override;
 
 public: // Element
 	pos_t center()const override;

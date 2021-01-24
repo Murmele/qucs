@@ -140,7 +140,7 @@ public: // other stuff
 	void setPosition(pos_t const& c){ _position = c; }
 	virtual void getCenter(int&, int&) const; // BUG
 	virtual void paint(ViewPainter*) const = 0;
-	virtual std::unique_ptr<QDialog> schematicWidget(QucsDoc*) const;
+	virtual std::unique_ptr<QDialog> createSchematicWidget(QucsDoc*) const;
 
 	// really?
 	virtual QWidget* newWidget() {return nullptr;}

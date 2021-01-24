@@ -126,7 +126,7 @@ void MouseActionSelect::showSchematicWidget(ElementGraphics* gfx)
         return;
     }
 
-    std::unique_ptr<QDialog> ew = elt->schematicWidget(&doc());
+    std::unique_ptr<QDialog> ew = elt->createSchematicWidget(&doc());
     if (!ew) {
         trace() << "no editElement";
         incomplete();
@@ -136,7 +136,7 @@ void MouseActionSelect::showSchematicWidget(ElementGraphics* gfx)
     trace() << "got editElement";
     assert(gfx);
 
-    if(auto eew=dynamic_cast<SchematicDialog*>(ew.get())){ untested();
+    if(auto eew=prechecked_cast<SchematicDialog*>(ew.get())){ untested();
 		assert(gfx);
 		eew->attach(gfx);
 		if(eew->exec() != 1){ untested();
@@ -2803,7 +2803,7 @@ void SchematicActions::editElement(SchematicDoc* doc, QEvent* e)
  // Element* E=element();
   ElementGraphics* EG=focusElement->element();
   Element* E=element(EG);
-  E->schematicWidget(Doc);
+  E->createSchematicWidget(Doc);
 
   // BUG. move to respective classes. 1 at a time...
   if(auto c=component(focusElement)){ untested();

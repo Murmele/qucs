@@ -1528,7 +1528,7 @@ std::string Component::paramName(unsigned i) const
   }
 }
 /*--------------------------------------------------------------------------*/
-std::unique_ptr<QDialog> Component::schematicWidget(QucsDoc* Doc) const
+std::unique_ptr<QDialog> Component::createSchematicWidget(QucsDoc* Doc) const
 { untested();
   trace0("Component::editElement");
   return std::unique_ptr<QDialog>(new ComponentDialog(Doc));

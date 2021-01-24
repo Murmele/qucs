@@ -79,12 +79,12 @@ public: //??!
 private: // Element override
   void    paint(ViewPainter*) const;
   /*!
-   * \brief schematicWidget
+   * \brief createSchematicWidget
    * Creates a new dialog for editing a component.
    * This dialog must be deleted afterwards
    * \return
    */
-  std::unique_ptr<QDialog> schematicWidget(QucsDoc*) const override;
+  std::unique_ptr<QDialog> createSchematicWidget(QucsDoc*) const override;
   rect_t bounding_rect() const override;
   bool legacyTransformHack() const override{
 	  return true;

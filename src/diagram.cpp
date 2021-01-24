@@ -2470,7 +2470,7 @@ bool Diagram::pressElement(SchematicDoc* Doc, Element*& selElem, QMouseEvent* Ev
 	return drawn;
 }
 
-std::unique_ptr<QDialog> Diagram::schematicWidget(QucsDoc* Doc) const
+std::unique_ptr<QDialog> Diagram::createSchematicWidget(QucsDoc* Doc) const
 { untested();
   trace0("Component::editElement");
   return std::unique_ptr<QDialog>(new DiagramDialog(Doc));

@@ -394,7 +394,7 @@ void Symbol::setParameter(unsigned pos, QString const& b)
 	setParameter(pos, v);
 }
 /*--------------------------------------------------------------------------*/
-std::unique_ptr<QDialog> Symbol::schematicWidget(QucsDoc* Doc) const
+std::unique_ptr<QDialog> Symbol::createSchematicWidget(QucsDoc* Doc) const
 { untested();
   return std::unique_ptr<QDialog>(new SymbolDialog(Doc));
 }

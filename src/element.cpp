@@ -41,7 +41,7 @@ Element::~Element()
 {
 }
 
-std::unique_ptr<QDialog> Element::schematicWidget(QucsDoc*) const
+std::unique_ptr<QDialog> Element::createSchematicWidget(QucsDoc*) const
 {
     return nullptr;
 }
