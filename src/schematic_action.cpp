@@ -104,7 +104,7 @@ QUndoCommand* MouseActionSelect::dblclk(QEvent* evt)
 		// QList<ElementGraphics*> l;
 		gfx = &i->item();
 		// l.push_back(&i->item());
-
+        assert(gfx);
         showSchematicWidget(gfx);
     }
 
