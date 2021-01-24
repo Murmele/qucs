@@ -15,6 +15,8 @@
 #include "element.h"
 #include "schematic_doc.h"
 
+#include "QDialog"
+
 Element::Element() : _position(0, 0), _owner(nullptr)
 {
   // Type = isDummyElement; // BUG
@@ -37,6 +39,11 @@ Element::Element(Element const& e)
 
 Element::~Element()
 {
+}
+
+std::unique_ptr<QDialog> Element::schematicWidget(QucsDoc*) const
+{
+    return nullptr;
 }
 
 void Element::getCenter(int&x, int&y) const

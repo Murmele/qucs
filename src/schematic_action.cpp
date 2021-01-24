@@ -109,13 +109,13 @@ QUndoCommand* MouseActionSelect::dblclk(QEvent* evt)
     }
 
     if(elt){
-        if(auto ew = elt->schematicWidget(&doc())){ untested();
+        if(std::unique_ptr<QDialog> ew = elt->schematicWidget(&doc())){ untested();
             trace0("got editElement");
             assert(gfx);
-            showSchematicWidget(ew, gfx);
+            showSchematicWidget(ew.get(), gfx);
         }else{ untested();
             trace0("no editElement");
-            incomplete(); // memory leak
+            incomplete();
         }
     }
 
@@ -133,7 +133,6 @@ void MouseActionSelect::showSchematicWidget(QWidget* ew, ElementGraphics* gfx)
 		}else{ untested();
 			incomplete();
 		}
-		//delete eew; // crash. why?
 	}else{
 	}
 }

@@ -2470,10 +2470,10 @@ bool Diagram::pressElement(SchematicDoc* Doc, Element*& selElem, QMouseEvent* Ev
 	return drawn;
 }
 
-QDialog* Diagram::schematicWidget(QucsDoc* Doc) const
+std::unique_ptr<QDialog> Diagram::schematicWidget(QucsDoc* Doc) const
 { untested();
   trace0("Component::editElement");
-  return new DiagramDialog(Doc); // memory leak?
+  return std::unique_ptr<QDialog>(new DiagramDialog(Doc));
 }
 
 // vim:ts=8:sw=2:noet

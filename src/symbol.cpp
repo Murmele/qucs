@@ -394,9 +394,9 @@ void Symbol::setParameter(unsigned pos, QString const& b)
 	setParameter(pos, v);
 }
 /*--------------------------------------------------------------------------*/
-QDialog* Symbol::schematicWidget(QucsDoc* Doc) const
+std::unique_ptr<QDialog> Symbol::schematicWidget(QucsDoc* Doc) const
 { untested();
-  return new SymbolDialog(Doc); // memory leak?
+  return std::unique_ptr<QDialog>(new SymbolDialog(Doc));
 }
 /*--------------------------------------------------------------------------*/
 COMMON_COMPONENT::COMMON_COMPONENT(int c)

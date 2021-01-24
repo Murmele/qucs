@@ -37,7 +37,7 @@ public:
 private:
   virtual rect_t bounding_rect() const override;
   void    paint(ViewPainter*) const;
-  QDialog* schematicWidget(QucsDoc* Doc) const;
+  std::unique_ptr<QDialog> schematicWidget(QucsDoc* Doc) const;
 
 public:
   void    paintScheme(SchematicDoc*) const;

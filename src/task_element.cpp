@@ -106,10 +106,10 @@ int TaskElement::textSize(int& _dx, int& _dy)
   return count;
 }
 /*--------------------------------------------------------------------------*/
-QDialog* TaskElement::schematicWidget(QucsDoc* Doc) const
+std::unique_ptr<QDialog> TaskElement::schematicWidget(QucsDoc* Doc) const
 { untested();
   trace0("Component::editElement");
-  return new TaskElementDialog(Doc); // memory leak?
+  return std::unique_ptr<QDialog>(new TaskElementDialog(Doc)); // TODO: memory leak?
 }
 /*--------------------------------------------------------------------------*/
 

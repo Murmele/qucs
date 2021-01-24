@@ -1521,10 +1521,10 @@ std::string Component::paramName(unsigned i) const
   }
 }
 /*--------------------------------------------------------------------------*/
-QDialog* Component::schematicWidget(QucsDoc* Doc) const
+std::unique_ptr<QDialog> Component::schematicWidget(QucsDoc* Doc) const
 { untested();
   trace0("Component::editElement");
-  return new ComponentDialog(Doc); // memory leak?
+  return std::unique_ptr<QDialog>(new ComponentDialog(Doc));
 }
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/

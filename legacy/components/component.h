@@ -78,7 +78,7 @@ public: //??!
 
 private: // Element override
   void    paint(ViewPainter*) const;
-  QDialog* schematicWidget(QucsDoc*) const override;
+  std::unique_ptr<QDialog> schematicWidget(QucsDoc*) const override;
   rect_t bounding_rect() const override;
   bool legacyTransformHack() const override{
 	  return true;

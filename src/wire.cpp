@@ -51,7 +51,7 @@ private: // Element
 	Wire* clone() const override{
 		return new Wire(*this);
 	}
-	QDialog* schematicWidget(QucsDoc*) const override;
+    std::unique_ptr<QDialog> schematicWidget(QucsDoc*) const override;
 	void paint(ViewPainter*) const override;
 	rect_t bounding_rect() const override;
 
@@ -342,10 +342,10 @@ Symbol* Wire::newUnion(Symbol const* s) const
 	return nullptr;
 }
 /*--------------------------------------------------------------------------*/
-QDialog* Wire::schematicWidget(QucsDoc* Doc) const
+std::unique_ptr<QDialog> Wire::schematicWidget(QucsDoc* Doc) const
 { untested();
 	trace0("Component::editElement");
-	return new WireDialog(Doc); // memory leak?
+    return std::unique_ptr<QDialog>(new WireDialog(Doc)); // memory leak?
 }
 /*--------------------------------------------------------------------------*/
 void Wire::paint(ViewPainter *p) const
