@@ -249,8 +249,17 @@ bool SchematicScene::itemEvent(QEvent* e)
 
 bool SchematicScene::handleMouseActions(QEvent* e)
 {
-    if (e->isAccepted())
-        return false;
+// TODO: commit dc6618fcf4dd558875a97ad0f3c9fd75aacd6fc5
+// when double clicking on a created symbol, the elementGraphics receives the event, but the
+// event is for some reason already accepted (Event it is not accepted in SchematicScene::event()
+// shortly before QGraphicsScene::event() is called. Checking with QList<ElementGraphics*> itms = items(mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
+// No other item gets selected. Don't understand why it is selected
+// Traces:
+/* virtual bool SchematicScene::event(QEvent*):e->isAccepted()=0e->type()=158@#@items raw mutable  L.size()=1
+virtual bool SchematicScene::event(QEvent*):Itms@#@ElementGraphics::sceneEvent already accepted  e->type()=186
+*/
+//    if (e->isAccepted())
+//        return false;
     assert(doc());
     assert(doc()->mouseActions());
     return doc()->mouseActions()->handle(e);
