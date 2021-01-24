@@ -103,6 +103,11 @@ class ViewPainter;
 /*--------------------------------------------------------------------------*/
 class SchematicModel;
 /*--------------------------------------------------------------------------*/
+
+/*!
+ * \brief The Element class
+ * Base object of all elements. This class handles the position TODO: what does this class exactly
+ */
 class Element : public Object {
 public:
 	friend class ElementGraphics;

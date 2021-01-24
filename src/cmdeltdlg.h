@@ -33,11 +33,20 @@ class QCheckBox;
 class QPushButton;
 class QLabel;
 
+/*!
+ * \brief The TaskElementDialog class
+ * Dialog which is used to edit the properties of a component.
+ */
 class TaskElementDialog : public SchematicDialog {
 public:
   TaskElementDialog(QucsDoc*);
   ~TaskElementDialog();
 
+  /*!
+   * \brief attach
+   * Attach the element which should be edited
+   * \param c
+   */
   void attach(ElementGraphics* c) override;
 
 private: // slot overrides.

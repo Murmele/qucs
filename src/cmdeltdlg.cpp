@@ -70,10 +70,18 @@ void TaskElementDialog::attach(ElementGraphics* gfx)
   Expr.setPattern("[\\w_]+");  // valid expression for property 'NameEdit'
   ValRestrict = new QRegExpValidator(Expr, this);
 
-  checkSim  = 0;  comboSim  = 0;  comboType  = 0;  checkParam = 0;
-  editStart = 0;  editStop = 0;  editNumber = 0;
+  // TODO: delete them first???
+  assert(!checkSim);
+  assert(!comboSim);
+  assert(!comboType);
+  assert(!checkParam);
+  assert(!editStart);
+  assert(!editStop);
+  assert(!editNumber);
+  checkSim  = nullptr;  comboSim  = nullptr;  comboType  = nullptr;  checkParam = nullptr;
+  editStart = nullptr;  editStop = nullptr;  editNumber = nullptr;
   
-  Property *pp = 0; // last property shown elsewhere outside the properties table, not to put in TableView
+  Property *pp = nullptr; // last property shown elsewhere outside the properties table, not to put in TableView
   // ...........................................................
   // if simulation component: .TR, .AC, .SW, (.SP ?)
   if((Comp->typeName() != "DC") && (Comp->typeName() != "HB") &&

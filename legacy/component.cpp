@@ -60,6 +60,12 @@ public:
   ComponentDialog(QucsDoc*);
   ~ComponentDialog();
 
+
+  /*!
+   * \brief attach
+   * This method shall not be called multiple times! There is an internal variable which checks that.
+   * \param c
+   */
   void attach(ElementGraphics* c) override;
 
 private: // slot overrides.
@@ -104,7 +110,7 @@ private:
   QValidator  *Validator, *ValRestrict, *Validator2;
   QRegExp     Expr;
   QIntValidator *ValInteger;
-  QTableWidget  *prop;
+  QTableWidget  *prop; // TODO: rename to propTable
   QLineEdit   *edit, *NameEdit, *CompNameEdit;
   QComboBox   *ComboEdit;
   QLabel      *Name, *Description;
@@ -129,6 +135,7 @@ private:
 private:
   ElementGraphics* _gfx;
   Component const* _comp;
+  bool attached{false}; // For checking that attached gets only called once
 };
 
 const int Component::num_component_params = 2; // tx and ty.
@@ -1559,6 +1566,11 @@ ComponentDialog::ComponentDialog(QucsDoc* d) : SchematicDialog(d)
 /*--------------------------------------------------------------------------*/
 void ComponentDialog::attach(ElementGraphics* gfx)
 {
+
+  // If this method gets called multiple times, there is a memory leak.
+  assert(!attached);
+  attached = true;
+
   trace0("ComponentDialog::attach");
   auto Comp = dynamic_cast<Component*>(element(gfx));
   assert(Comp);
@@ -2184,7 +2196,7 @@ void ComponentDialog::slotApplyInput()
   bool display;
   Property *pp = Comp->Props.first();
   // apply all the new property values
-
+  // TODO: what does it???
   if(comboSim) {
     display = checkSim->isChecked();
     if(pp->display != display) {
