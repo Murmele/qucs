@@ -69,7 +69,7 @@ private: // rectangles?  // this was in MouseActionsHandler. BUG. remove
 	int MAy2;
 #endif
 private:
-	void showSchematicWidget(QWidget*, ElementGraphics*);
+    void showSchematicWidget(ElementGraphics *gfx);
     cmd* release_left(QEvent*);
 
 protected:
@@ -98,34 +98,45 @@ QUndoCommand* MouseActionSelect::dblclk(QEvent* evt)
 	//  Doc->releaseKeyboard();  // allow keyboard inputs again
 	//  QucsMain->editText->setHidden(true);
 	//  editElement(Doc, Event);
-	Element* elt = nullptr;
 	ElementGraphics* gfx = nullptr;
 	//
 	if(auto i = dynamic_cast<ItemEvent*>(evt)){ untested();
 		// QList<ElementGraphics*> l;
 		gfx = &i->item();
-		elt = element(gfx);
 		// l.push_back(&i->item());
+
+        showSchematicWidget(gfx);
     }
 
-    if(elt){
-        if(std::unique_ptr<QDialog> ew = elt->schematicWidget(&doc())){ untested();
-            trace0("got editElement");
-            assert(gfx);
-            showSchematicWidget(ew.get(), gfx);
-        }else{ untested();
-            trace0("no editElement");
-            incomplete();
-        }
-    }
-
-	return nullptr;
+    return nullptr;
 }
 /*--------------------------------------------------------------------------*/
-// not sure I like this.
-void MouseActionSelect::showSchematicWidget(QWidget* ew, ElementGraphics* gfx)
+
+/*!
+ * \brief MouseActionSelect::showSchematicWidget
+ * Shows the element schematic widget to edit the properties of the element
+ * \param gfx The graphicsitem to which the element is attached. From this the element is extracted
+ */
+void MouseActionSelect::showSchematicWidget(ElementGraphics* gfx)
 {
-	if(auto eew=dynamic_cast<SchematicDialog*>(ew)){ untested();
+    Element* elt = element(gfx);
+    if (!elt) {
+        unreachable();
+        trace() << "Element is not valid.";
+        return;
+    }
+
+    std::unique_ptr<QDialog> ew = elt->schematicWidget(&doc());
+    if (!ew) {
+        trace() << "no editElement";
+        incomplete();
+        return;
+    }
+
+    trace() << "got editElement";
+    assert(gfx);
+
+    if(auto eew=dynamic_cast<SchematicDialog*>(ew.get())){ untested();
 		assert(gfx);
 		eew->attach(gfx);
 		if(eew->exec() != 1){ untested();
