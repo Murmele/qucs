@@ -86,6 +86,12 @@ private: // more decoupling
 	QPointF _pos1;
 }; // MouseActionSelect
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief MouseActionSelect::dblclk
+ * Double click. This method handles the itemevents from the graphicsitems.
+ * \param evt
+ * \return
+ */
 QUndoCommand* MouseActionSelect::dblclk(QEvent* evt)
 { untested();
 	incomplete();
@@ -100,18 +106,18 @@ QUndoCommand* MouseActionSelect::dblclk(QEvent* evt)
 		gfx = &i->item();
 		elt = element(gfx);
 		// l.push_back(&i->item());
-	}else{ untested();
-	}
+    }
 
-	if(!elt){ untested();
-	}else if(auto ew = elt->schematicWidget(&doc())){ untested();
-		trace0("got editElement");
-		assert(gfx);
-		showSchematicWidget(ew, gfx);
-	}else{ untested();
-		trace0("no editElement");
-		incomplete(); // memory leak
-	}
+    if(elt){
+        if(auto ew = elt->schematicWidget(&doc())){ untested();
+            trace0("got editElement");
+            assert(gfx);
+            showSchematicWidget(ew, gfx);
+        }else{ untested();
+            trace0("no editElement");
+            incomplete(); // memory leak
+        }
+    }
 
 	return nullptr;
 }

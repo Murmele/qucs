@@ -284,6 +284,15 @@ bool SchematicScene::event(QEvent* e)
     if(e->isAccepted() && e->type() != QEvent::MetaCall){
 	}else{itested();
 		trace0("fwd");
+        trace() << var(e->isAccepted()) << var(e->type());
+        auto mouseEvent = dynamic_cast<QGraphicsSceneMouseEvent*>(e);
+        if (mouseEvent)
+        {
+            QList<ElementGraphics*> itms = items(mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
+            //itemAt(20, 10);
+            trace() << "Itms";
+        }
+
 		r = QGraphicsScene::event(e);
 	}
 

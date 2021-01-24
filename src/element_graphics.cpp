@@ -28,6 +28,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
+#include <QGraphicsSceneMouseEvent>
 
 #include "../legacy/obsolete_paintings.h"
 /*--------------------------------------------------------------------------*/
@@ -484,19 +485,31 @@ void ElementGraphics::setSelected(bool s)
 // the specialized event handlers. should return true if the event e was
 // recognized and processed.
 // """
+/*!
+ * \brief ElementGraphics::sceneEvent
+ * Received, when the scene does not accept the event and an event
+ * is related to this item.
+ * This method creates a Item event from the event and calls the scene
+ * handler again. So it must not be determined in the scene, which element
+ * gets the action, but has a little bit of overhead, because the scene handler
+ * is called before
+ * \param e
+ * \return
+ */
 bool ElementGraphics::sceneEvent(QEvent* e)
 {itested();
 	if(e->type() == QEvent::WindowActivate){itested();
 	}else if(e->type() == QEvent::WindowDeactivate){itested();
 	}else if(!e->isAccepted()){itested();
 		// possibly set in filter?
-	}else{itested();
+    }else {itested();
 		// unreachable();
 		// strange. getting here when shutting down?
 		trace1("ElementGraphics::sceneEvent already accepted", e->type());
 	}
 	assert(scene());
 
+    trace() << var(e->isAccepted()) << ", " var(e->type());
 	auto sc = scene();
 	auto s = dynamic_cast<SchematicScene*>(sc);
 	assert(s);
