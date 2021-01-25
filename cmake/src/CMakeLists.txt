@@ -8,8 +8,6 @@
 project(qucs_lib CXX)
 
 # this is where the library source is.
-set(libqucsPath ../../src)
-
 set(libqucsPath ${CMAKE_CURRENT_SOURCE_DIR}/../../src)
 
 # use top VERSION file
