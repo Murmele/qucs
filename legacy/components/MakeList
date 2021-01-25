@@ -1,5 +1,11 @@
 TARGET = components
 
+DIALOGS = \
+	componentdialog.cpp
+	
+COMPONENT_CLASS = \
+    component.cpp
+
 DEFAULT_COMPONENTS = \
 	EKV26MOS.cpp \
 	MESFET.cpp \
@@ -9,11 +15,11 @@ DEFAULT_COMPONENTS = \
 	bondwire.cpp \
 	circulator.cpp \
 	coaxialline.cpp \
-	component.cpp \
 	coupler.cpp \
 	d_flipflop.cpp \
 	diac.cpp \
 	eqndefined.cpp \
+	gatecomponent.cpp \
 	iexp.cpp \
 	ifile.cpp \
 	isolator.cpp \

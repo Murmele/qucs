@@ -6,8 +6,6 @@ SUBDIRS = \
 	qucsator
 
 LEGACY_SRC = \
-	component.cpp \
-	gatecomponent.cpp \
 	curvediagram.cpp \
 	compcmd.cpp \
 	diagram.cpp \
