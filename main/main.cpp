@@ -36,6 +36,7 @@
 //#include <QDebug>
 
 #include "qucs.h"
+#include "qucs_defines.h"
 #include "docfmt.h"
 #include "printerwriter.h"
 #include "imagewriter.h"
@@ -54,9 +55,6 @@
 #endif
 
 static const std::string default_simulator="qucsator"; // FIXME: get from rc? maybe from environment?
-
-
-#define CMD Command
 
 void setSimulator(char const* name)
 { untested();

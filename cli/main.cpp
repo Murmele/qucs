@@ -235,8 +235,8 @@ static void process_cmd_line(int argc, const char *argv[])
 int main(int argc, const char *argv[])
 {
   prepare_env();
-  //CKT_BASE::_sim = new SIM_DATA;
-  //CKT_BASE::_probe_lists = new PROBE_LISTS;
+  //CircuitBase::_sim = new SIM_DATA;
+  //CircuitBase::_probe_lists = new PROBE_LISTS;
   try {
   {
     // SET_RUN_MODE xx(rBATCH);
@@ -298,10 +298,10 @@ int main(int argc, const char *argv[])
   CMD::command("clear", &static_model);
   assert(static_model.size()==0);
   CMD::command("detach_all", &static_model);
-//  delete CKT_BASE::_probe_lists;
-//  CKT_BASE::_probe_lists = NULL;
-//  delete CKT_BASE::_sim;
-//  CKT_BASE::_sim = NULL;
+//  delete CircuitBase::_probe_lists;
+//  CircuitBase::_probe_lists = NULL;
+//  delete CircuitBase::_sim;
+//  CircuitBase::_sim = NULL;
   
   return 0;
 }

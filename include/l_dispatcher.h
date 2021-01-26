@@ -35,13 +35,19 @@
 // #include "l_stlextra.h"
 // #include "u_opt.h"
 // #include "ap.h"
+#include "qucs_defines.h"
 #include "io_error.h"
+#include "io_trace.h"
+
+#include <map>
+#include <string>
+#include <assert.h>
 /*--------------------------------------------------------------------------*/
 class DISPATCHER_BASE {
 private:
-  std::map<std::string, CKT_BASE*> _map;
+  std::map<std::string, CircuitBase*> _map;
 public:
-  typedef std::map<std::string, CKT_BASE*>::const_iterator const_iterator;
+  typedef std::map<std::string, CircuitBase*>::const_iterator const_iterator;
 private:
   DISPATCHER_BASE(DISPATCHER_BASE const&) {unreachable();}
 public:
@@ -51,18 +57,18 @@ public:
   const_iterator begin()const		{return _map.begin();}
   const_iterator end()const		{return _map.end();}
 public:
-  CKT_BASE* operator[](std::string s);
+  CircuitBase* operator[](std::string s);
 private:
-  void      uninstall(CKT_BASE* p);
-  void	    install(const std::string& s, CKT_BASE* p);
+  void      uninstall(CircuitBase* p);
+  void	    install(const std::string& s, CircuitBase* p);
 public:
   class INSTALL {
   private:
     const std::string _name;
     DISPATCHER_BASE* _d;
-    CKT_BASE* _p;
+    CircuitBase* _p;
   public:
-    INSTALL(DISPATCHER_BASE* d, const std::string& name, CKT_BASE* p) :
+    INSTALL(DISPATCHER_BASE* d, const std::string& name, CircuitBase* p) :
       _name(name),
       _d(d),
       _p(p)
@@ -118,16 +124,16 @@ class INTERFACE D_DISPATCHER : public DISPATCHER_BASE {
 inline DISPATCHER_BASE::~DISPATCHER_BASE()
 { untested();
 #if !defined(NDEBUG)
-  for (typename std::map<std::string, CKT_BASE*>::iterator
+  for (typename std::map<std::string, CircuitBase*>::iterator
       ii = _map.begin();  ii != _map.end();  ++ii) { untested();
     assert(!(ii->second));
   }
 #endif
 }
 /*--------------------------------------------------------------------------*/
-inline CKT_BASE* DISPATCHER_BASE::operator[](std::string s)
+inline CircuitBase* DISPATCHER_BASE::operator[](std::string s)
 {
-  CKT_BASE* rv = _map[s];
+  CircuitBase* rv = _map[s];
   if (!rv && OPT::case_insensitive) {
     notstd::to_lower(&s);
     rv = _map[s];
@@ -136,9 +142,9 @@ inline CKT_BASE* DISPATCHER_BASE::operator[](std::string s)
   return rv;
 }
 /*--------------------------------------------------------------------------*/
-inline void DISPATCHER_BASE::uninstall(CKT_BASE* p)
+inline void DISPATCHER_BASE::uninstall(CircuitBase* p)
 {
-  for (typename std::map<std::string, CKT_BASE*>::iterator
+  for (typename std::map<std::string, CircuitBase*>::iterator
 	 ii = _map.begin();  ii != _map.end();  ++ii) {
     if (ii->second == p) {
       ii->second = NULL;
@@ -146,7 +152,7 @@ inline void DISPATCHER_BASE::uninstall(CKT_BASE* p)
     }
   }
 #if !defined(NDEBUG)
-  for (typename std::map<std::string, CKT_BASE*>::iterator
+  for (typename std::map<std::string, CircuitBase*>::iterator
 	 ii = _map.begin();  ii != _map.end();  ++ii) {
     assert(ii->second != p);
   }
@@ -162,7 +168,7 @@ void DISPATCHER<TT>::check_init()
   }
 }
 /*--------------------------------------------------------------------------*/
-inline void DISPATCHER_BASE::install(const std::string& s, CKT_BASE* p)
+inline void DISPATCHER_BASE::install(const std::string& s, CircuitBase* p)
 {
   assert(s.find(',', 0) == std::string::npos);
   trace0(s.c_str());
@@ -196,7 +202,7 @@ template <class TT>
 TT* DISPATCHER<TT>::operator[](std::string s)
 {
   check_init(); // main.cc gets here first (??)
-  CKT_BASE* rv = (*_base)[s];
+  CircuitBase* rv = (*_base)[s];
   if (!rv && OPT::case_insensitive) {
     notstd::to_lower(&s);
     rv = (*_base)[s];

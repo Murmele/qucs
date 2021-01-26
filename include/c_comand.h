@@ -25,21 +25,18 @@
 #ifndef C_COMAND_H
 #define C_COMAND_H
 
+#include "qucs_defines.h"
 /*--------------------------------------------------------------------------*/
 // QUCS hacks
-#ifndef CMD
-#error // not yet
-#endif
 #include "object.h"
 #include "schematic_model.h"
-#define CKT_BASE Object
 #define CARD_LIST SchematicModel
 #define CS istream_t
 //#include "e_card.h"
 /*--------------------------------------------------------------------------*/
 class CS;
 /*--------------------------------------------------------------------------*/
-class INTERFACE CMD : public CKT_BASE {
+class INTERFACE CMD : public CircuitBase {
 public:
   std::string value_name()const {return "";}
   virtual void do_it(CS&, CARD_LIST*) = 0; // const!?
