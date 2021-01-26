@@ -72,30 +72,28 @@ void ComponentDialog::attach(ElementGraphics* gfx)
   _all->addLayout(gp1);
 
 
-  // ...........................................................
-  // BUG: memory leak
-  gp1->addWidget(new QLabel(Comp->description()), 0,0,1,2);
+  gp1->addWidget(new QLabel(Comp->description(), this), 0,0,1,2);
 
   QHBoxLayout *h5 = new QHBoxLayout;
   h5->setSpacing(5);
 
-  h5->addWidget(new QLabel(tr("Name:")) );
+  h5->addWidget(new QLabel(tr("Name:"), this) );
 
-  CompNameEdit = new QLineEdit;
+  CompNameEdit = new QLineEdit(this);
   h5->addWidget(CompNameEdit);
 
   CompNameEdit->setValidator(ValRestrict);
   connect(CompNameEdit, SIGNAL(returnPressed()), SLOT(slotButtOK()));
 
-  showName = new QCheckBox(tr("display in schematic"));
+  showName = new QCheckBox(tr("display in schematic"), this);
   h5->addWidget(showName);
 
-  QWidget *hTop = new QWidget;
+  QWidget *hTop = new QWidget(this);
   hTop->setLayout(h5);
 
   gp1->addWidget(hTop,1,0);
 
-  QGroupBox *PropertyBox = new QGroupBox(tr("Properties"));
+  QGroupBox *PropertyBox = new QGroupBox(tr("Properties"), this);
   gp1->addWidget(PropertyBox,2,0);
 
   // H layout inside the GroupBox
@@ -103,12 +101,12 @@ void ComponentDialog::attach(ElementGraphics* gfx)
   PropertyBox->setLayout(hProps);
 
   // left pane
-  QWidget *vboxPropsL = new QWidget;
+  QWidget *vboxPropsL = new QWidget(this);
   QVBoxLayout *vL = new QVBoxLayout;
   vboxPropsL->setLayout(vL);
 
   /// \todo column min width
-  prop = new QTableWidget(0,4); //initialize
+  prop = new QTableWidget(0,4, this); //initialize
   vL->addWidget(prop);
   prop->verticalHeader()->setVisible(false);
   prop->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -131,7 +129,7 @@ void ComponentDialog::attach(ElementGraphics* gfx)
   prop->setHorizontalHeaderLabels(headers);
 
   // right pane
-  QWidget *vboxPropsR = new QWidget;
+  QWidget *vboxPropsR = new QWidget(this);
   QVBoxLayout *v1 = new QVBoxLayout;
   vboxPropsR->setLayout(v1);
 
@@ -140,27 +138,27 @@ void ComponentDialog::attach(ElementGraphics* gfx)
   hProps->addWidget(vboxPropsL, 5); // stretch the left pane (with the table) when resized
   hProps->addWidget(vboxPropsR);
 
-  Name = new QLabel;
+  Name = new QLabel(this);
   v1->addWidget(Name);
 
-  Description = new QLabel;
+  Description = new QLabel(this);
   v1->addWidget(Description);
 
   // hide, because it only replaces 'Description' in some cases
-  NameEdit = new QLineEdit;
+  NameEdit = new QLineEdit(this);
   v1->addWidget(NameEdit);
   NameEdit->setVisible(false);
   NameEdit->setValidator(ValRestrict);
   connect(NameEdit, SIGNAL(returnPressed()), SLOT(slotApplyPropName()));
 
-  edit = new QLineEdit;
+  edit = new QLineEdit(this);
   v1->addWidget(edit);
   edit->setMinimumWidth(150);
   edit->setValidator(Validator2);
   connect(edit, SIGNAL(returnPressed()), SLOT(slotApplyProperty()));
 
   // hide, because it only replaces 'edit' in some cases
-  ComboEdit = new QComboBox;
+  ComboEdit = new QComboBox(this);
   v1->addWidget(ComboEdit);
   ComboEdit->setVisible(false);
   ComboEdit->installEventFilter(this); // to catch Enter keypress
@@ -170,19 +168,19 @@ void ComponentDialog::attach(ElementGraphics* gfx)
   QHBoxLayout *h3 = new QHBoxLayout;
   v1->addLayout(h3);
 
-  EditButt = new QPushButton(tr("Edit"));
+  EditButt = new QPushButton(tr("Edit"), this);
   h3->addWidget(EditButt);
   EditButt->setEnabled(false);
   EditButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   connect(EditButt, SIGNAL(clicked()), SLOT(slotEditFile()));
 
-  BrowseButt = new QPushButton(tr("Browse"));
+  BrowseButt = new QPushButton(tr("Browse"), this);
   h3->addWidget(BrowseButt);
   BrowseButt->setEnabled(false);
   BrowseButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   connect(BrowseButt, SIGNAL(clicked()), SLOT(slotBrowseFile()));
 
-  disp = new QCheckBox(tr("display in schematic"));
+  disp = new QCheckBox(tr("display in schematic"), this);
   v1->addWidget(disp);
   connect(disp, SIGNAL(stateChanged(int)), SLOT(slotApplyState(int)));
 
@@ -191,18 +189,18 @@ void ComponentDialog::attach(ElementGraphics* gfx)
 
   QGridLayout *bg = new QGridLayout;
   v1->addLayout(bg);
-  ButtAdd = new QPushButton(tr("Add"));
+  ButtAdd = new QPushButton(tr("Add"), this);
   bg->addWidget(ButtAdd, 0, 0);
   ButtAdd->setEnabled(false);
-  ButtRem = new QPushButton(tr("Remove"));
+  ButtRem = new QPushButton(tr("Remove"), this);
   bg->addWidget(ButtRem, 0, 1);
   ButtRem->setEnabled(false);
   connect(ButtAdd, SIGNAL(clicked()), SLOT(slotButtAdd()));
   connect(ButtRem, SIGNAL(clicked()), SLOT(slotButtRem()));
   // Buttons to move equations up/down on the list
-  ButtUp = new QPushButton(tr("Move Up"));
+  ButtUp = new QPushButton(tr("Move Up"), this);
   bg->addWidget(ButtUp, 1, 0);
-  ButtDown = new QPushButton(tr("Move Down"));
+  ButtDown = new QPushButton(tr("Move Down"), this);
   bg->addWidget(ButtDown, 1, 1);
   connect(ButtUp,   SIGNAL(clicked()), SLOT(slotButtUp()));
   connect(ButtDown, SIGNAL(clicked()), SLOT(slotButtDown()));
@@ -210,13 +208,13 @@ void ComponentDialog::attach(ElementGraphics* gfx)
 
   // ...........................................................
   QHBoxLayout *h2 = new QHBoxLayout;
-  QWidget * hbox2 = new QWidget;
+  QWidget * hbox2 = new QWidget(this);
   hbox2->setLayout(h2);
   h2->setSpacing(5);
   _all->addWidget(hbox2);
-  QPushButton *ok = new QPushButton(tr("OK"));
-  QPushButton *apply = new QPushButton(tr("Apply"));
-  QPushButton *cancel = new QPushButton(tr("Cancel"));
+  QPushButton *ok = new QPushButton(tr("OK"), this);
+  QPushButton *apply = new QPushButton(tr("Apply"), this);
+  QPushButton *cancel = new QPushButton(tr("Cancel"), this);
   h2->addWidget(ok);
   h2->addWidget(apply);
   h2->addWidget(cancel);

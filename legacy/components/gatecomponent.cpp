@@ -1,4 +1,4 @@
-#include "components/component.h" // BUG
+#include "component.h" // BUG
 #include "node.h"
 #include "qucs.h"
 #include "schematic_doc.h"

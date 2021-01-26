@@ -19,7 +19,6 @@ DEFAULT_COMPONENTS = \
 	d_flipflop.cpp \
 	diac.cpp \
 	eqndefined.cpp \
-	gatecomponent.cpp \
 	iexp.cpp \
 	ifile.cpp \
 	isolator.cpp \
@@ -74,6 +73,7 @@ LUMPED_COMPONENTS = \
 	dcblock.cpp \
 	dcfeed.cpp \
 	diode.cpp \
+	gatecomponent.cpp \
 	gyrator.cpp \
 	inductor.cpp \
 	iprobe.cpp \

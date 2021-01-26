@@ -14,9 +14,12 @@ find_package(
   Core
   )
 
-add_library(legacy SHARED ${SRCS})
+# TODO: try to remove all these external sources!
+add_library(legacy SHARED ${SRCS} components/component.cpp components/componentdialog.cpp components/gatecomponent.cpp)
 # TODO: get rid of all of this dependecies
-target_include_directories(legacy PRIVATE ${PROJECT_SOURCE_DIR}/../src
+target_include_directories(legacy PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/components
+    ${PROJECT_SOURCE_DIR}/../src
  ${PROJECT_SOURCE_DIR}/../include
  ${qucs_BINARY_DIR}/main # config.h
  )

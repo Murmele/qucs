@@ -33,7 +33,7 @@ set(COMPONENTS_SRCS ${COMPONENTS_SRCS} ${COMPONENT_SRCS_})
 readVariable(MakeList HEADERS_ HEADERS)
 
 # An object library compiles source files but does not archive or link their object files into a library.
-add_library(components SHARED ${HEADERS} ${COMPONENTS_SRCS})
+add_library(components SHARED ${COMPONENTS_SRCS})
 target_include_directories(components
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}
