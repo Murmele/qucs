@@ -5,6 +5,8 @@
 //testing=script 2015.01.21
 #ifndef QUCS_DISPATCHER_H
 #define QUCS_DISPATCHER_H
+
+#include "platform.h"
 /*--------------------------------------------------------------------------*/
 // TODO: connect with qucs error facilities.
 INTERFACE void error(int,const char*,...);
@@ -24,8 +26,6 @@ std::string to_string(int);
 #include <assert.h>
 #include "platform.h"
 #include "io_trace.h"
-#define CKT_BASE Object
 #define DISPATCHER Dispatcher
 #include "l_dispatcher.h"
-#undef CKT_BASE
 #endif

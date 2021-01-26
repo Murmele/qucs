@@ -2,6 +2,7 @@
 // (c) 2020 Felix Salfelder
 // GPLv3+
 
+#include "qucs_defines.h"
 #include "schematic_model.h"
 #include "globals.h"
 #include "wiretest.h"
