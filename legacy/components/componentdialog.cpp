@@ -22,6 +22,13 @@
 #include <QKeyEvent>
 #include <QDebug>
 #include "swap.h"
+
+typedef enum {
+   name = 0,
+   value = 1,
+   show = 2,
+   desc = 3,
+} PropTableColumns;
 /*--------------------------------------------------------------------------*/
 ComponentDialog::ComponentDialog(QucsDoc* d) : SchematicDialog(d)
 {
@@ -61,9 +68,6 @@ void ComponentDialog::attach(ElementGraphics* gfx)
   Validator2 = new QRegExpValidator(Expr, this);
   Expr.setPattern("[\\w_]+");  // valid expression for property 'NameEdit'
   ValRestrict = new QRegExpValidator(Expr, this);
-
-  checkSim  = nullptr;  comboSim  = nullptr;  comboType  = nullptr;  checkParam = nullptr;
-  editStart = nullptr;  editStop = nullptr;  editNumber = nullptr;
   
   Property *pp = nullptr; // last property shown elsewhere outside the properties table, not to put in TableView
   // ...........................................................
@@ -106,19 +110,19 @@ void ComponentDialog::attach(ElementGraphics* gfx)
   vboxPropsL->setLayout(vL);
 
   /// \todo column min width
-  prop = new QTableWidget(0,4, this); //initialize
-  vL->addWidget(prop);
-  prop->verticalHeader()->setVisible(false);
-  prop->setSelectionBehavior(QAbstractItemView::SelectRows);
-  prop->setSelectionMode(QAbstractItemView::SingleSelection);
-  prop->setMinimumSize(200, 150);
-  prop->horizontalHeader()->setStretchLastSection(true);
+  propTable = new QTableWidget(0,4, this); //initialize
+  vL->addWidget(propTable);
+  propTable->verticalHeader()->setVisible(false);
+  propTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+  propTable->setSelectionMode(QAbstractItemView::SingleSelection);
+  propTable->setMinimumSize(200, 150);
+  propTable->horizontalHeader()->setStretchLastSection(true);
   // set automatic resize so all content will be visible, 
   //  horizontal scrollbar will appear if table becomes too large
-  prop->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-  prop->horizontalHeader()->setClickable(false); // no action when clicking on the header 
+  propTable->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+  propTable->horizontalHeader()->setClickable(false); // no action when clicking on the header
 
-  connect(prop->horizontalHeader(),SIGNAL(sectionDoubleClicked(int)),
+  connect(propTable->horizontalHeader(),SIGNAL(sectionDoubleClicked(int)),
               this, SLOT(slotHHeaderClicked(int)));
 
   QStringList headers;
@@ -126,7 +130,7 @@ void ComponentDialog::attach(ElementGraphics* gfx)
           << tr("Value")
           << tr("display")
           << tr("Description");
-  prop->setHorizontalHeaderLabels(headers);
+  propTable->setHorizontalHeaderLabels(headers);
 
   // right pane
   QWidget *vboxPropsR = new QWidget(this);
@@ -233,7 +237,7 @@ void ComponentDialog::attach(ElementGraphics* gfx)
   tmp = Comp->ty+ty_Dist - Comp->y1_();
   if((tmp > 0) || (tmp < -6))  ty_Dist = 0;
 
-  /*! Insert all \a Comp properties into the dialog \a prop list */
+  /*! Insert all \a Comp properties into the dialog \a propTable list */
   int row=0; // row counter
   Comp->Props.findRef(pp);
   Property *p=Comp->Props.current();
@@ -258,33 +262,33 @@ void ComponentDialog::attach(ElementGraphics* gfx)
       // add Props into TableWidget
       qDebug() << " Loading Comp->Props :" << p->Name << p->Value << p->display << p->Description ;
 
-      prop->setRowCount(prop->rowCount()+1);
+      propTable->setRowCount(propTable->rowCount()+1);
 
       QTableWidgetItem *cell;
       cell = new QTableWidgetItem(p->Name);
       cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-      prop->setItem(row, 0, cell);
+      propTable->setItem(row, 0, cell);
       cell = new QTableWidgetItem(p->Value);
       cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-      prop->setItem(row, 1, cell);
+      propTable->setItem(row, 1, cell);
       cell = new QTableWidgetItem(s);
       cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-      prop->setItem(row, 2, cell);
+      propTable->setItem(row, 2, cell);
       cell = new QTableWidgetItem(p->Description);
       cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-      prop->setItem(row, 3, cell);
+      propTable->setItem(row, 3, cell);
 
       row++;
     }
 
-    if(prop->rowCount() > 0) {
-        prop->setCurrentItem(prop->item(0,0));
-        slotSelectProperty(prop->item(0,0));
+    if(propTable->rowCount() > 0) {
+        propTable->setCurrentItem(propTable->item(0,0));
+        slotSelectProperty(propTable->item(0,0));
     }
 
 
-  /// \todo add key up/down brose and select prop
-  connect(prop, SIGNAL(itemClicked(QTableWidgetItem*)),
+  /// \todo add key up/down brose and select propTable
+  connect(propTable, SIGNAL(itemClicked(QTableWidgetItem*)),
                 SLOT(slotSelectProperty(QTableWidgetItem*)));
 }
 /*--------------------------------------------------------------------------*/
@@ -340,35 +344,35 @@ void ComponentDialog::updateCompPropsList()
       // add Props into TableWidget
       qDebug() << " Loading Comp->Props :" << p->Name << p->Value << p->display << p->Description ;
 
-      if (row > prop->rowCount()-1) { // Add new rows
-          prop->setRowCount(prop->rowCount()+1);
+      if (row > propTable->rowCount()-1) { // Add new rows
+          propTable->setRowCount(propTable->rowCount()+1);
       }
 
       QTableWidgetItem *cell;
       cell = new QTableWidgetItem(p->Name);
       cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-      prop->setItem(row, 0, cell);
+      propTable->setItem(row, 0, cell);
       cell = new QTableWidgetItem(p->Value);
       cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-      prop->setItem(row, 1, cell);
+      propTable->setItem(row, 1, cell);
       cell = new QTableWidgetItem(s);
       cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-      prop->setItem(row, 2, cell);
+      propTable->setItem(row, 2, cell);
       cell = new QTableWidgetItem(p->Description);
       cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-      prop->setItem(row, 3, cell);
+      propTable->setItem(row, 3, cell);
 
       row++;
     }
 
-    if(prop->rowCount() > 0) {
-        prop->setCurrentItem(prop->item(0,0));
-        slotSelectProperty(prop->item(0,0));
+    if(propTable->rowCount() > 0) {
+        propTable->setCurrentItem(propTable->item(0,0));
+        slotSelectProperty(propTable->item(0,0));
     }else{
     }
 
-    if (row < prop->rowCount()-1) {
-        prop->setRowCount(row);
+    if (row < propTable->rowCount()-1) {
+        propTable->setRowCount(row);
     }else{
     }
 }
@@ -384,10 +388,10 @@ void ComponentDialog::slotSelectProperty(QTableWidgetItem *item)
 
   qDebug() << "row " << item->row(); //<< item->text()
 
-  QString name  = prop->item(item->row(),0)->text();
-  QString value = prop->item(item->row(),1)->text();
-  QString show  = prop->item(item->row(),2)->text();
-  QString desc  = prop->item(item->row(),3)->text();
+  QString name  = propTable->item(item->row(),PropTableColumns::name)->text();
+  QString value = propTable->item(item->row(),PropTableColumns::value)->text();
+  QString show  = propTable->item(item->row(),PropTableColumns::show)->text();
+  QString desc  = propTable->item(item->row(),PropTableColumns::desc)->text();
 
   if(show == tr("yes")){
     disp->setChecked(true);
@@ -481,7 +485,7 @@ void ComponentDialog::slotApplyChange(const QString& Text)
 { untested();
   /// \bug what if the table have no items?
   // pick selected row
-  QList<QTableWidgetItem *> items = prop->selectedItems();
+  QList<QTableWidgetItem *> items = propTable->selectedItems();
   Q_ASSERT(!items.isEmpty());
   QTableWidgetItem *item = items.first();
   
@@ -489,14 +493,14 @@ void ComponentDialog::slotApplyChange(const QString& Text)
   
   edit->setText(Text);
   // apply edit line
-  prop->item(row, 1)->setText(Text);
+  propTable->item(row, 1)->setText(Text);
 
   ComboEdit->setFocus();
 
   // step to next item if not at the last line
-  if ( row < (prop->rowCount() - 1)) {
-    prop->setCurrentItem(prop->item(row+1,0));
-    slotSelectProperty(prop->item(row+1,0));
+  if ( row < (propTable->rowCount() - 1)) {
+    propTable->setCurrentItem(propTable->item(row+1,0));
+    slotSelectProperty(propTable->item(row+1,0));
   }
 }
 /*--------------------------------------------------------------------------*/
@@ -508,22 +512,22 @@ void ComponentDialog::slotApplyChange(const QString& Text)
 void ComponentDialog::slotApplyProperty()
 {
   // pick selected row
-  QTableWidgetItem *item = prop->currentItem();
+  QTableWidgetItem *item = propTable->currentItem();
   
   if(!item)
     return;
   
   int row = item->row();
 
-  QString name  = prop->item(row, 0)->text();
-  QString value = prop->item(row, 1)->text();
+  QString name  = propTable->item(row, PropTableColumns::name)->text();
+  QString value = propTable->item(row, PropTableColumns::value)->text();
 
   if (!ComboEdit->isHidden())   // take text from ComboBox ?
     edit->setText(ComboEdit->currentText());
 
   // apply edit line
   if(value != edit->text()) {
-       prop->item(row, 1)->setText(edit->text());
+       propTable->item(row, PropTableColumns::value)->setText(edit->text());
     }
 
   if (!NameEdit->isHidden())	// also apply property name ?
@@ -532,13 +536,13 @@ void ComponentDialog::slotApplyProperty()
 //        item->setText(0, "Export_");   // name must not be "Export" !!!
 //      else
 //      item->setText(0, NameEdit->text());  // apply property name
-      prop->item(row, 0)->setText(NameEdit->text());
+      propTable->item(row, PropTableColumns::name)->setText(NameEdit->text());
     }
 
   // step to next item
-  if ( row < prop->rowCount()-1) {
-    prop->setCurrentItem(prop->item(row+1,0));
-    slotSelectProperty(prop->item(row+1,0));
+  if ( row < propTable->rowCount()-1) {
+    propTable->setCurrentItem(propTable->item(row+1,PropTableColumns::name));
+    slotSelectProperty(propTable->item(row+1,PropTableColumns::name));
   }
   else {
     slotButtOK();   // close dialog, if it was the last property
@@ -550,10 +554,10 @@ void ComponentDialog::slotApplyProperty()
 void ComponentDialog::slotApplyPropName()
 {
   // pick selected row
-  QTableWidgetItem *item = prop->selectedItems()[0];
+  QTableWidgetItem *item = propTable->selectedItems()[0];
   int row = item->row();
 
-  QString name  = prop->item(row, 0)->text();
+  QString name  = propTable->item(row, PropTableColumns::name)->text();
 
   if(name != NameEdit->text()) {
 //    if(NameEdit->text() == "Export") {
@@ -561,7 +565,7 @@ void ComponentDialog::slotApplyPropName()
 //	NameEdit->setText("Export_");
 //    }
 //      else
-    prop->item(row, 0)->setText(NameEdit->text());
+    propTable->item(row, PropTableColumns::name)->setText(NameEdit->text());
   }
   edit->setFocus();   // cursor into "edit" widget
 }
@@ -570,10 +574,10 @@ void ComponentDialog::slotApplyPropName()
 void ComponentDialog::slotApplyState(int State)
 {
   // pick selected row
-  QTableWidgetItem *item = prop->selectedItems()[0];
+  QTableWidgetItem *item = propTable->selectedItems()[0];
   int row = item->row();
 
-  QString disp  = prop->item(row, 2)->text();
+  QString disp  = propTable->item(row, PropTableColumns::show)->text();
 
   if(item == 0) return;
 
@@ -584,7 +588,7 @@ void ComponentDialog::slotApplyState(int State)
     ButtonState = tr("no");
 
   if(disp != ButtonState) {
-    prop->item(row, 2)->setText(ButtonState);
+    propTable->item(row, PropTableColumns::show)->setText(ButtonState);
   }
 }
 /*--------------------------------------------------------------------------*/
@@ -651,161 +655,43 @@ void ComponentDialog::slotApplyInput()
     }
   }
 
-  /*! Walk the original Comp->Props and compare with the
-   *  data in the dialog.
-   *  The pointers to the combo, edits,... are set to 0.
-   *  Only check if the widgets were created (pointers checks are 'true')
-   */
-  bool display;
-  Property *pp = Comp->Props.first();
-  // apply all the new property values
-  // TODO: what does it???
-  if(comboSim) {
-    display = checkSim->isChecked();
-    if(pp->display != display) {
-      pp->display = display;
-      changed = true;
-    }
-    if(pp->Value != comboSim->currentText()) {
-      pp->Value = comboSim->currentText();
-      changed = true;
-    }
-    pp = Comp->Props.next();
-  }
-  if(comboType) {
-    display = checkType->isChecked();
-    if(pp->display != display) {
-      pp->display = display;
-      changed = true;
-    }
-    switch(comboType->currentIndex()) {
-      case 1:  tmp = "log";   break;
-      case 2:  tmp = "list";  break;
-      case 3:  tmp = "const"; break;
-      default: tmp = "lin";   break;
-    }
-    if(pp->Value != tmp) {
-      pp->Value = tmp;
-      changed = true;
-    }
-    pp = Comp->Props.next();
-  }
-  if(checkParam) if(checkParam->isEnabled()) {
-    display = checkParam->isChecked();
-    if(pp->display != display) {
-      pp->display = display;
-      changed = true;
-    }
-    if(pp->Value != editParam->text()) {
-      pp->Value = editParam->text();
-      changed = true;
-    }
-    pp = Comp->Props.next();
-  }
-  if(editStart) {
-    if(comboType->currentIndex() < 2) {
-      display = checkStart->isChecked();
-      if(pp->display != display) {
-        pp->display = display;
-        changed = true;
-      }
-      pp->Name  = "Start";
-      if(pp->Value != editStart->text()) {
-        pp->Value = editStart->text();
-        changed = true;
-      }
-      pp = Comp->Props.next();
-
-      display = checkStop->isChecked();
-      if(pp->display != display) {
-        pp->display = display;
-        changed = true;
-      }
-      pp->Name  = "Stop";
-      if(pp->Value != editStop->text()) {
-        pp->Value = editStop->text();
-        changed = true;
-      }
-      pp = Comp->Props.next();
-
-      display = checkNumber->isChecked();
-      if(pp->display != display) {
-        pp->display = display;
-        changed = true;
-      }
-      if((pp->Value != editNumber->text()) || (pp->Name != "Points")) {
-        pp->Value = editNumber->text();
-        pp->Name  = "Points";
-        changed = true;
-      }
-      qDebug() << "====> before ad"
-               << pp->Description;
-
-      pp = Comp->Props.next();
-    }else{
-      // If a value list is used, the properties "Start" and "Stop" are not
-      // used. -> Call them "Symbol" to omit them in the netlist.
-      pp->Name = "Symbol";
-      pp->display = false;
-      pp = Comp->Props.next();
-      pp->Name = "Symbol";
-      pp->display = false;
-      pp = Comp->Props.next();
-
-      display = checkValues->isChecked();
-      if(pp->display != display) {
-        pp->display = display;
-        changed = true;
-      }
-      tmp = "["+editValues->text()+"]";
-      if((pp->Value != tmp) || (pp->Name != "Values")) {
-        pp->Value = tmp;
-        pp->Name  = "Values";
-        changed = true;
-      }
-      qDebug() << "====> before ad"
-               << pp;
-
-      pp = Comp->Props.next();
-    }
-  }
-
-
   // pick selected row
   QTableWidgetItem *item = 0;
 
   //  make sure we have one item, take selected
-  if (prop->selectedItems().size()) {
-    item = prop->selectedItems()[0];
+  if (propTable->selectedItems().size()) {
+    item = propTable->selectedItems()[0];
   }
 
-  /*! Walk the dialog list of 'prop'
+  /*! Walk the dialog list of 'propTable'
    */
+    Property *pp = Comp->Props.first();
    if(item != 0) {
      int row = item->row();
-     QString name  = prop->item(row, 0)->text();
-     QString value = prop->item(row, 1)->text();
+     QString name  = propTable->item(row, 0)->text();
+     QString value = propTable->item(row, 1)->text();
 
      // apply edit line
      if(value != edit->text())
-       prop->item(row, 1)->setText(edit->text());
+       propTable->item(row, PropTableColumns::value)->setText(edit->text());
 
      // apply property name
      if (!NameEdit->isHidden())
        if (name != NameEdit->text())
-         prop->item(row, 0)->setText(NameEdit->text());
+         propTable->item(row, PropTableColumns::name)->setText(NameEdit->text());
 
      // apply all the new property values in the ListView
-     for( int row = 0; row < prop->rowCount(); row++ ) {
+     bool display;
+     for( int row = 0; row < propTable->rowCount(); row++ ) {
 
-       QString name  = prop->item(row, 0)->text();
-       QString value = prop->item(row, 1)->text();
-       QString disp = prop->item(row, 2)->text();
-       QString desc = prop->item(row, 3)->text();
+       QString name  = propTable->item(row, PropTableColumns::name)->text();
+       QString value = propTable->item(row, PropTableColumns::value)->text();
+       QString disp = propTable->item(row, PropTableColumns::show)->text();
+       QString desc = propTable->item(row, PropTableColumns::desc)->text();
 
        qDebug() << "====>" <<name << value
                 << Comp->Props.count()
-                << prop->rowCount() +1
+                << propTable->rowCount() +1
                 << pp;
 
        display = (disp == tr("yes"));
@@ -833,8 +719,8 @@ void ComponentDialog::slotApplyInput()
        } else {
          // if properties where added in the dialog
          // -> create new on the Comp
-         Q_ASSERT(prop->rowCount() >= 0);
-         if ( (int) Comp->Props.count() < prop->rowCount() +1) {
+         Q_ASSERT(propTable->rowCount() >= 0);
+         if ( (int) Comp->Props.count() < propTable->rowCount() +1) {
              qDebug() << "adding to Comp ";
              Comp->Props.append(new Property(name, value, display, desc));
              changed = true;
@@ -887,8 +773,8 @@ void ComponentDialog::slotApplyInput()
     auto V=schematic()->viewport();
     assert(V);
     V->repaint();
-    if ( (int) Comp->Props.count() != prop->rowCount()) { // If props count was changed after recreation
-      Q_ASSERT(prop->rowCount() >= 0);
+    if ( (int) Comp->Props.count() != propTable->rowCount()) { // If props count was changed after recreation
+      Q_ASSERT(propTable->rowCount() >= 0);
       updateCompPropsList(); // of component we need to update properties
     }
   }else{
@@ -899,7 +785,7 @@ void ComponentDialog::slotBrowseFile()
 {
   incomplete();
   // current file name from the component properties
-  QString currFileName = prop->item(prop->currentRow(), 1)->text();
+  QString currFileName = propTable->item(propTable->currentRow(), PropTableColumns::value)->text();
   QFileInfo currFileInfo(currFileName);
   // name of the schematic where component is instantiated (may be empty)
   QFileInfo schematicFileInfo; // = Comp->getSchematic()->getFileInfo();
@@ -954,7 +840,7 @@ void ComponentDialog::slotBrowseFile()
     edit->setText(s);
   }
   /* FIX
-  prop->currentIndex()->setText(1, s); */
+  propTable->currentIndex()->setText(1, s); */
 }
 /*--------------------------------------------------------------------------*/
 void ComponentDialog::slotEditFile()
@@ -986,11 +872,11 @@ void ComponentDialog::slotEditFile()
 void ComponentDialog::slotButtAdd()
 {
   // Set existing equation into focus, return
-  for(int row=0; row < prop->rowCount(); row++) {
-    QString name  = prop->item(row, 0)->text();
+  for(int row=0; row < propTable->rowCount(); row++) {
+    QString name  = propTable->item(row, PropTableColumns::name)->text();
     if( name == NameEdit->text()) {
-      prop->setCurrentItem(prop->item(row,0));
-      slotSelectProperty(prop->item(row,0));
+      propTable->setCurrentItem(propTable->item(row, PropTableColumns::name));
+      slotSelectProperty(propTable->item(row, PropTableColumns::name));
       return;
     }
   }
@@ -1001,49 +887,49 @@ void ComponentDialog::slotButtAdd()
     s = tr("yes");
 
   // get number for selected row
-  int curRow = prop->currentRow();
+  int curRow = propTable->currentRow();
 
   // insert new row under current
   int insRow = curRow+1;
-  prop->insertRow(insRow);
+  propTable->insertRow(insRow);
 
   // append new row
   QTableWidgetItem *cell;
   cell = new QTableWidgetItem(NameEdit->text());
   cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-  prop->setItem(insRow, 0, cell);
+  propTable->setItem(insRow, PropTableColumns::name, cell);
   cell = new QTableWidgetItem(edit->text());
   cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-  prop->setItem(insRow, 1, cell);
+  propTable->setItem(insRow, PropTableColumns::value, cell);
   cell = new QTableWidgetItem(s);
   cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-  prop->setItem(insRow, 2, cell);
+  propTable->setItem(insRow, PropTableColumns::show, cell);
   // no description? add empty cell
   cell = new QTableWidgetItem("");
   cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
-  prop->setItem(insRow, 3, cell);
+  propTable->setItem(insRow, PropTableColumns::desc, cell);
 
   // select new row
-  prop->selectRow(insRow);
+  propTable->selectRow(insRow);
 }
 /*--------------------------------------------------------------------------*/
 // only eqn?
 void ComponentDialog::slotButtRem()
 {
-  if(prop->rowCount() < 3)
+  if(propTable->rowCount() < 3)
     return;  // the last property cannot be removed
 
-  QTableWidgetItem *item = prop->selectedItems()[0];
+  QTableWidgetItem *item = propTable->selectedItems()[0];
   int row = item->row();
 
   if(item == 0)
     return;
 
   // peek next, delete current, set next current
-  if ( row < prop->rowCount()) {
-    prop->setCurrentItem(prop->item(row+1,0));
-    slotSelectProperty(prop->item(row+1,0));
-    prop->removeRow(row);
+  if ( row < propTable->rowCount()) {
+    propTable->setCurrentItem(propTable->item(row+1,PropTableColumns::name));
+    slotSelectProperty(propTable->item(row+1,PropTableColumns::name));
+    propTable->removeRow(row);
     }
 }
 
@@ -1051,49 +937,49 @@ void ComponentDialog::slotButtRem()
 // EQN only
 void ComponentDialog::slotButtUp()
 {
-  qDebug() << "slotButtUp" << prop->currentRow() << prop->rowCount();
+  qDebug() << "slotButtUp" << propTable->currentRow() << propTable->rowCount();
 
-  int curRow = prop->currentRow();
+  int curRow = propTable->currentRow();
   if (curRow == 0)
     return;
 
   // swap current and row above it
-  QTableWidgetItem *source = prop->takeItem(curRow  ,0);
-  QTableWidgetItem *target = prop->takeItem(curRow-1,0);
-  prop->setItem(curRow-1, 0, source);
-  prop->setItem(curRow, 0, target);
-  source = prop->takeItem(curRow  ,1);
-  target = prop->takeItem(curRow-1,1);
-  prop->setItem(curRow-1, 1, source);
-  prop->setItem(curRow, 1, target);
+  QTableWidgetItem *source = propTable->takeItem(curRow  ,PropTableColumns::name);
+  QTableWidgetItem *target = propTable->takeItem(curRow-1,PropTableColumns::name);
+  propTable->setItem(curRow-1, PropTableColumns::name, source);
+  propTable->setItem(curRow, PropTableColumns::name, target);
+  source = propTable->takeItem(curRow  ,PropTableColumns::value);
+  target = propTable->takeItem(curRow-1,PropTableColumns::value);
+  propTable->setItem(curRow-1, PropTableColumns::value, source);
+  propTable->setItem(curRow, PropTableColumns::value, target);
 
 
   // select moved row
-  prop->selectRow(curRow-1);
+  propTable->selectRow(curRow-1);
 }
 /*--------------------------------------------------------------------------*/
 // EQN only
 void ComponentDialog::slotButtDown()
 {
-  qDebug() << "slotButtDown" << prop->currentRow() << prop->rowCount();
+  qDebug() << "slotButtDown" << propTable->currentRow() << propTable->rowCount();
 
-  int curRow = prop->currentRow();
+  int curRow = propTable->currentRow();
   // Leave Export as last
-  if (curRow == prop->rowCount()-2)
+  if (curRow == propTable->rowCount()-2)
     return;
 
   // swap current and row below it
-  QTableWidgetItem *source = prop->takeItem(curRow,0);
-  QTableWidgetItem *target = prop->takeItem(curRow+1,0);
-  prop->setItem(curRow+1, 0, source);
-  prop->setItem(curRow, 0, target);
-  source = prop->takeItem(curRow,1);
-  target = prop->takeItem(curRow+1,1);
-  prop->setItem(curRow+1, 1, source);
-  prop->setItem(curRow, 1, target);
+  QTableWidgetItem *source = propTable->takeItem(curRow,PropTableColumns::name);
+  QTableWidgetItem *target = propTable->takeItem(curRow+1,PropTableColumns::name);
+  propTable->setItem(curRow+1, PropTableColumns::name, source);
+  propTable->setItem(curRow, PropTableColumns::name, target);
+  source = propTable->takeItem(curRow, PropTableColumns::value);
+  target = propTable->takeItem(curRow+1, PropTableColumns::value);
+  propTable->setItem(curRow+1, PropTableColumns::value, source);
+  propTable->setItem(curRow, PropTableColumns::value, target);
 
   // select moved row
-  prop->selectRow(curRow+1);
+  propTable->selectRow(curRow+1);
 }
 /*--------------------------------------------------------------------------*/
 // looks like simTask?
@@ -1199,7 +1085,7 @@ void ComponentDialog::slotNumberEntered()
 /*--------------------------------------------------------------------------*/
 void ComponentDialog::slotHHeaderClicked(int headerIdx)
 {
-  if (headerIdx != 2) return; // clicked on header other than 'display'
+  if (headerIdx != PropTableColumns::show) return; // clicked on header other than 'display'
 
   QString s;
   QTableWidgetItem *cell;
@@ -1213,8 +1099,8 @@ void ComponentDialog::slotHHeaderClicked(int headerIdx)
   }
 
   // go through all the properties table and set the visibility cell
-  for (int row = 0; row < prop->rowCount(); row++) {
-    cell = prop->item(row, 2);
+  for (int row = 0; row < propTable->rowCount(); row++) {
+    cell = propTable->item(row, PropTableColumns::show);
     cell->setText(s);
   }
   setAllVisible = not setAllVisible; // toggle visibility for the next double-click

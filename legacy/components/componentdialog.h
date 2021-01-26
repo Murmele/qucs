@@ -76,7 +76,7 @@ private:
   QValidator  *Validator, *ValRestrict, *Validator2;
   QRegExp     Expr;
   QIntValidator *ValInteger;
-  QTableWidget  *prop; // TODO: rename to propTable
+  QTableWidget  *propTable{nullptr};
   QLineEdit   *edit, *NameEdit, *CompNameEdit;
   QComboBox   *ComboEdit;
   QLabel      *Name, *Description;
@@ -86,16 +86,14 @@ private:
   bool        changed;
   int         tx_Dist, ty_Dist;   // remember the text position
   bool        setAllVisible; // used for toggling visibility of properties
- 
+
   QLabel    *textType;
   QLabel    *textSim, *textParam, *textValues, *textStart, *textStop,
             *textStep, *textNumber;
-  QLineEdit *editParam, *editValues, *editStart, *editStop,
-            *editStep, *editNumber;
-  QCheckBox *checkSim, *checkParam, *checkValues, *checkStart, *checkStop,
+  QLineEdit *editParam, *editValues, *editStart{nullptr}, *editStop{nullptr},
+  *editStep, *editNumber{nullptr};
+  QCheckBox *checkSim{nullptr}, *checkValues, *checkStart, *checkStop,
             *checkNumber, *checkType, *showName;
-  QComboBox *comboSim, *comboType;
-
   void updateCompPropsList(void);
 
 private:
