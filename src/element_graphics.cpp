@@ -558,7 +558,7 @@ void ElementGraphics::show()
 		x->show();
 	}
 
-#if 0
+#if 1
 	assert(!_e->owner());
 	_e->setOwner(subckt());
 	subckt()->push_back(_e);

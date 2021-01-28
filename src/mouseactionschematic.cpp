@@ -25,7 +25,7 @@ MouseActionSchematic::MouseActionSchematic(MouseActionsHandler &ctx):
 
 SchematicDoc& MouseActionSchematic::doc() const
 {itested();
-    unreachable();
+
   QucsDoc* c=&ctx().doc();
   auto cc = dynamic_cast<SchematicDoc*>(c);
   assert(cc);

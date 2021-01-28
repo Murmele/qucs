@@ -420,13 +420,21 @@ private:
 /*--------------------------------------------------------------------------*/
 class NewElementCommand : public SchematicEdit {
 public:
+    /*!
+     * \brief NewElementCommand
+     * Sets the ownership of the element in the ElementGraphics \p gfx
+     * to the SchematicDoc \p ctx
+     * \param ctx
+     * \param gfx
+     */
 	NewElementCommand(SchematicDoc& ctx, ElementGraphics* gfx)
 	: SchematicEdit(*ctx.sceneHACK()) { untested();
 		assert(gfx->scene());
-		assert(!element(gfx)->mutable_owner());
+        assert(!element(gfx)->mutable_owner()); // element should not have an owner yet
 		gfx->hide();
-//		ctx.takeOwnership(element(gfx)); // BUG?
-		// elment->setOwner(ctx)...?
+        // TODO: why this is needed?
+        //ctx.takeOwnership(element(gfx)); // BUG?
+        element(gfx)->setOwner(&ctx);
 		setText("NewElement" /*element(gfx)->label()*/); // tr?
 		trace0("NewElementCommand::NewElementCommand");
 		qInsert(gfx);
@@ -479,7 +487,7 @@ QUndoCommand* MouseActionNewElement::makeNew(QEvent* ev)
 { untested();
 	// assert(ev->widget=doc->scene()) // or so.
 	trace1("RELEASE", ev->type());
-	if(ev->type() == QEvent::MouseButtonRelease){ itested();
+    if(ev->type() == QEvent::GraphicsSceneMouseRelease){ itested();
 	}else{ untested();
 		unreachable();
 	}
