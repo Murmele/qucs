@@ -9,7 +9,6 @@ LEGACY_SRC = \
 	curvediagram.cpp \
 	compcmd.cpp \
 	diagram.cpp \
-	equation.cpp \
 	gui.cc \
 	lang_dat.cpp \
 	lang_qucsator.cpp \

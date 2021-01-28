@@ -32,7 +32,7 @@ public:
    * TODO: maybe adding everything to constructor, or at least the creation of widgets
    * \param c
    */
-  void attach(ElementGraphics* c) override;
+  virtual void attach(ElementGraphics* c) override;
 
 private: // slot overrides.
   void slotButtOK();
@@ -46,20 +46,14 @@ private: // slot overrides.
   void slotApplyProperty();
   void slotApplyPropName();
 
-  void slotButtAdd();
+  void createNewProperty(); // DONE: cleaned up
   void slotButtRem();
 
   void slotButtUp();
   void slotButtDown();
 
-  void slotSimTypeChange(int);
-
   void slotParamEntered();
-  void slotSimEntered(int);
   void slotValuesEntered();
-  void slotStartEntered();
-  void slotStopEntered();
-  void slotStepEntered();
   void slotNumberEntered();
   void slotHHeaderClicked(int headerIdx);
 
@@ -72,6 +66,10 @@ protected slots:
     bool eventFilter(QObject *obj, QEvent *event);
 
 private:
+    bool propertyRow(const QString name) const; // DONE: cleaned up
+    QString uniquePropertyName(const QString prefix) const; // DONE: cleanup
+
+private:
   QVBoxLayout *_all;
   QValidator  *Validator, *ValRestrict, *Validator2;
   QRegExp     Expr;
@@ -80,19 +78,19 @@ private:
   QLineEdit   *edit, *NameEdit, *CompNameEdit;
   QComboBox   *ComboEdit;
   QLabel      *Name, *Description;
-  QPushButton *BrowseButt, *EditButt, *ButtAdd, *ButtRem;
+  QPushButton *BrowseButt, *EditButt, *ButtAddNewProperty{nullptr}, *ButtRemProperty{nullptr};
   QPushButton *ButtUp, *ButtDown;
   QCheckBox   *disp;
   bool        changed;
   int         tx_Dist, ty_Dist;   // remember the text position
   bool        setAllVisible; // used for toggling visibility of properties
 
+  // TODO: check with variables are still needed
   QLabel    *textType;
   QLabel    *textSim, *textParam, *textValues, *textStart, *textStop,
             *textStep, *textNumber;
-  QLineEdit *editParam, *editValues, *editStart{nullptr}, *editStop{nullptr},
-  *editStep, *editNumber{nullptr};
-  QCheckBox *checkSim{nullptr}, *checkValues, *checkStart, *checkStop,
+  QLineEdit *editParam, *editValues, *editNumber{nullptr};
+  QCheckBox *checkStart, *checkStop,
             *checkNumber, *checkType, *showName;
   void updateCompPropsList(void);
 

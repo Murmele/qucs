@@ -13,10 +13,11 @@
 #include "globals.h"
 #include "module.h"
 #include "qucs.h"
+#include "componentdialog.h"
 
 #include "some_font_stuff.h"
 
-#include "components/component.h" // BUG
+#include "component.h"
 
 namespace{
 
@@ -27,6 +28,7 @@ public:
   ~Equation();
   Component* newOne() {return new Equation(*this);}
   static Element* info(QString&, char* &, bool getNewOne=false);
+  std::unique_ptr<QDialog> createSchematicWidget(QucsDoc*) const override;
 
 protected:
   QString vhdlCode(int);
@@ -72,6 +74,12 @@ Equation::~Equation()
 {
 }
 
+std::unique_ptr<QDialog> Equation::createSchematicWidget(QucsDoc* Doc) const
+{ untested();
+  trace0("Component::editElement");
+  return std::unique_ptr<QDialog>(new ComponentDialog(Doc));
+}
+
 // -------------------------------------------------------
 QString Equation::verilogCode(int)
 {
@@ -105,7 +113,7 @@ Element* Equation::info(QString& Name, char* &BitmapFile, bool getNewOne)
 }
 #endif
 
-void Equation::dialgButtStuff(ComponentDialog&)const
+void Equation::dialgButtStuff(ComponentDialog &)const
 {
   incomplete();
   // d.enableButtons();

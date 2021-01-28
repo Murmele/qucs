@@ -193,14 +193,14 @@ void ComponentDialog::attach(ElementGraphics* gfx)
 
   QGridLayout *bg = new QGridLayout;
   v1->addLayout(bg);
-  ButtAdd = new QPushButton(tr("Add"), this);
-  bg->addWidget(ButtAdd, 0, 0);
-  ButtAdd->setEnabled(false);
-  ButtRem = new QPushButton(tr("Remove"), this);
-  bg->addWidget(ButtRem, 0, 1);
-  ButtRem->setEnabled(false);
-  connect(ButtAdd, SIGNAL(clicked()), SLOT(slotButtAdd()));
-  connect(ButtRem, SIGNAL(clicked()), SLOT(slotButtRem()));
+  ButtAddNewProperty = new QPushButton(tr("Add New Property"), this);
+  bg->addWidget(ButtAddNewProperty, 0, 0);
+  ButtRemProperty = new QPushButton(tr("Remove Property"), this);
+  ButtRemProperty->setToolTip(tr("Remove a non locked property"));
+  bg->addWidget(ButtRemProperty, 0, 1);
+  ButtRemProperty->setEnabled(false);
+  connect(ButtAddNewProperty, SIGNAL(clicked()), SLOT(createNewProperty()));
+  connect(ButtRemProperty, SIGNAL(clicked()), SLOT(slotButtRem()));
   // Buttons to move equations up/down on the list
   ButtUp = new QPushButton(tr("Move Up"), this);
   bg->addWidget(ButtUp, 1, 0);
@@ -377,9 +377,13 @@ void ComponentDialog::updateCompPropsList()
     }
 }
 /*--------------------------------------------------------------------------*/
-// Is called if a property is selected.
-// Handle the Property editor tab.
-// It transfers the values to the right side for editing.
+/*!
+ * \brief ComponentDialog::slotSelectProperty
+ * Is called if a property is selected.
+ * Handle the Property editor tab.
+ * It transfers the values to the right side for editing.
+ * \param item
+ */
 void ComponentDialog::slotSelectProperty(QTableWidgetItem *item)
 {
   auto Comp=_comp;
@@ -401,18 +405,26 @@ void ComponentDialog::slotSelectProperty(QTableWidgetItem *item)
 
   if(name == "File") {
     EditButt->setEnabled(true);
+    EditButt->setToolTip(tr(""));
     BrowseButt->setEnabled(true);
+    BrowseButt->setToolTip(EditButt->toolTip());
   }else{
     EditButt->setEnabled(false);
+    EditButt->setToolTip(tr("The selected property is not a file"));
     BrowseButt->setEnabled(false);
+    BrowseButt->setToolTip(EditButt->toolTip());
   }
 
   /// \todo enable edit of description anyway...
   /// empy or "-" (no comment from verilog-a)
+  // TODO: why it depends on the description, if it is possible
+  // to remove a property??
+  // Mabey implementing something like lock, if some properties
+  // are required
   if(desc.isEmpty()) {
     // show two line edit fields (name and value)
-    ButtAdd->setEnabled(true);
-    ButtRem->setEnabled(true);
+    // Possible to edit the name and the value of the property
+    ButtRemProperty->setEnabled(true);
 
     Comp->dialgButtStuff(*this);
     Name->setText("");
@@ -426,8 +438,7 @@ void ComponentDialog::slotSelectProperty(QTableWidgetItem *item)
 
     NameEdit->setFocus();   // edit QLineEdit
   }else{  // show standard line edit (description and value)
-    ButtAdd->setEnabled(false);
-    ButtRem->setEnabled(false);
+    ButtRemProperty->setEnabled(false);
     ButtUp->setEnabled(false);
     ButtDown->setEnabled(false);
 
@@ -442,7 +453,7 @@ void ComponentDialog::slotSelectProperty(QTableWidgetItem *item)
     QStringList List;
     int b = desc.indexOf('[');
     int e = desc.lastIndexOf(']');
-    if (e-b > 2) {
+    if (e-b > 2) { // means that there are not only empty brackets
       QString str = desc.mid(b+1, e-b-1);
       str.replace( QRegExp("[^a-zA-Z0-9_,]"), "" );
       List = str.split(',');
@@ -848,57 +859,71 @@ void ComponentDialog::slotEditFile()
   schematic()->_app->editFile(QucsSettings.QucsWorkDir.filePath(edit->text()));
 }
 /*--------------------------------------------------------------------------*/
+
+/*!
+ * \brief ComponentDialog::uniquePropertyName
+ * Returns the row of a property named \p name.
+ * If \p name was not found, -1 is returned
+ * \param name
+ * \return
+ */
+bool ComponentDialog::propertyRow(const QString name) const
+{
+    for(int row=0; row < propTable->rowCount(); row++) {
+      QString n  = propTable->item(row, PropTableColumns::name)->text();
+      if( n == name) {
+        return row;
+      }
+    }
+    return -1;
+}
+
+/*!
+ * \brief ComponentDialog::uniquePropertyName
+ * Iterates over all properties and returns a new property name with
+ * a prefix \p prefix
+ * \param prefix
+ * \return
+ */
+QString ComponentDialog::uniquePropertyName(const QString prefix) const
+{
+    int postfix = 1;
+    for(int row=0; row < propTable->rowCount(); row++) {
+      QString n  = propTable->item(row, PropTableColumns::name)->text();
+      if (prefix + QString::number(postfix) == n)
+          postfix++;
+    }
+
+    return prefix + QString::number(postfix);
+}
+
 /*!
   Add description if missing.
-  Is called if the add button is pressed. This is only possible for some
- properties.
- If desc is empy, ButtAdd is enabled, this slot handles if it is clicked.
- Used with: Equation, ?
-
- Original behavior for an Equation block
-  - start with props
-    y=1 (Name, Value)
-    Export=yes
-  - add equation, results
-    y=1
-    y2=1
-    Export=yes
+  Is called when the add button is pressed.
 
   Behavior:
    If Name already exists, set it to focus
    If new name, insert item after selected, set it to focus
 
 */
-void ComponentDialog::slotButtAdd()
+void ComponentDialog::createNewProperty()
 {
-  // Set existing equation into focus, return
-  for(int row=0; row < propTable->rowCount(); row++) {
-    QString name  = propTable->item(row, PropTableColumns::name)->text();
-    if( name == NameEdit->text()) {
-      propTable->setCurrentItem(propTable->item(row, PropTableColumns::name));
-      slotSelectProperty(propTable->item(row, PropTableColumns::name));
-      return;
-    }
-  }
+  QString propertyName = uniquePropertyName("NewProperty");
 
-  // toggle display flag
+  // by default the property is not displayed (TODO: in the schematic?)
   QString s = tr("no");
-  if(disp->isChecked())
-    s = tr("yes");
 
-  // get number for selected row
+  // The new row will be added below the select row
   int curRow = propTable->currentRow();
-
-  // insert new row under current
   int insRow = curRow+1;
   propTable->insertRow(insRow);
 
   // append new row
   QTableWidgetItem *cell;
-  cell = new QTableWidgetItem(NameEdit->text());
+  cell = new QTableWidgetItem(propertyName);
   cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
   propTable->setItem(insRow, PropTableColumns::name, cell);
-  cell = new QTableWidgetItem(edit->text());
+  cell = new QTableWidgetItem("");
   cell->setFlags(cell->flags() ^ Qt::ItemIsEditable);
   propTable->setItem(insRow, PropTableColumns::value, cell);
   cell = new QTableWidgetItem(s);
@@ -911,6 +936,7 @@ void ComponentDialog::slotButtAdd()
 
   // select new row
   propTable->selectRow(insRow);
+  slotSelectProperty(propTable->selectedItems()[0]);
 }
 /*--------------------------------------------------------------------------*/
 // only eqn?
@@ -959,6 +985,7 @@ void ComponentDialog::slotButtUp()
 }
 /*--------------------------------------------------------------------------*/
 // EQN only
+// TODO: move to equation dialog
 void ComponentDialog::slotButtDown()
 {
   qDebug() << "slotButtDown" << propTable->currentRow() << propTable->rowCount();
@@ -982,100 +1009,18 @@ void ComponentDialog::slotButtDown()
   propTable->selectRow(curRow+1);
 }
 /*--------------------------------------------------------------------------*/
-// looks like simTask?
-void ComponentDialog::slotSimTypeChange(int)
-{
-#if 0
-  if(Type < 2) {  // new type is "linear" or "logarithmic"
-    if(!editNumber->isEnabled()) {  // was the other mode before ?
-      // this text change, did not emit the textChange signal !??!
-      editStart->setText(
-	editValues->text().section(';', 0, 0).trimmed());
-      editStop->setText(
-	editValues->text().section(';', -1, -1).trimmed());
-      editNumber->setText("2");
-      slotNumberChanged(0);
-
-      checkStart->setChecked(true);
-      checkStop->setChecked(true);
-    }
-    textValues->setDisabled(true);
-    editValues->setDisabled(true);
-    checkValues->setDisabled(true);
-    textStart->setDisabled(false);
-    editStart->setDisabled(false);
-    checkStart->setDisabled(false);
-    textStop->setDisabled(false);
-    editStop->setDisabled(false);
-    checkStop->setDisabled(false);
-    textStep->setDisabled(false);
-    editStep->setDisabled(false);
-    textNumber->setDisabled(false);
-    editNumber->setDisabled(false);
-    checkNumber->setDisabled(false);
-    if(Type == 1)   // logarithmic ?
-      textStep->setText(tr("Points per decade:"));
-    else
-      textStep->setText(tr("Step:"));
-  }
-  else {  // new type is "list" or "constant"
-    if(!editValues->isEnabled()) {   // was the other mode before ?
-      editValues->setText(editStart->text() + "; " + editStop->text());
-      checkValues->setChecked(true);
-    }
-
-    textValues->setDisabled(false);
-    editValues->setDisabled(false);
-    checkValues->setDisabled(false);
-    textStart->setDisabled(true);
-    editStart->setDisabled(true);
-    checkStart->setDisabled(true);
-    textStop->setDisabled(true);
-    editStop->setDisabled(true);
-    checkStop->setDisabled(true);
-    textStep->setDisabled(true);
-    editStep->setDisabled(true);
-    textNumber->setDisabled(true);
-    editNumber->setDisabled(true);
-    checkNumber->setDisabled(true);
-    textStep->setText(tr("Step:"));
-  }
-#endif
-}
-/*--------------------------------------------------------------------------*/
 void ComponentDialog::slotParamEntered()
 {
   if(editValues->isEnabled()){ untested();
     editValues->setFocus();
   }else{ untested();
-    editStart->setFocus();
+    //editStart->setFocus();
   }
-}
-/*--------------------------------------------------------------------------*/
-void ComponentDialog::slotSimEntered(int)
-{
-  unreachable();
-  editParam->setFocus();
 }
 /*--------------------------------------------------------------------------*/
 void ComponentDialog::slotValuesEntered()
 {
   slotButtOK();
-}
-/*--------------------------------------------------------------------------*/
-void ComponentDialog::slotStartEntered()
-{
-  editStop->setFocus();
-}
-/*--------------------------------------------------------------------------*/
-void ComponentDialog::slotStopEntered()
-{
-  editStep->setFocus();
-}
-/*--------------------------------------------------------------------------*/
-void ComponentDialog::slotStepEntered()
-{
-  editNumber->setFocus();
 }
 /*--------------------------------------------------------------------------*/
 void ComponentDialog::slotNumberEntered()
@@ -1085,7 +1030,8 @@ void ComponentDialog::slotNumberEntered()
 /*--------------------------------------------------------------------------*/
 void ComponentDialog::slotHHeaderClicked(int headerIdx)
 {
-  if (headerIdx != PropTableColumns::show) return; // clicked on header other than 'display'
+  if (headerIdx != PropTableColumns::show)
+      return; // clicked on header other than 'display'
 
   QString s;
   QTableWidgetItem *cell;

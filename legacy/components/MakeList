@@ -73,6 +73,7 @@ LUMPED_COMPONENTS = \
 	dcblock.cpp \
 	dcfeed.cpp \
 	diode.cpp \
+	equation.cpp \
 	gatecomponent.cpp \
 	gyrator.cpp \
 	inductor.cpp \
