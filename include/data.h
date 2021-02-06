@@ -20,11 +20,15 @@
 #include <QDateTime>
 #include "element.h"
 /* -------------------------------------------------------------------------------- */
+
+/*!
+ * \brief The CommonData class
+ */
 class CommonData : public Object{
 private:
 	CommonData(CommonData const&) = delete;
 public:
-	explicit CommonData() : Object(), _attach_count(0){}
+        explicit CommonData() : Object() {}
 	virtual ~CommonData();
 public:
 	virtual CommonData* clone() { return NULL; }
@@ -42,7 +46,7 @@ public:
 	virtual CommonData const* refresh(){unreachable(); return nullptr;}
 
 private:
-	unsigned _attach_count;
+        unsigned _attach_count{0};
 };
 
 
@@ -62,7 +66,7 @@ public:
 // a sequence of double pairs (with a name on it)
 class SimOutputWave : public SimOutputData{
 private:
-	SimOutputSeq* dep;
+	SimOutputSeq* dep{nullptr};
 };
 #endif
 

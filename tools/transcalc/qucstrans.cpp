@@ -78,7 +78,7 @@ static const int TransMaxBox[MAX_TRANS_BOXES] = { 9, 1, 4, 3 };
 #define TRANS_RESULTS { TRANS_RESULT }
 
 // Defines the available transmission line types.
-struct TransType TransLineTypes[] = {
+TransType TransLineTypes[] = {
   { ModeMicrostrip, "Microstrip", "microstrip.png", NULL,
     { { {
       { "Er",    2.94,  NULL, TRANS_NONES,   0, TRANS_QOBJS },
@@ -628,7 +628,7 @@ void QucsTranscalc::setupTranslations () {
 void QucsTranscalc::createPropItem (QGridLayout * parentGrid, TransValue * val,
                     int box, QButtonGroup * group) {
   Q_UNUSED(group);
-  QRadioButton * r = NULL;
+  QRadioButton * r = nullptr;
   QLabel * l;
   QLineEdit * e;
   QComboBox * c;
@@ -734,12 +734,12 @@ void QucsTranscalc::updateMode (void) {
     // update each property item
     for (int i = 0; i < TransMaxBox[box]; i++) {
       // fix uninitialized memory
-      if (val->name == NULL) last++;
+      if (val->name == nullptr) last++;
       if (last) {
-    val->name = NULL;
+    val->name = nullptr;
     val->value = 0;
-    val->tip = NULL;
-    val->units[0] = NULL;
+    val->tip = nullptr;
+    val->units[0] = nullptr;
       }
         updatePropItem (val);
       val++;
@@ -793,12 +793,12 @@ void QucsTranscalc::createPropItems (QGroupBox *parent, int box) {
   for (int i = 0; i < TransMaxBox[box]; i++) {
     // fix uninitialized memory
 
-    if (val->name == NULL) last++;
+    if (val->name == nullptr) last++;
     if (last) {
-      val->name = NULL;
+      val->name = nullptr;
       val->value = 0;
-      val->tip = NULL;
-      val->units[0] = NULL;
+      val->tip = nullptr;
+      val->units[0] = nullptr;
     }
 
     createPropItem (boxGrid, val, box, group);
@@ -900,7 +900,7 @@ int QucsTranscalc::getTypeIndex () {
 
 /* Returns the property value specified by its name. */
 struct TransValue * QucsTranscalc::findProperty (QString prop) {
-  struct TransValue * val = NULL;
+  struct TransValue * val = nullptr;
   for (int box = 0; box < MAX_TRANS_BOXES; box++) {
     val = TransLineTypes[getTypeIndex ()].array[box].item;
     for (int i = 0; val->name; i++) {
@@ -908,7 +908,7 @@ struct TransValue * QucsTranscalc::findProperty (QString prop) {
       val++;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 /* Sets the given property to the given value. */
@@ -961,7 +961,7 @@ char * QucsTranscalc::getUnit (QString prop) {
       }
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 /* Returns the given property selection. */
@@ -1113,7 +1113,7 @@ bool QucsTranscalc::saveFile(QString fname) {
    given stream. */
 void QucsTranscalc::saveMode(QTextStream& stream) {
   struct TransType * t = &TransLineTypes[getTypeIndex ()];
-  struct TransValue * val = NULL;
+  struct TransValue * val = nullptr;
   stream << "<" << t->description << ">\n";
   for (int box = 0; box < MAX_TRANS_BOXES; box++) {
     val = t->array[box].item;

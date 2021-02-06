@@ -193,13 +193,13 @@ public:
 	const Element* find_in_my_scope(const std::string& name)const;
 
 private:
-	pos_t _position; // BUG: store in symbol?
+  Object* _owner{nullptr}; // should probably be const all the way
+  pos_t _position; // BUG: store in symbol?
 
 protected: // BUG in Painting
 	int x1, y1;
 
 private:
-	Object* _owner; // could be const all the way??
 }; // Element
 /*--------------------------------------------------------------------------*/
 inline SchematicModel const* Element::scope() const

@@ -29,6 +29,7 @@
 class DocumentFormat;
 class Component;
 class CommonData;
+
 /*--------------------------------------------------------------------------*/
 // simulator controller
 struct SimCtrl{
@@ -39,6 +40,13 @@ struct SimCtrl{
 };
 /*--------------------------------------------------------------------------*/
 // must be Element, so it fits into a cl
+/*!
+ * \brief The Simulator class
+ * Base class for all simulator elements in the schematic
+ * For example qucsator
+ *
+ * TODO: what does it exactly?
+ */
 class Simulator : public Data {
 public:
   typedef enum {
@@ -94,10 +102,10 @@ protected:
   bool has_ctrl() const{return _ctrl;}
 
 private:
-  QucsDoc* _doc; // const?
-  CommonData** _data_p;
+  QucsDoc* _doc{nullptr}; // const?
+  CommonData** _data_p{nullptr};
   int _state;
-  SimCtrl* _ctrl;
+  SimCtrl* _ctrl{nullptr};
 }; // Simulator
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/

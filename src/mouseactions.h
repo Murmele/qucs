@@ -84,7 +84,7 @@ protected:
 
 private:
 	MouseActionsHandler& _ctx;
-	QAction* _sender;
+	QAction* _sender{nullptr};
 };
 
 
@@ -148,7 +148,7 @@ public:
 private:
 	int _action_type; // the legacy way.
 	                  //  might need cleanup
-  ElementGraphics* _e;
+	 ElementGraphics* _e{nullptr};
 };
 
 // enable access to attached elements.

@@ -111,7 +111,7 @@ public: // forward to BASE
   }
 private:
   void check_init();
-  DISPATCHER_BASE* _base;
+  DISPATCHER_BASE* _base{nullptr};
 };
 /*--------------------------------------------------------------------------*/
 // not sure if this is needed, could be put wherever used.
