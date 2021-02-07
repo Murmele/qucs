@@ -405,28 +405,9 @@ void SchematicDoc::showNoZoom()
 }
 
 float SchematicDoc::zoomBy(float s)
-{ untested();
-    assert(false); // Not tested yet
-    QTransform matrix = transform();
-    double d = matrix.m11();
-    assert(d == matrix.m22());
-    double Scale = d * s;
-
-    if(Scale > 10.0){ untested();
-        Scale = 10.0f;
-    }else if(Scale < 0.1){ untested();
-        Scale = 0.1f;
-    }else{ untested();
-    }
-
-    s = Scale / d;
-
-    scale(s, s); // scale is relative...
-    s -= 1.0;
-    TODO("Fix contentsX");
-    /// todo scrollBy( int(s * float(contentsX()+visibleWidth()/2)),
-    ///          int(s * float(contentsY()+visibleHeight()/2)) );
-    return Scale;
+{
+    zoom(s);
+    return 1.0;
 }
 
 /*!

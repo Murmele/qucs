@@ -54,7 +54,7 @@ public:
   void  setName (const QString&);
   bool  load ();
   int   save ();
-  float zoomBy (float);
+  float zoomBy(float);
   void  showNoZoom ();
   void  becomeCurrent (bool);
   bool  loadSimulationTime (QString&);

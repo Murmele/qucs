@@ -16,6 +16,7 @@
  */
 /*--------------------------------------------------------------------------*/
 #include "mouseactionschematic.h"
+#include "schematic_doc.h"
 
 #include <QEvent>
 #include <QUndoCommand>
@@ -41,79 +42,79 @@ private:
 /*--------------------------------------------------------------------------*/
 QUndoCommand* MouseActionZoomIn::press(QEvent* e)
 { untested();
-	QPointF pos;
-	if(auto se=dynamic_cast<QGraphicsSceneMouseEvent*>(e)){ untested();
-		pos = se->scenePos();
-	}else{ untested();
-		incomplete();
-	}
-	float fX = pos.x();
-	float fY = pos.y();
+//	QPointF pos;
+//	if(auto se=dynamic_cast<QGraphicsSceneMouseEvent*>(e)){ untested();
+//		pos = se->scenePos();
+//	}else{ untested();
+//		incomplete();
+//	}
+//	float fX = pos.x();
+//	float fY = pos.y();
 
-	qDebug() << "zoom into box";
-	_MAx1 = int(fX);
-	_MAy1 = int(fY);
-	_MAx2 = 0;  // rectangle size
-	_MAy2 = 0;
+//	qDebug() << "zoom into box";
+//	_MAx1 = int(fX);
+//	_MAy1 = int(fY);
+//	_MAx2 = 0;  // rectangle size
+//	_MAy2 = 0;
 
-//  QucsMain->MouseMoveAction = &MouseActions::MMoveSelect;
-//  QucsMain->MouseReleaseAction = &MouseActions::MReleaseZoomIn;
+////  QucsMain->MouseMoveAction = &MouseActions::MMoveSelect;
+////  QucsMain->MouseReleaseAction = &MouseActions::MReleaseZoomIn;
 	
-	//grabKeyboard();  // no keyboard inputs during move actions
-	                 // why not redirect events to mode?!
-	doc().zoomBy(1.5);
+//	//grabKeyboard();  // no keyboard inputs during move actions
+//	                 // why not redirect events to mode?!
 
 	
 //  Doc->viewport()->update();
 //  setDrawn(false);
-	return nullptr; // zoom is not undoable (good idea?)
+	return nullptr; // zoom is not undoable
 }
 /*--------------------------------------------------------------------------*/
 QUndoCommand* MouseActionZoomIn::release(QEvent* e)
-{ untested();
-	auto* m = prechecked_cast<QGraphicsSceneMouseEvent*>(e);
-  if(m->button() == Qt::LeftButton){ untested();
+{
+	doc().zoom(1.5);
+//	auto* m = prechecked_cast<QGraphicsSceneMouseEvent*>(e);
+//  if(m->button() == Qt::LeftButton){ untested();
 
-	  _MAx1 = m->pos().x();
-	  _MAy1 = m->pos().y();
-	  TODO("Sort out contentsX");
-	  return nullptr; // not undoable.
-	  /**
-	  float DX = float(MAx2);
-	  float DY = float(MAy2);
+//	  _MAx1 = m->pos().x();
+//	  _MAy1 = m->pos().y();
+//	  TODO("Sort out contentsX");
+//	  return nullptr; // not undoable.
+//	  /**
+//	  float DX = float(MAx2);
+//	  float DY = float(MAy2);
 
-	  float initialScale = Doc->Scale;
-	  float scale = 1;
-	  float xShift = 0;
-	  float yShift = 0;
-	  if((Doc->Scale * DX) < 6.0) { untested();
-		 // a simple click zooms by constant factor
-		 scale = Doc->zoom(1.5)/initialScale;
+//	  float initialScale = Doc->Scale;
+//	  float scale = 1;
+//	  float xShift = 0;
+//	  float yShift = 0;
+//	  if((Doc->Scale * DX) < 6.0) { untested();
+//		 // a simple click zooms by constant factor
+//		 scale = Doc->zoom(1.5)/initialScale;
 
-		 xShift = scale * Event->pos().x();
-		 yShift = scale * Event->pos().y();
-	  } else { untested();
-		 float xScale = float(Doc->visibleWidth())  / std::abs(DX);
-		 float yScale = float(Doc->visibleHeight()) / std::abs(DY);
-		 scale = qMin(xScale, yScale)/initialScale;
-		 scale = Doc->zoom(scale)/initialScale;
+//		 xShift = scale * Event->pos().x();
+//		 yShift = scale * Event->pos().y();
+//	  } else { untested();
+//		 float xScale = float(Doc->visibleWidth())  / std::abs(DX);
+//		 float yScale = float(Doc->visibleHeight()) / std::abs(DY);
+//		 scale = qMin(xScale, yScale)/initialScale;
+//		 scale = Doc->zoom(scale)/initialScale;
 
-		 xShift = scale * (MAx1 - 0.5*DX);
-		 yShift = scale * (MAy1 - 0.5*DY);
-	  }
-	  xShift -= (0.5*Doc->visibleWidth() + Doc->contentsX());
-	  yShift -= (0.5*Doc->visibleHeight() + Doc->contentsY());
-	  Doc->scrollBy(xShift, yShift);
-	  */
-#if 0
-	  QucsMain->MouseMoveAction = &MouseActions::MMoveZoomIn;
-	  QucsMain->MouseReleaseAction = 0;
-#endif
-          unreachable();
-          // TODO: move it out
-          //doc().releaseKeyboard();  // allow keyboard inputs again
+//		 xShift = scale * (MAx1 - 0.5*DX);
+//		 yShift = scale * (MAy1 - 0.5*DY);
+//	  }
+//	  xShift -= (0.5*Doc->visibleWidth() + Doc->contentsX());
+//	  yShift -= (0.5*Doc->visibleHeight() + Doc->contentsY());
+//	  Doc->scrollBy(xShift, yShift);
+//	  */
+//#if 0
+//	  QucsMain->MouseMoveAction = &MouseActions::MMoveZoomIn;
+//	  QucsMain->MouseReleaseAction = 0;
+//#endif
+//          unreachable();
+//          // TODO: move it out
+//          //doc().releaseKeyboard();  // allow keyboard inputs again
 
-  }else{ untested();
-  }
+//  }else{ untested();
+//  }
   return nullptr;
 }

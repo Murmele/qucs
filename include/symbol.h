@@ -85,6 +85,9 @@ private:
 };
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief The Symbol class
+ */
 class Symbol : public Element{
 protected:
 	explicit Symbol(Symbol const&);

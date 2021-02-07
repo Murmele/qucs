@@ -246,6 +246,12 @@ bool Component::getSelected(int x_, int y_)
 }
 
 // -------------------------------------------------------
+/*!
+ * \brief Component::paint
+ * Instead of repainting all the time, qelectrotech generates an image and shows that. Might be another solution, if this
+ * is too slow.
+ * \param p
+ */
 void Component::paint(ViewPainter *p) const
 {itested();
   int x, y;
@@ -258,6 +264,8 @@ void Component::paint(ViewPainter *p) const
   if(dynamic_cast<TaskElement const*>(this)) { untested();
     unreachable();
   }else{itested();
+    // appreciate scaling!
+
     // normal components go here
     assert(!Model.size() || Model.at(0) != '.');
 

@@ -78,6 +78,8 @@ static const int TransMaxBox[MAX_TRANS_BOXES] = { 9, 1, 4, 3 };
 #define TRANS_RESULTS { TRANS_RESULT }
 
 // Defines the available transmission line types.
+// TODO: in setupTranslations() the lines are configured. Is it possible to
+// move it directly into the type?
 TransType TransLineTypes[] = {
   { ModeMicrostrip, "Microstrip", "microstrip.png", NULL,
     { { {
