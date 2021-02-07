@@ -63,7 +63,7 @@ public:
   }
 
   void paintScheme(SchematicDoc*);
-  void getCenter(int&, int&);
+  void getPosition(int&, int&);
 
   bool load(const QString&);
   QString save();
@@ -136,7 +136,7 @@ void ID_Text::paint(ViewPainter *p)
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-void ID_Text::getCenter(int& x, int &y)
+void ID_Text::getPosition(int& x, int &y)
 {
 	  auto cx=Element::cx();
       auto cy=Element::cy();
@@ -146,7 +146,7 @@ void ID_Text::getCenter(int& x, int &y)
 
 // --------------------------------------------------------------------------
 // Sets the center of the painting to x/y.
-//void ID_Text::setCenter(int x, int y, bool relative)
+//void ID_Text::setPosition(int x, int y, bool relative)
 //{
 //	  auto cx=Element::cx();
 //      auto cy=Element::cy();

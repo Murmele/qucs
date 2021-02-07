@@ -32,8 +32,8 @@ public:
   Ellipse(bool _filled=false);
  ~Ellipse();
 
-  void getCenter(int&, int&);
-  void setCenter(int, int, bool relative=false);
+  void getPosition(int&, int&);
+  void setPosition(int, int, bool relative=false);
 
   Element* clone() const {return new Ellipse(*this);}
   static Element* info(QString&, char* &, bool getNewOne=false);
@@ -105,7 +105,7 @@ void Ellipse::paint(ViewPainter *p)
 }
 
 // --------------------------------------------------------------------------
-void Ellipse::getCenter(int& x, int &y)
+void Ellipse::getPosition(int& x, int &y)
 { untested();
 	 auto cx=Element::cx();
      auto cy=Element::cy();
@@ -116,7 +116,7 @@ void Ellipse::getCenter(int& x, int &y)
 
 // --------------------------------------------------------------------------
 // Sets the center of the painting to x/y.
-void Ellipse::setCenter(int x, int y, bool relative)
+void Ellipse::setPosition(int x, int y, bool relative)
 {
 	 auto cx=Element::cx();
      auto cy=Element::cy();
@@ -161,7 +161,7 @@ bool Ellipse::load(const QString& s)
   int cy = n.toInt(&ok);
   if(!ok) return false;
 
-  setCenter(cx, cy);
+  setPosition(cx, cy);
 
   n  = s.section(' ',3,3);    // x2
   x2 = n.toInt(&ok);

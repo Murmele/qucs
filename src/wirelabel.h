@@ -38,7 +38,7 @@ public:
             int _x1=0, int _y1=0, int _Type=0);
   ~WireLabel();
 
-  void setCenter(int x, int y, bool relative=false);
+  void setPosition(int x, int y, bool relative=false);
   bool getSelected(int, int);
   void setName(const QString& Name_);
   void setHighlighted (bool newval) { isHighlighted = newval; };

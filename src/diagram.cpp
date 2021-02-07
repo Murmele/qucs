@@ -1237,7 +1237,7 @@ int Diagram::checkColumnWidth(const QString& Str,
 }
 
 // ------------------------------------------------------------
-//void Diagram::setCenter(int x, int y, bool relative)
+//void Diagram::setPosition(int x, int y, bool relative)
 //{
 //  if(relative) { untested();
 //    _cx += x;  _cy += y;
@@ -1254,7 +1254,7 @@ int Diagram::checkColumnWidth(const QString& Str,
 //}
 
 // -------------------------------------------------------
-//void Diagram::getCenter(int& x, int& y)
+//void Diagram::getPosition(int& x, int& y)
 //{ untested();
 //
 //  trace3("diag getcenter", label(), _cx, _cy);
@@ -1350,7 +1350,7 @@ bool Diagram::load(const QString& Line, istream_t& stream)
   int cy = n.toInt(&ok);
   if(!ok) return false;
 
-  setCenter(pos_t(cx, cy));
+  setPosition(pos_t(cx, cy));
 
   n  = s.section(' ',3,3);    // x2
   x2 = n.toInt(&ok);

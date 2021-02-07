@@ -35,8 +35,8 @@ private:
   Element* clone() const { return new Rectangle(*this); }
 
   void paintScheme(SchematicDoc*) const;
-  void getCenter(int&, int&);
-  void setCenter(int, int, bool relative=false);
+  void getPosition(int&, int&);
+  void setPosition(int, int, bool relative=false);
 
   static Element* info(QString&, char* &, bool getNewOne=false);
   static Element* info_filled(QString&, char* &, bool getNewOne=false);
@@ -121,7 +121,7 @@ void Rectangle::paint(ViewPainter *p) const
 }
 
 // --------------------------------------------------------------------------
-void Rectangle::getCenter(int& x, int &y)
+void Rectangle::getPosition(int& x, int &y)
 {
 	 auto cx=Element::cx();
      auto cy=Element::cy();
@@ -132,7 +132,7 @@ void Rectangle::getCenter(int& x, int &y)
 
 // --------------------------------------------------------------------------
 // Sets the center of the painting to x/y.
-void Rectangle::setCenter(int x, int y, bool relative)
+void Rectangle::setPosition(int x, int y, bool relative)
 {
 	 auto cx=Element::cx();
      auto cy=Element::cy();
@@ -177,7 +177,7 @@ bool Rectangle::load(const QString& s)
   int cy = n.toInt(&ok);
   if(!ok) return false;
 
-  setPosition(pos_t(cx, cy));
+  setPosition(cx, cy);
 
   n  = s.section(' ',3,3);    // x2
   x2 = n.toInt(&ok);

@@ -32,8 +32,8 @@ public:
  ~EllipseArc();
 
   void paintScheme(SchematicDoc*);
-  void getCenter(int&, int&);
-//  void setCenter(int, int, bool relative=false);
+  void getPosition(int&, int&);
+//  void setPosition(int, int, bool relative=false);
 
   Element* clone() const {return new EllipseArc(*this);}
   static Element* info(QString&, char* &, bool getNewOne=false);
@@ -96,7 +96,7 @@ void EllipseArc::paint(ViewPainter *p)
 }
 
 // --------------------------------------------------------------------------
-void EllipseArc::getCenter(int& x, int &y)
+void EllipseArc::getPosition(int& x, int &y)
 {
 	auto cx=0;
 	auto cy=0;
@@ -107,7 +107,7 @@ void EllipseArc::getCenter(int& x, int &y)
 
 // --------------------------------------------------------------------------
 // Sets the center of the painting to x/y.
-//void EllipseArc::setCenter(int x, int y, bool relative)
+//void EllipseArc::setPosition(int x, int y, bool relative)
 //{
 //  if(relative) { _cx += x;  _cy += y; }
 //  else { _cx = x-(x2>>1);  _cy = y-(y2>>1); }

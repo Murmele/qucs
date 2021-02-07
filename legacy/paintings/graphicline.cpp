@@ -41,8 +41,8 @@ public:
 //  void setSomeStuff( int cx_=0, int cy_=0, int x2_=0, int y2_=0,
 //              QPen Pen_=QPen(QColor()));
 
-  void getCenter(int&, int&);
-//  void setCenter(int, int, bool relative=false);
+  void getPosition(int&, int&);
+//  void setPosition(int, int, bool relative=false);
 
   Element* clone() const {return new GraphicLine(*this);}
   static Element* info(QString&, char* &, bool getNewOne=false);
@@ -121,7 +121,7 @@ void GraphicLine::paint(ViewPainter *p) const
 }
 
 // --------------------------------------------------------------------------
-void GraphicLine::getCenter(int& x, int &y)
+void GraphicLine::getPosition(int& x, int &y)
 {
 	assert(false);
 	auto cx=Element::cx();
@@ -133,7 +133,7 @@ void GraphicLine::getCenter(int& x, int &y)
 
 // --------------------------------------------------------------------------
 // Sets the center of the painting to x/y.
-//void GraphicLine::setCenter(int x, int y, bool relative)
+//void GraphicLine::setPosition(int x, int y, bool relative)
 //{
 //	assert(false);
 //	 auto cx=Element::cx();

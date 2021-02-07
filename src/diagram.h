@@ -94,7 +94,7 @@ public:
 private:
   virtual void paint(ViewPainter*) const override;
 //  pos_t center() const override;
-  void    getCenter(int&, int&); //override; //remove this.
+  void    getPosition(int&, int&); //override; //remove this.
   std::unique_ptr<QDialog> createSchematicWidget(QucsDoc* Doc) const override;
   virtual QRectF boundingRect() const; // { unreachable(); return QRectF(); }
 
@@ -113,7 +113,7 @@ public:
 public: // ??!
   virtual void paintDiagram(ViewPainter* p);
   void paintMarkers(ViewPainter* p, bool paintAll = true);
-//  void    setCenter(int, int, bool relative=false);
+//  void    setPosition(int, int, bool relative=false);
   void    paintScheme(SchematicDoc*) const;
   void    Bounding(int&, int&, int&, int&);
   bool    getSelected(int, int);

@@ -192,7 +192,7 @@ void Component::entireBounds(int& _x1, int& _y1, int& _x2, int& _y2, float Corr)
 
 // -------------------------------------------------------
 #if 1 // REMOVE
-void Component::getCenter(int& x, int& y) const
+void Component::getPosition(int& x, int& y) const
 {itested();
   x = cx();
   y = cy();

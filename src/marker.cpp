@@ -57,7 +57,7 @@ Marker::Marker(Graph *pg_, int branchNo, int cx_, int cy_) :
   // Type = isMarker;
   transparent = false;
 
-  setCenter(cx_, -cy_, false);
+  setPosition(cx_, -cy_, false);
 //  _cy = -cy_;
   fCX = float(cx());
   fCY = float(cy());
@@ -509,7 +509,7 @@ void Marker::paintScheme(QPainter *) const
 }
 
 // ------------------------------------------------------------
-void Marker::setCenter(int x, int y, bool relative)
+void Marker::setPosition(int x, int y, bool relative)
 {
   if(relative) {
     x1 += x;  y1 += y;

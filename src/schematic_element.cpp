@@ -1519,7 +1519,7 @@ bool SchematicDoc::aligning(int Mode)
         case isDigitalComponent:
             pc = (Component*)pe;
             pc->Bounding(bx1, by1, bx2, by2);
-            pc->setCenter(x1-((*bx)+(*ax))/y2, y1-((*by)+(*ay))/y2, true);
+            pc->setPosition(x1-((*bx)+(*ax))/y2, y1-((*by)+(*ay))/y2, true);
             insertRawComponent(pc);
             break;
 
@@ -1529,7 +1529,7 @@ bool SchematicDoc::aligning(int Mode)
             by1 = pw->y1_();
             bx2 = pw->x2_();
             by2 = pw->y2_();
-            pw->setCenter(x1-((*bx)+(*ax))/y2, y1-((*by)+(*ay))/y2, true);
+            pw->setPosition(x1-((*bx)+(*ax))/y2, y1-((*by)+(*ay))/y2, true);
 //        if(pw->Label) {  }
             insertWire(pw);
             break;
@@ -1544,12 +1544,12 @@ bool SchematicDoc::aligning(int Mode)
             by2 = ((Diagram*)pe)->cy();
             bx2 = bx1 + ((Diagram*)pe)->x2_();
             by1 = by2 - ((Diagram*)pe)->y2_();
-            ((Diagram*)pe)->setCenter(x1-((*bx)+(*ax))/y2, y1-((*by)+(*ay))/y2, true);
+            ((Diagram*)pe)->setPosition(x1-((*bx)+(*ax))/y2, y1-((*by)+(*ay))/y2, true);
             break;
 
         case isPainting:
             ((Painting*)pe)->Bounding(bx1, by1, bx2, by2);
-            ((Painting*)pe)->setCenter(x1-((*bx)+(*ax))/y2, y1-((*by)+(*ay))/y2, true);
+            ((Painting*)pe)->setPosition(x1-((*bx)+(*ax))/y2, y1-((*by)+(*ay))/y2, true);
             break;
 
         case isNodeLabel:
@@ -1615,9 +1615,9 @@ bool SchematicDoc::distributeHorizontal()
             pe = ElementCache.first();
             for(int j=0; j<i; j++)
             {
-                pe->getCenter(bx1, by1);
+                pe->getPosition(bx1, by1);
                 pe=elementCacheIter.peekNext();
-                pe->getCenter(bx2, by2);
+                pe->getPosition(bx2, by2);
                 if(bx1 > bx2)    // change two elements ?
                 {
                     ElementCache.replace(j+1, elementCacheIter.peekPrevious());
@@ -1627,8 +1627,8 @@ bool SchematicDoc::distributeHorizontal()
             }
         }
 
-    ElementCache.last()->getCenter(x2, y2);
-    ElementCache.first()->getCenter(x1, y1);
+    ElementCache.last()->getPosition(x2, y2);
+    ElementCache.first()->getPosition(x1, y1);
     int x = x2;
     int dx=0;
     if(count > 1) dx = (x2-x1)/(count-1);
@@ -1649,7 +1649,7 @@ bool SchematicDoc::distributeHorizontal()
         case isDigitalComponent:
             assert(C);
 
-            C->setCenter(x, C->cy());
+            C->setPosition(x, C->cy());
             insertRawComponent(C);
             break;
 
@@ -1672,15 +1672,15 @@ bool SchematicDoc::distributeHorizontal()
             break;
 
         case isPainting:
-            pe->getCenter(bx1, by1);
-            pe->setCenter(x, by1, false);
+            pe->getPosition(bx1, by1);
+            pe->setPosition(x, by1, false);
             break;
 
         case isNodeLabel:
             pl = (WireLabel*)pe;
             if(auto oc=dynamic_cast<Component*>(pl->pOwner)){
 		//pe->cx += x - ((Component*)(pl->pOwner))->cx;
-		pl->setCenter(x - oc->cx(), 0, true);
+		pl->setPosition(x - oc->cx(), 0, true);
 	
 	    }else if((pw=dynamic_cast<Wire*>(pl->pOwner))){
                 if(pw->isHorizontal()) {
@@ -1732,9 +1732,9 @@ bool SchematicDoc::distributeVertical()
             pe = ElementCache.first();
             for(int j=0; j<i; j++)
             {
-                pe->getCenter(bx1, by1);
+                pe->getPosition(bx1, by1);
                 pe = elementCacheIter.peekNext();
-                pe->getCenter(bx2, by2);
+                pe->getPosition(bx2, by2);
                 if(by1 > by2)    // change two elements ?
                 {
                     ElementCache.replace(j+1, elementCacheIter.peekPrevious());
@@ -1744,8 +1744,8 @@ bool SchematicDoc::distributeVertical()
             }
         }
 
-    ElementCache.last()->getCenter(x2, y2);
-    ElementCache.first()->getCenter(x1, y1);
+    ElementCache.last()->getPosition(x2, y2);
+    ElementCache.first()->getPosition(x1, y1);
     int y  = y2;
     int dy=0;
     if(count > 1) dy = (y2-y1)/(count-1);
@@ -1765,7 +1765,7 @@ bool SchematicDoc::distributeVertical()
         case isAnalogComponent:
         case isDigitalComponent:
             assert(C);
-            C->setCenter(C->cx(), y);
+            C->setPosition(C->cx(), y);
             insertRawComponent(C);
             break;
 
@@ -1788,14 +1788,14 @@ bool SchematicDoc::distributeVertical()
             break;
 
         case isPainting:
-            pe->getCenter(bx1, by1);
-            pe->setCenter(bx1, y, false);
+            pe->getPosition(bx1, by1);
+            pe->setPosition(bx1, y, false);
             break;
 
         case isNodeLabel:
             // if(((Element*)(((WireLabel*)pe)->pOwner))->Type & isComponent)
             if(auto oc=dynamic_cast<Component*>(pl->pOwner)){
-	        oc->setCenter(y - oc->cx(), 0, true);
+	        oc->setPosition(y - oc->cx(), 0, true);
 	    }else if((pw=dynamic_cast<Wire*>(pl->pOwner))){
                 if(!pw->isHorizontal())
                 {

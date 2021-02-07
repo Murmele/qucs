@@ -45,7 +45,7 @@ public:
 	explicit Wire();
 	~Wire();
 
-	void getCenter(int&, int&);
+	void getPosition(int&, int&);
 
 private: // Element
 	Wire* clone() const override{

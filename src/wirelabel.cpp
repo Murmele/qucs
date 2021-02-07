@@ -70,7 +70,7 @@ void WireLabel::paintScheme(QPainter *p) const
 #endif
 
 // ----------------------------------------------------------------
-void WireLabel::setCenter(int, int, bool)
+void WireLabel::setPosition(int, int, bool)
 {
 	incomplete();
 #if 0

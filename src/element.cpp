@@ -46,7 +46,7 @@ std::unique_ptr<QDialog> Element::createSchematicWidget(QucsDoc*) const
     return nullptr;
 }
 
-void Element::getCenter(int&x, int&y) const
+void Element::getPosition(int&x, int&y) const
 {
 	unreachable();
 	x = _position.first;

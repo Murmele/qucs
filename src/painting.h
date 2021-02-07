@@ -25,7 +25,7 @@ public:
   Painting(int cx, int cy) : Element(cx, cy) {}
  ~Painting() {}
 
-  virtual void getCenter(int&, int &) {}
+  virtual void getPosition(int&, int &) {}
   virtual bool getSelected(float, float, float) { return false; }
 
 public: // legacy anonymous stuff.

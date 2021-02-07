@@ -44,8 +44,8 @@ public:
 
   void paint(ViewPainter*);
   void paintScheme(SchematicDoc*);
-  void getCenter(int&, int&);
-  void setCenter(int, int, bool relative=false);
+  void getPosition(int&, int&);
+  void setPosition(int, int, bool relative=false);
 
   Element* newOne() { return new Arrow(*this); }
   Element* clone() const { return new Arrow(*this); }
@@ -170,7 +170,7 @@ void Arrow::paintScheme(SchematicDoc *p)
 }
 
 // --------------------------------------------------------------------------
-void Arrow::getCenter(int& x, int &y)
+void Arrow::getPosition(int& x, int &y)
 {
 	 auto cx=Element::cx();
      auto cy=Element::cy();
@@ -181,7 +181,7 @@ void Arrow::getCenter(int& x, int &y)
 
 // --------------------------------------------------------------------------
 // Sets the center of the painting to x/y.
-void Arrow::setCenter(int x, int y, bool relative)
+void Arrow::setPosition(int x, int y, bool relative)
 {
 	 auto cx=Element::cx();
      auto cy=Element::cy();
@@ -216,7 +216,7 @@ bool Arrow::load(const QString& s)
   int cy = n.toInt(&ok);
   if(!ok) return false;
 
-  setPosition(pos_t(cx, cy));
+  setPosition(cx, cy);
 
   n  = s.section(' ',3,3);    // x2
   x2 = n.toInt(&ok);

@@ -1736,7 +1736,7 @@ void SchematicActions::MMoveMoving(SchematicDoc* doc, QEvent* e)
 
     }else{ untested();
       assert(!pw);
-      pe->setCenter(MAx1, MAy1, true);
+      pe->setPosition(MAx1, MAy1, true);
     }
 
   pe->paintScheme(Doc);
@@ -2592,7 +2592,7 @@ void SchematicActions::moveElements(SchematicDoc *Doc, int& x1, int& y1)
       L->cy__() += y1;  L->y1__() += y1;
     }else{ untested();
       assert(!L);
-      pe->setCenter(x1, y1, true);
+      pe->setPosition(x1, y1, true);
     }
   }
 }
@@ -2615,7 +2615,7 @@ void SchematicActions::rotateElements(SchematicDoc *Doc, int& x1, int& y1)
     case isDigitalComponent:
       ((Component*)pe)->rotate(); // rotate !before! rotating the center
       x2 = x1 - pe->cx_();
-      pe->setCenter(pe->cy_() - y1 + x1, x2 + y1);
+      pe->setPosition(pe->cy_() - y1 + x1, x2 + y1);
       break;
     case isWire:
       x2     = pe->x1_();
@@ -2627,12 +2627,12 @@ void SchematicActions::rotateElements(SchematicDoc *Doc, int& x1, int& y1)
       break;
     case isPainting:
       ((Painting*)pe)->rotate(); // rotate !before! rotating the center
-      ((Painting*)pe)->getCenter(x2, y2);
-      pe->setCenter(y2 - y1 + x1, x1 - x2 + y1);
+      ((Painting*)pe)->getPosition(x2, y2);
+      pe->setPosition(y2 - y1 + x1, x1 - x2 + y1);
           break;
     default:
       x2 = x1 - pe->cx_();   // if diagram -> only rotate cx/cy
-      pe->setCenter(pe->cy_() - y1 + x1, x2 + y1);
+      pe->setPosition(pe->cy_() - y1 + x1, x2 + y1);
       break;
     }
   }
@@ -3022,7 +3022,7 @@ bool SchematicActions::pasteElements(SchematicDoc *)
       // TODO.
       auto oldtype=L->Type;
       L->Type = isMovingLabel;
-      L->setCenter(xmin, ymin, true /*relative*/);
+      L->setPosition(xmin, ymin, true /*relative*/);
       L->Type = oldtype;
     } else{
       pe->setPos(xmin, ymin, true);
@@ -3175,7 +3175,7 @@ void SchematicActions::moveElements(EGPList& , int, int)
 #endif
 
     } else{
-      pe->setCenter(x, y, true);
+      pe->setPosition(x, y, true);
     }
   }
 }
@@ -3248,7 +3248,7 @@ void SchematicActions::MMoveElement(SchematicDoc* doc, QEvent* e)
   //  Component *comp = (Component*)selElem;
     //qDebug() << "desc" << comp->Description << "gx" << gx << "gy" << gy;
 
-    selElem->setCenter(gx, gy);
+    selElem->setPosition(gx, gy);
     selElem->paintScheme(Doc); // paint scheme at new position
     Doc->viewport()->update();
   }

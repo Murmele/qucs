@@ -123,7 +123,7 @@ void TaskElement::entireBounds(int&, int&, int&, int&, float)
 
 // -------------------------------------------------------
 // obsolete?
-//void TaskElement::setCenter(int x, int y, bool relative)
+//void TaskElement::setPosition(int x, int y, bool relative)
 //{
 //  if(relative) {
 //    _cx += x;  _cy += y;
@@ -133,7 +133,7 @@ void TaskElement::entireBounds(int&, int&, int&, int&, float)
 //}
 
 //// -------------------------------------------------------
-//void TaskElement::getCenter(int& x, int& y)
+//void TaskElement::getPosition(int& x, int& y)
 //{
 //  unreachable();
 //  x = cx();

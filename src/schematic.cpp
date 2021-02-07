@@ -106,14 +106,14 @@ bool SchematicDoc::createSubcircuitSymbol()
     pp = painting_dispatcher.clone("GraphicsLine");
     pp->setSomeStuff(-30, y, 10, 0, QPen(Qt::darkBlue,2));
     symbolPaintings().append(pp);
-    symbolPaintings().at(i)->setCenter(-30,  y);
+    symbolPaintings().at(i)->setPosition(-30,  y);
 
     if(i == countPort)  break;
     i++;
     pp = painting_dispatcher.clone("GraphicsLine");
     pp->setSomeStuff( 20, y, 10, 0, QPen(Qt::darkBlue,2));
     symbolPaintings().append(pp);
-    symbolPaintings().at(i)->setCenter(30,  y);
+    symbolPaintings().at(i)->setPosition(30,  y);
     y += 60;
   }
 #endif
@@ -1672,7 +1672,7 @@ void SchematicDoc::getSelAreaWidthAndHeight(int &wsel, int &hsel, int& xmin_sel_
 
         if (pw->isSelected) { untested();
             int xc,yc;
-            pw->getCenter(xc,yc);
+            pw->getPosition(xc,yc);
 
             if (xc<xmin) xmin = xc;
             if (xc>xmax) xmax = xc;

@@ -31,8 +31,8 @@ public:
  ~GraphicText();
 
   void paintScheme(SchematicDoc*);
-  void getCenter(int&, int&);
-//  void setCenter(int, int, bool relative=false);
+  void getPosition(int&, int&);
+//  void setPosition(int, int, bool relative=false);
 
   Element* newOne() const {return new GraphicText(*this);}
   Element* clone() const {return new GraphicText(*this);}

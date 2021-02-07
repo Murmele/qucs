@@ -42,8 +42,8 @@ private:
 public:
   void    paintScheme(SchematicDoc*) const;
   void    print(ViewPainter*, float);
-//  void    setCenter(int, int, bool relative=false);
-  void    getCenter(int&, int&);
+//  void    setPosition(int, int, bool relative=false);
+  void    getPosition(int&, int&);
   int     textSize(int&, int&);
   void    entireBounds(int&, int&, int&, int&, float);
   int     getTextSelected(int, int, float);

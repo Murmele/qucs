@@ -29,7 +29,7 @@ private:
 public: // construct
 	explicit Place() : Symbol() { }
 	//explicit Place(pos_t p) : Symbol(),  _port(0, 0){
-	//	setCenter(p);
+	//	setPosition(p);
 	//}
 	virtual ~Place() {}
 

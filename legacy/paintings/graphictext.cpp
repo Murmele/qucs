@@ -120,7 +120,7 @@ void GraphicText::paintScheme(SchematicDoc *p)
 }
 
 // ------------------------------------------------------------------------
-void GraphicText::getCenter(int& x, int &y)
+void GraphicText::getPosition(int& x, int &y)
 {
 	   auto cx=Element::cx();
      auto cy=Element::cy();
@@ -131,7 +131,7 @@ void GraphicText::getCenter(int& x, int &y)
 
 // -----------------------------------------------------------------------
 // Sets the center of the painting to x/y.
-// void GraphicText::setCenter(int x, int y, bool relative)
+// void GraphicText::setPosition(int x, int y, bool relative)
 // {
 //   if(relative) {
 // 	  _cx += x;
@@ -166,7 +166,7 @@ bool GraphicText::load(const QString& s)
   int cy = n.toInt(&ok);
   if(!ok) return false;
 
-  setCenter(pos_t(cx, cy));
+  setPosition(pos_t(cx, cy));
 
   n  = s.section(' ',3,3);    // Size
   Font.setPointSize(n.toInt(&ok));
