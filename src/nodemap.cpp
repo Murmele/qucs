@@ -71,7 +71,7 @@ ConnectedComponents<NodeMap>* NodeMap::new_ccs()
 int NodeMap::erase(Node* tt)
 {
 	assert(tt);
-	trace2("NodeMap::erase", tt->degree(), tt->position());
+    //trace2("NodeMap::erase", tt->degree(), tt->position());
 	assert(tt->hasNet());
 	Conductor* c = tt;
 	_cc->deregisterVertex(c);

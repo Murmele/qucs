@@ -49,8 +49,8 @@ std::unique_ptr<QDialog> Element::createSchematicWidget(QucsDoc*) const
 void Element::getPosition(int&x, int&y) const
 {
 	unreachable();
-	x = _position.first;
-	y = _position.second;
+    x = _position.x();
+    y = _position.y();
 }
 
 // pure? maybe not. there could be non-paintable elements...
@@ -104,12 +104,6 @@ SchematicModel* Element::scope()
 		return nullptr;
 	}
 }
-/*--------------------------------------------------------------------------*/
-pos_t /* const & */ Element::center()const
-{
-	return pos_t(cx(), cy());
-}
-
 // borrowed/modified from e_card.h
 const Element* Element::find_looking_out(const std::string& name)const
 {

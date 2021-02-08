@@ -23,14 +23,14 @@ public:
 				++k;
 				Element* elt = eg->cloneElement();
 				eg->hide();
-				auto ec = elt->center();
+				auto ec = elt->position();
 				eg->setPos(QPoint(getX(ec), getY(ec)));
 				eg->show();
 				assert(elt);
 				int dx = getX(delta);
 				int dy = getY(delta);
 
-				pos_t c = elt->center() + pos_t(dx, dy);
+				pos_t c = elt->position() + pos_t(dx, dy);
 				elt->setPosition(c);
 
 				qSwap(eg, elt); // gaah.

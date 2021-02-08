@@ -521,12 +521,12 @@ void Component::setParameter(std::string const& name, std::string const& v)
     set_mirror_xaxis(r);
   }else if(name=="$xposition"){
     int x = atoi(v.c_str());
-    auto c = center();
+    auto c = position(); // center(). Now it makes anymore sense
     c.first = x;
     Element::setPosition(c);
   }else if(name=="$yposition"){
     int y = atoi(v.c_str());
-    auto c = center();
+    auto c = position(); // center()
     c.second = y;
     Element::setPosition(c);
   }else{ untested();
@@ -566,9 +566,9 @@ std::string Component::paramValue(std::string const& name) const
   }else if(name=="$ty"){
     return std::to_string(ty);
   }else if(name=="$xposition"){
-    return std::to_string(center().first);
+    return std::to_string(position().x());
   }else if(name=="$yposition"){
-    return std::to_string(center().second);
+    return std::to_string(position().y());
   }else if(name=="$vflip"){
     // 0 |-> 1
     // 1 |-> -1

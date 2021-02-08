@@ -202,8 +202,8 @@ public:
   bool showLabel() const override{ return showName; }
 
 public:
-  int cx() const{return getX(Element::center());}
-  int cy() const{return getY(Element::center());}
+  int cx() const{return Element::position().x();}
+  int cy() const{return Element::position().y();}
 
 public:
   QString const& obsolete_model_hack() const{

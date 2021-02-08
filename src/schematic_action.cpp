@@ -297,24 +297,24 @@ void transformElement(Element* e, qucsSymbolTransform a, pos_t pivot)
 
 		trace3("posttransform", hflip, vflip, new_mr.degrees_int());
 
-		auto p = e->center();
-		trace1("posttransform setpos0", p);
+        auto p = e->position();
+        //trace1("posttransform setpos0", p);
 		int x = getX(p);
 		int y = getY(p);
 
-		x -= pivot.first;
-		y -= pivot.second;
+        x -= pivot.x();
+        y -= pivot.y();
 
 		pos_t new_xy(x,y);
 		new_xy = a.apply(new_xy);
 
-		x = pivot.first + new_xy.first;
-		y = pivot.second + new_xy.second;
+        x = pivot.x() + new_xy.x();
+        y = pivot.y() + new_xy.y();
 
 		// todo: rounding errors.
 
 		p = pos_t(x, y);
-		trace1("posttransform setpos1", p);
+        //trace1("posttransform setpos1", p);
 		e->setPosition(p);
 	// prepareGeometryChange(); // needed??
 	}else{ untested();
@@ -347,7 +347,7 @@ public:
 
 		auto center = bb.center();
 		pos_t pivot(getX(center), getY(center));
-		trace1("transform", pivot);
+        //trace1("transform", pivot);
 
 		for(auto i : buf){
 			transformElement(i.second, t, pivot);
@@ -853,7 +853,7 @@ static QPoint getDelta(ElementGraphics* e)
 {itested();
 	auto p = e->pos().toPoint();
 	assert(element(e));
-	auto p1_ = element(e)->center();
+    auto p1_ = element(e)->position();
 	auto p1 = QPoint(getX(p1_), getY(p1_));
 	return p - p1;
 }
@@ -898,8 +898,8 @@ static void selectWireLine(ElementGraphics *g)
 	assert(scn);
 	
 	for(unsigned i=0; i<s->numPorts(); ++i){
-		auto pos = makeQPointF(s->nodePosition(i));
-		auto items = scn->items(pos);
+        auto pos = s->nodePosition(i);
+        auto items = scn->items(pos.x(), pos.y());
 		if(items.size()==2){
 
 			for(auto ii : items){

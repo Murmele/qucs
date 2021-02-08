@@ -187,11 +187,11 @@ void ElementGraphics::attachElement(Element* e)
 	// BUG: ask element?
 	setAcceptHoverEvents(true);
 
-	auto sp = _e->center();
+    auto sp = _e->position();
 	prepareGeometryChange();
-	trace3("attachElement", e->label(), sp.first, sp.second);
+    trace3("attachElement", e->label(), sp.x(), sp.y());
 	trace2("attachElement", e->label(), boundingRect());
-	QGraphicsItem::setPos(sp.first, sp.second);
+    QGraphicsItem::setPos(sp.x(), sp.y());
 
 	// this is probably not needed. test later.
 	if(dynamic_cast<Conductor*>(e)){itested();
@@ -429,8 +429,8 @@ void ElementGraphics::transform(qucsSymbolTransform a, std::pair<int, int> pivot
 		pos_t new_xy(x,y);
 		new_xy = a.apply(new_xy);
 
-		x = pivot.first + new_xy.first;
-		y = pivot.second + new_xy.second;
+        x = pivot.first + new_xy.x();
+        y = pivot.second + new_xy.y();
 
 		trace2("posttransform setpos", x ,y);
 		setPos(x, y);
@@ -461,7 +461,7 @@ QRectF ElementGraphics::absoluteBoundingRect() const
 #ifdef DO_TRACE
 	if(auto sym=dynamic_cast<Symbol const*>(_e)){
 		for(unsigned i=0; i<sym->numPorts(); ++i){
-			trace4("abr", pos(), sym->label(), i, sym->nodePosition(i));
+            //trace4("abr", pos(), sym->label(), i, sym->nodePosition(i));
 		}
 	}
 #endif
@@ -545,9 +545,9 @@ void ElementGraphics::show()
 #ifdef DO_TRACE
 	if(auto sym=dynamic_cast<Symbol const*>(_e)){
 		if(sym->numPorts() == 1){
-			trace2("show", sym->label(), sym->nodePosition(0));
+            //trace2("show", sym->label(), sym->nodePosition(0));
 		}else if(sym->numPorts() == 2){
-			trace3("show", sym->label(), sym->nodePosition(0), sym->nodePosition(1));
+            //trace3("show", sym->label(), sym->nodePosition(0), sym->nodePosition(1));
 		}else{
 		}
 	}
@@ -581,9 +581,9 @@ void ElementGraphics::hide()
 #ifdef DO_TRACE
 	if(auto sym=dynamic_cast<Symbol const*>(_e)){
 		if(sym->numPorts() == 1){
-			trace2("hide", sym->label(), sym->nodePosition(0));
+            //trace2("hide", sym->label(), sym->nodePosition(0));
 		}else if(sym->numPorts() == 2){
-			trace3("hide", sym->label(), sym->nodePosition(0), sym->nodePosition(1));
+            //trace3("hide", sym->label(), sym->nodePosition(0), sym->nodePosition(1));
 		}else{
 		}
 	}

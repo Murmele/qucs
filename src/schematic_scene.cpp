@@ -400,7 +400,7 @@ Node const* SchematicScene::nodeAt(pos_t p) const
 /*--------------------------------------------------------------------------*/
 bool SchematicScene::isConductor(pos_t p) const
 {itested();
-	QPointF pos(p.first, p.second);
+    QPointF pos(p.x(), p.y());
 	auto it = items(pos);
 	for(auto i : it){itested();
 		if(auto c = dynamic_cast<Conductor const*>(element(i))){

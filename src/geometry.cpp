@@ -26,7 +26,7 @@ std::ostream& operator<<(std::ostream& o, pos_t const& p)
 // rotate counterclockwise. NB: the y axis points downwards on the screen.
 pos_t angle_t::apply(pos_t const& p) const
 {
-//	trace3("angle_apply0", _degrees, p.first, p.second);
+//	trace3("angle_apply0", _degrees, p.x(), p.y());
 	assert(! (_degrees%90) ); //for now
 	int a = _degrees/90;
 	int s = dsin(a);
@@ -37,11 +37,11 @@ pos_t angle_t::apply(pos_t const& p) const
 	// @angle_apply  a=2  s=0  c=1
 
 #if 1
-	int rx = c*p.first + s*p.second;
-	int ry =-s*p.first + c*p.second;
+    int rx = c*p.x() + s*p.y();
+    int ry =-s*p.x() + c*p.y();
 #else
-	int rx = c*p.first - s*p.second;
-	int ry = s*p.first + c*p.second;
+    int rx = c*p.x() - s*p.y();
+    int ry = s*p.x() + c*p.y();
 #endif
 //	trace3("angle_apply2", _degrees, rx, ry);
 	return pos_t(rx, ry);
@@ -63,7 +63,7 @@ pos_t rotate_after_mirror1_t::apply(pos_t const& p) const
 {
 	auto tmp = p;
 	if(_m){
-		tmp.second *= -1;
+        tmp.setY(tmp.y() * -1);
 	}else{
 	}
 	return angle_t::apply(tmp);
@@ -116,11 +116,11 @@ pos_t rotate_after_mirror::apply(pos_t const& p) const
 {
 	auto tmp = p;
 	if(_v){
-		tmp.second *= -1;
+        tmp.setY(tmp.y() * -1);
 	}else{
 	}
 	if(_h){
-		tmp.first *= -1;
+        tmp.setX(tmp.x() * -1);
 	}else{
 	}
 	pos_t ret = angle_t::apply(tmp);
@@ -142,7 +142,7 @@ rect_t::rect_t(QRectF const& p) : _tl(0,0), _br(0,0)
 /*--------------------------------------------------------------------------*/
 QRectF rect_t::toRectF() const
 {
-	return QRectF(_tl.first, _tl.second, w(), h());
+    return QRectF(_tl.x(), _tl.y(), w(), h());
 }
 /*--------------------------------------------------------------------------*/
 rect_t rect_t::operator+(pos_t const& m) const
@@ -163,10 +163,10 @@ rect_t& rect_t::operator|=(rect_t const& o)
 	}else if(w()==0 || h()==0){
 		operator=(o);
 	}else{
-		int l = std::min(_tl.first, o._tl.first);
-		int t = std::min(_tl.second, o._tl.second);
-		int r = std::max(_br.first, o._br.first);
-		int b = std::max(_br.second, o._br.second);
+        int l = std::min(_tl.x(), o._tl.x());
+        int t = std::min(_tl.y(), o._tl.y());
+        int r = std::max(_br.x(), o._br.x());
+        int b = std::max(_br.y(), o._br.y());
 
 		_tl = pos_t(l,t);
 		_br = pos_t(r,b);

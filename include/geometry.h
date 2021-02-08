@@ -22,17 +22,26 @@
 #include "assert.h"
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
+// TODO: maybe removing pos_t and using QPoint() ?
+// Operator < must be reimplemented or a workaround must be found
 class pos_t : public std::pair<int, int>{
 public:
 	pos_t(pos_t const& p) : std::pair<int, int>(p) {}
 	pos_t(std::pair<int, int> const& p) : std::pair<int, int>(p) {}
 	pos_t(int a, int b) : std::pair<int, int>(a,b) {}
 	bool operator<=(pos_t const& b) const;
+	bool operator<(pos_t const& b) const;
 	operator bool() const{ return x() || y(); }
 
 	pos_t& operator=(pos_t const& o){
 		std::pair<int, int>::operator=(o);
 		return *this;
+	}
+
+	bool operator==(pos_t const& o) const {
+		// For som reason it is not available
+		//std::pair<int, int>::operator==(o)
+		return x() == o.x() && y() == o.y();
 	}
 
 	pos_t& setX(int x){ first=x; return *this;}
@@ -43,37 +52,42 @@ public:
 /*--------------------------------------------------------------------------*/
 inline bool pos_t::operator<=(pos_t const& b) const
 {
-	return first<=b.first && second<=b.second;
+	return x()<=b.x() && y()<=b.y();
+}
+
+inline bool pos_t::operator<(pos_t const& b) const
+{
+	return x() < b.x() && y() < b.y();
 }
 /*--------------------------------------------------------------------------*/
 inline pos_t& operator+=(pos_t& r, pos_t const& q)
 {
-  r.first += q.first;
-  r.second += q.second;
+  r.setX(r.x() + q.x());
+  r.setY(r.y() + q.y());
   return r;
 }
 /*--------------------------------------------------------------------------*/
 inline pos_t operator+(pos_t const& p, pos_t const& q)
 {
   pos_t r(p);
-  r.first += q.first;
-  r.second += q.second;
+  r.setX(r.x() + q.x());
+  r.setY(r.y() + q.y());
   return r;
 }
 /*--------------------------------------------------------------------------*/
 inline pos_t operator-(pos_t const& p, pos_t const& q)
 {
   pos_t r(p);
-  r.first -= q.first;
-  r.second -= q.second;
+  r.setX(r.x() - q.x());
+  r.setY(r.y() - q.y());
   return r;
 }
 /*--------------------------------------------------------------------------*/
 inline pos_t operator*(pos_t const& p, double d)
 {
   pos_t r(p);
-  r.first *= d;
-  r.second *= d;
+  r.setX(r.x() * d);
+  r.setY(r.y() * d);
   return r;
 }
 /*--------------------------------------------------------------------------*/
@@ -97,8 +111,8 @@ public:
 	pos_t const& tl() const{return _tl;}
 	pos_t const& br() const{return _br;}
 	pos_t center() const{return (_tl+_br)*.5;}
-	int w() const{return _br.first - _tl.first;}
-	int h() const{return _br.second - _tl.second;}
+	int w() const{return _br.x() - _tl.x();}
+	int h() const{return _br.y() - _tl.y();}
 private:
 	pos_t _tl;
 	pos_t _br;
@@ -119,12 +133,12 @@ inline int getY(std::pair<int, int> const& p)
 /*--------------------------------------------------------------------------*/
 inline int getX(pos_t const& p)
 {
-	return p.first;
+	return p.x();
 }
 /*--------------------------------------------------------------------------*/
 inline int getY(pos_t const& p)
 {
-	return p.second;
+	return p.y();
 }
 /*--------------------------------------------------------------------------*/
 inline int dsin(int angle)

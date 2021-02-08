@@ -22,7 +22,9 @@ typedef unsigned index_t;
 
 /*!
  * \brief The Object class
- * Base object of all objects in qt.
+ * Base object of all objects in qucs.
+ *
+ * It holds the label of the object
  */
 class Object{
 public:

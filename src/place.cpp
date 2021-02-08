@@ -50,7 +50,7 @@ public: // Port access
 		return pos_t(0, 0);
 	}
 	virtual pos_t nodePosition(unsigned) const{
-		return pos_t(center());
+        return position();
 	}
 
 	virtual Node const* portValue(unsigned) const{

@@ -54,10 +54,6 @@ private:
   void finishMarkerCoordinates(float&, float&) const;
   bool insideDiagram(float, float) const;
 
-  pos_t center() const override{
-    return Element::center();
-  }
-
 //  in new style diagrams.
 //  QWidget* newWidget(){ untested();
 //    QWidget* w=new QLineEdit;

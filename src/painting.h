@@ -19,6 +19,10 @@
 #include "viewpainter.h"
 
 
+/*!
+ * \brief The Painting class
+ * Base class for paintings. Paintings do not have a logic
+ */
 class Painting : public Element  {
 public:
   Painting();
@@ -77,7 +81,7 @@ private: // Element?
 
 protected:
   QString Name; // the type
-  int x2, y2; // yikes
+  int x2, y2; // yikes. Bottom right points
 };
 
 #endif

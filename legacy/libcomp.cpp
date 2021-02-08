@@ -104,7 +104,7 @@ private:
 			assert(p);
 			Element const* e = p;
 //			trace2("br", e->boundingRect().topLeft(), e->boundingRect().bottomRight());
-			auto c = e->center();
+            auto c = e->position();
 			br |= ( e->bounding_rect() + c );
 		}
 		trace4("LibComp::br", label(), paintings()->size(), br.tl(), br.br());

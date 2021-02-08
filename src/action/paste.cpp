@@ -15,6 +15,7 @@
 #include "docfmt.h"
 #include "sckt_base.h"
 #include "mouseactionschematic.h"
+#include "schematic_doc.h"
 
 static const std::string cnp_lang = "leg_sch";
 /*--------------------------------------------------------------------------*/
@@ -108,7 +109,7 @@ public:
 	rect_t bounding_rect() const override{ untested();
 		rect_t r;
 		for (auto i : *subckt()){ itested();
-			auto c = i->center();
+			auto c = i->position();
 			r |= i->bounding_rect() + c;
 		}
 		return r;
@@ -136,14 +137,14 @@ QUndoCommand* MouseActionPaste::activate(QObject* sender)
 
   for(auto i : *buf->subckt()){ untested();
 	  trace2("paste: centering", i->label(), br.center());
-	  auto p = i->center();
+	  auto p = i->position();
 	  i->setPosition(p - center);
   }
 
 #if 0
   // BUG
   for(auto i : buf->wires()){ untested();
-	  auto p = i->center();
+	  auto p = i->position();
 	  i->setPosition(p - center);
   }
 #endif

@@ -58,7 +58,7 @@ void WireUC::paint(ViewPainter *p) const
 	QPoint pm = QPoint(getX(m), getY(m));
 	QPoint p0 = QPoint(getX(_p0), getY(_p0));
 	QPoint p1 = QPoint(getX(_p1), getY(_p1));
-	trace3("paint", _p0, _p1, pm);
+        //trace3("paint", _p0, _p1, pm);
 	p->setPen(QPen(Qt::darkBlue, 1));
 	p->drawLine(p0, pm);
 	p->drawLine(pm, p1);

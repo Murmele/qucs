@@ -219,12 +219,6 @@ Node const* Symbol::portValue(unsigned i) const
   }
 }
 /*--------------------------------------------------------------------------*/
-// same as Element::center?
-pos_t Symbol::center()const
-{
-	return Element::center(); // pos_t(_cx, _cy);
-}
-/*--------------------------------------------------------------------------*/
 Port const& Symbol::port(unsigned i) const
 {
 	Symbol* s=const_cast<Symbol*>(this);
@@ -290,11 +284,11 @@ pos_t Symbol::nodePosition(unsigned i) const
 		// ports use external coordinates...
 	}else{
 		rotate_after_mirror a(_angle, (1-_hflip)/2, (1-_vflip)/2);
-		trace4("nodePosition pre", pp, _angle, _hflip, _vflip);
+        //trace4("nodePosition pre", pp, _angle, _hflip, _vflip);
 		pp = a.apply(pp);
-		trace2("nodePosition post", pp, center());
+        //trace2("nodePosition post", pp, position());
 	}
-	return pp + center();
+    return pp + position();
 }
 /*--------------------------------------------------------------------------*/
 // BUG: not here. legacy stuff...

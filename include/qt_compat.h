@@ -43,6 +43,8 @@
 class ElementGraphics;
 #endif
 
+#include "geometry.h"
+
 
 // strictly, this should also work with qt4.
 
@@ -422,9 +424,9 @@ inline std::ostream& operator<<(std::ostream&o, QPointF const& p)
   return o << "(" << p.x() << ", " << p.y() << ")";
 }
 
-inline QPointF makeQPointF(std::pair<int,int> p)
+inline QPointF makeQPointF(pos_t p)
 {
-	return QPointF(p.first, p.second);
+        return QPointF(p.x(), p.y());
 }
 
 #endif

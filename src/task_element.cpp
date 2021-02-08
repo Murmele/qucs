@@ -211,8 +211,8 @@ rect_t TaskElement::bounding_rect() const
 void TaskElement::paint(ViewPainter *p) const
 {
 	int x2=0; int y2=0; //?
-  int cx = center().first;
-  int cy = center().second;
+  int cx = position().x();
+  int cy = position().y();
   int x, y, a, b, xb, yb;
   QFont f = p->font();   // save current font
   QFont newFont = f;

@@ -14,15 +14,19 @@ struct graph_traits{};
 class Node;
 class NodeMap;
 class NetList;
-// describe the conductor graph.
-// Conductors are the vertices.
-// a connected component in this graph is a Net
+
 template<class M>
 class ConnectedComponents;
 
+/*!
+ * \brief The NodeMap class
+ * describe the conductor graph.
+ * Conductors are the vertices.
+ * a connected component in this graph is a Net
+ */
 class NodeMap {
 public:
-  	typedef pos_t key_type;
+	typedef pos_t key_type; // TODO: what is it?
 private:
 	class NodeCompare{
 	public:
@@ -37,7 +41,7 @@ private:
 			return c(n1, n2->position());
 		}
 	private:
-		std::less< std::pair<int, int> > c;
+		std::less<pos_t> c;
 	};
 public: // really?
 	// need *set*, because map splits key from payload.

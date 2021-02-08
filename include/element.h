@@ -43,6 +43,8 @@
 #include "geometry.h"
 #include "qt_compat.h"
 
+#include "QRect"
+
 class Node;
 class QucsDoc;
 class QPainter;
@@ -107,6 +109,9 @@ class SchematicModel;
 /*!
  * \brief The Element class
  * Base object of all elements. This class handles the position ... TODO: what does this class exactly
+ *
+ * An element is an object in a schematic.
+ * It has a position and a bounding rectangle
  */
 class Element : public Object {
 public:
@@ -120,8 +125,8 @@ public:
 	virtual ~Element();
 
 public: // make old variables accessible
-	int const& cx() const { return _position.first; }
-	int const& cy() const { return _position.second; }
+	int const& cx() const { return _position.x(); }
+	int const& cy() const { return _position.y(); }
 
 	int const& x1_() const { return x1; }
 	int const& y1_() const { return y1; }
@@ -143,10 +148,6 @@ public: // other stuff
 
 	// really?
 	virtual QWidget* newWidget() {return nullptr;}
-
-	// BUG: remove "center"
-	// BUG: not virtual
-	virtual pos_t center()const;
 
 	pos_t position()const{
 		return _position;
@@ -193,10 +194,10 @@ public:
 
 private:
   Object* _owner{nullptr}; // should probably be const all the way
-  pos_t _position; // BUG: store in symbol?
+  pos_t _position; // Position of the element. The position must not be the center of the element
 
 protected: // BUG in Painting
-	int x1, y1;
+  int x1, y1; // Top left corner
 
 private:
 }; // Element

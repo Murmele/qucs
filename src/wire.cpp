@@ -575,7 +575,7 @@ pos_t Wire::pP1() const
 	assert(!(angle()%90));
 	rotate_after_mirror a(angle(), (1-hflip())/2, (1-vflip())/2);
 	auto pp = a.apply(p);
-	trace2("nodePosition post", pp, center());
+    trace2("nodePosition post", pp, position());
 	return pp;
 }
 /*--------------------------------------------------------------------------*/
