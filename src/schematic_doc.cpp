@@ -17,6 +17,7 @@
 #include "globals.h"
 #include "qucs.h" // BUG. QucsSettings?
 #include <QUndoStack>
+#include <QApplication>
 #include "simmessage.h"
 #include "docfmt.h" // copy&paste
 #include "sckt_base.h"
@@ -83,7 +84,7 @@ SchematicDoc::SchematicDoc(QucsApp* App_/*BUG?*/, const QString& Name_, QWidget*
 
   misc::setWidgetBackgroundColor(viewport(), QucsSettings.BGColor);
   assert(viewport());
-  viewport()->setMouseTracking(true);
+  viewport()->setMouseTracking(true); // --> no difference between mouseMove and hover
   viewport()->setAcceptDrops(true);  // enable drag'n drop
 
   TODO("Repair scroll connect");
@@ -471,9 +472,11 @@ void SchematicDoc::mouseMoveEvent(QMouseEvent *e)
 {itested();
   assert(e);
   e->ignore(); // TODO: why sometimes it is accepted?
+
   if(e->isAccepted()){ itested();
       trace1("SchematicDoc::mouseMoveEvent: Is accepted!", e->type());
-  } else if (e->buttons() & Qt::MiddleButton) {
+  } else if (e->buttons() & Qt::MiddleButton ||
+            (QApplication::keyboardModifiers() & Qt::ControlModifier)) /* Mousepad moving */{
       QPointF oldPos = mapToScene(mOrigin);
       QPointF newPos = mapToScene(e->pos());
       QPointF delta = newPos - oldPos;
@@ -488,6 +491,8 @@ void SchematicDoc::mouseMoveEvent(QMouseEvent *e)
 
 	  // move actions go through here.
 	  signalCursorPosChanged(ee.localPos().x(), ee.localPos().y());
+      mOrigin = e->pos();
+      // do not accept!
 
       // forwarding the event to the scene.
 	  QGraphicsView::mouseMoveEvent(e);

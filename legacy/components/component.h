@@ -86,9 +86,6 @@ private: // Element override
    */
   std::unique_ptr<QDialog> createSchematicWidget(QucsDoc*) const override;
   rect_t bounding_rect() const override;
-  bool legacyTransformHack() const override{
-	  return true;
-  }
 
 private: // Symbol interface.
   virtual void recreate() {}; // obsolete?
