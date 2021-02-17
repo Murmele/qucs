@@ -125,8 +125,8 @@ public:
 	virtual ~Element();
 
 public: // make old variables accessible
-	int const& cx() const { return _position.x(); }
-	int const& cy() const { return _position.y(); }
+        int const& cx() const { return _position.first; }
+        int const& cy() const { return _position.second; }
 
 	int const& x1_() const { return x1; }
 	int const& y1_() const { return y1; }
