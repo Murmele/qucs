@@ -254,6 +254,7 @@ bool Component::getSelected(int x_, int y_)
  */
 void Component::paint(ViewPainter *p) const
 {itested();
+
   int x, y;
   int cx = 0; // cx_(); // "positionX"
   int cy = 0; // cy_(); // "positionY"
@@ -270,26 +271,26 @@ void Component::paint(ViewPainter *p) const
     assert(!Model.size() || Model.at(0) != '.');
 
     // paint all lines
-    foreach(Line *p1, Lines) {itested();
+    for(Line *p1: Lines) {itested();
       p->setPen(p1->style);
       p->drawLine(cx+p1->x1, cy+p1->y1, cx+p1->x2, cy+p1->y2);
     }
 
     // paint all arcs
-    foreach(Arc *p3, Arcs) {itested();
+    for(Arc *p3: Arcs) {itested();
       p->setPen(p3->style);
       p->drawArc(cx+p3->x, cy+p3->y, p3->w, p3->h, p3->angle, p3->arclen);
     }
 
     // paint all rectangles
-    foreach(Area *pa, Rects) { untested();
+    for(Area *pa: Rects) { untested();
       p->setPen(pa->Pen);
       p->setBrush(pa->Brush);
       p->drawRect(cx+pa->x, cy+pa->y, pa->w, pa->h);
     }
 
     // paint all ellipses
-    foreach(Area *pa, Ellips) { untested();
+    for(Area *pa: Ellips) { untested();
       p->setPen(pa->Pen);
       p->setBrush(pa->Brush);
       p->drawEllipse(cx+pa->x, cy+pa->y, pa->w, pa->h);

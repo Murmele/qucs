@@ -178,12 +178,7 @@ void ElementGraphics::attachElement(Element* e)
 	_elementText = nullptr;
 	_e = e;
 
-	auto flags = ItemIsSelectable|ItemIsMovable|ItemSendsGeometryChanges;
-	if(_e->legacyTransformHack()){ untested();
-		flags |= ItemIgnoresTransformations;
-	}else{ untested();
-	}
-	setFlags(flags);
+    setFlags(graphicsItemFlags);
 	// BUG: ask element?
 	setAcceptHoverEvents(true);
 
@@ -223,8 +218,6 @@ void ElementGraphics::attachElement(Element* e)
 	trace1("ElementGraphics unpacked", childItems().size());
 
 	if(!_e){ untested();
-	}else if(_e->legacyTransformHack()){ untested();
-		// throw that in the bin some day..
 	}else if(auto s=dynamic_cast<Symbol const*>(_e)){ untested();
 		// could be made accessible through Symbol interface.
 		int hflip = atoi(s->paramValue("$hflip").c_str());

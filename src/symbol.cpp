@@ -280,14 +280,15 @@ pos_t Symbol::nodePosition(unsigned i) const
 {
 	pos_t pp = portPosition(i);
 
-	if(legacyTransformHack()){
-		// ports use external coordinates...
-	}else{
-		rotate_after_mirror a(_angle, (1-_hflip)/2, (1-_vflip)/2);
-        //trace4("nodePosition pre", pp, _angle, _hflip, _vflip);
-		pp = a.apply(pp);
-        //trace2("nodePosition post", pp, position());
-	}
+    // TODO: check
+//	if(legacyTransformHack()){
+//		// ports use external coordinates...
+//	}else{
+//		rotate_after_mirror a(_angle, (1-_hflip)/2, (1-_vflip)/2);
+//        //trace4("nodePosition pre", pp, _angle, _hflip, _vflip);
+//		pp = a.apply(pp);
+//        //trace2("nodePosition post", pp, position());
+//	}
     return pp + position();
 }
 /*--------------------------------------------------------------------------*/

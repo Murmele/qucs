@@ -102,6 +102,7 @@ public:
 	void setSelected(bool s);
 
 private:
+        const GraphicsItemFlags graphicsItemFlags = ItemIsSelectable|ItemIsMovable|ItemSendsGeometryChanges;
 	Element* _e{nullptr};
 	QGraphicsItem* _elementText{nullptr};
 	bool _select__;

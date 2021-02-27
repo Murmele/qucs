@@ -163,11 +163,6 @@ public:
 	virtual QString const& description() const{return incomplete_description;}
 	virtual char const* iconBasename() const{return nullptr;}
 
-public: // compatibility
-	virtual bool legacyTransformHack() const{
-		return false;
-	}
-
 public:
 	// BUG; abused in taskElement
 	//  mutable int x2, y2;  // center and relative boundings
