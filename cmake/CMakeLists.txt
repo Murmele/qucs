@@ -12,6 +12,8 @@ option(COMPILE_TOOLS "Compile external qucs tools. Default: ON" ON)
 set(QUCS_URL "https://sf.net/p/qucs")
 set(QUCS_BUGREPORT "qucs-bugs@lists.sourceforge.net")
 
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+
 include(determineGitCommitHash.cmake)
 determineGitCommitHash()
 

@@ -108,10 +108,12 @@ class SchematicModel;
 
 /*!
  * \brief The Element class
- * Base object of all elements. This class handles the position ... TODO: what does this class exactly
+ * Base object of all elements. This class handles the position
+ * and the bounding rectangle. It draws also the bounding rectangle around the object
  *
  * An element is an object in a schematic.
  * It has a position and a bounding rectangle
+ * This object draws also the bounding rectangle
  */
 class Element : public Object {
 public:
@@ -144,7 +146,7 @@ public: // other stuff
 	void setPosition(pos_t const& c){ _position = c; }
 	virtual void getPosition(int&, int&) const; // BUG
 	virtual void paint(ViewPainter*) const = 0;
-	virtual std::unique_ptr<QDialog> createSchematicWidget(QucsDoc*) const;
+	virtual std::unique_ptr<QDialog> createSchematicWidget(QucsDoc*) const; // TODO: make it pure virtual
 
 	// really?
 	virtual QWidget* newWidget() {return nullptr;}

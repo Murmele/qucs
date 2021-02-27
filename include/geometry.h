@@ -22,8 +22,11 @@
 #include "assert.h"
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
-// TODO: maybe removing pos_t and using QPoint() ?
-// Operator < must be reimplemented or a workaround must be found
+/*!
+ * \brief The pos_t class
+ * This class is created to support the < operators and others.
+ * So std::sort can be used to sort the elements
+ */
 class pos_t : public std::pair<int, int>{
 public:
 	pos_t(pos_t const& p) : std::pair<int, int>(p) {}
