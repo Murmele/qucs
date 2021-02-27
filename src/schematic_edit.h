@@ -17,7 +17,11 @@
 #include <QUndoCommand> // really?
 #include "element_graphics.h"
 
-// edit a schematic add/delete/alter
+/*!
+ * \brief The SchematicEdit class
+ *
+ * edit a schematic add/delete/alter
+ */
 class SchematicEdit : public QUndoCommand {
 public:
 	typedef std::list<ElementGraphics*> list_t;
@@ -32,7 +36,7 @@ public:
 	};
 protected:
 	explicit SchematicEdit(SchematicScene& s)
-	  : QUndoCommand(), _first(true), _scn(s) {}
+          : QUndoCommand(), _scn(s) {}
 	SchematicEdit(SchematicEdit const&) = delete;
 
 	template<class IT>
@@ -90,10 +94,10 @@ private:
 	}
 
 private:
-	list_t _ins;
+        list_t _ins; // Contains all new inserted elements
 	list_t _del;
 	std::vector<swap_t*> _swap;
-	bool _first;
+        bool _first{true};
 	SchematicScene& _scn;
 };
 /*--------------------------------------------------------------------------*/

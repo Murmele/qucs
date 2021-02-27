@@ -46,7 +46,7 @@ SchematicDoc::SchematicDoc(QucsApp* App_/*BUG?*/, const QString& Name_, QWidget*
   }
   // ...........................................................
 
-  _undoStack = new QUndoStack();
+  setUndoStack(new QUndoStack());
 
   // ...........................................................
   GridX  = GridY  = 10;
@@ -452,19 +452,19 @@ void SchematicDoc::zoom(float s)
     setTransformationAnchor(a);
 }
 
-bool SchematicDoc::pushUndoStack(QUndoCommand* cmd)
-{
-    // QucsDoc inherits not from QObject,
-    // Therefore no signal slot is available
-    if (QucsDoc::pushUndoStack(cmd)) {
-        emit signalUndoState(_undoStack->canUndo());
-        emit signalRedoState(_undoStack->canRedo());
-        return true;
+void SchematicDoc::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_A)
+    {
+        // add new element
+        // focus on the search, so the user can easily
+        // search an element
+        event->accept();
     }
-
-    return false;
+    else
+    {
+        QGraphicsView::keyPressEvent(event);
+    }
 }
-
 
 
 // why is this here and not in SchematicScene?

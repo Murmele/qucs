@@ -46,8 +46,8 @@ public:
 
 	pos_t& setX(int x){ first=x; return *this;}
 	pos_t& setY(int x){ second=x; return *this;}
-	int x()const{ return first;}
-	int y()const{ return second;}
+        int x()const{ return first;}
+        int y()const{ return second;}
 };
 /*--------------------------------------------------------------------------*/
 inline bool pos_t::operator<=(pos_t const& b) const

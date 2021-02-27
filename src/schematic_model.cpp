@@ -291,6 +291,12 @@ SchematicModel::const_iterator SchematicModel::find_again(const std::string& sho
 }
 /*--------------------------------------------------------------------------*/
 // HACK
+/*!
+ * \brief SchematicModel::nextIdx
+ * Iterate over all elements and compare the names, to find the next free
+ * index to get a unique element name.
+ * \param s
+ */
 unsigned SchematicModel::nextIdx(std::string const& s) const
 {
 	unsigned r=0;

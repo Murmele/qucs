@@ -74,8 +74,8 @@ Rectangle::Rectangle(bool _filled) : Painting()
   Pen = QPen(QColor());
   Brush = QBrush(Qt::lightGray);
   filled = _filled;
-  assert(cx() == 0);
-  assert(cy() == 0);
+  //assert(cx() == 0);
+  //assert(cy() == 0);
   x1 = width = 0;
   y1 = heigth = 0;
 }

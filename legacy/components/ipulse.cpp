@@ -60,7 +60,7 @@ iPulse::iPulse()
   Props.append(new Property("Tf", "1 ns", false,
 		QObject::tr("fall time of the trailing edge")));
 
-  set_rotated(1);  // fix historical flaw
+  /* set_rotated(1); */ setRotationAngle(0);  // fix historical flaw
 }
 
 iPulse::~iPulse()

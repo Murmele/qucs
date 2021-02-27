@@ -418,13 +418,20 @@ private:
     Element const* _proto{nullptr};
 };
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief The NewElementCommand class
+ * Gets executed when a new element will be placed on the schematic
+ *
+ * This element gets then the undostack of the doc so undo/redo is possible.
+ */
 class NewElementCommand : public SchematicEdit {
 public:
 	NewElementCommand(SchematicDoc& ctx, ElementGraphics* gfx)
 	: SchematicEdit(*ctx.sceneHACK()) { untested();
 		assert(gfx->scene());
 		assert(!element(gfx)->mutable_owner());
-		gfx->hide();
+        gfx->hide(); // why?
+        element(gfx)->setUndoStack(ctx.undoStack());
 //		ctx.takeOwnership(element(gfx)); // BUG?
 		// elment->setOwner(ctx)...?
 		setText("NewElement" /*element(gfx)->label()*/); // tr?
@@ -479,7 +486,7 @@ QUndoCommand* MouseActionNewElement::makeNew(QEvent* ev)
 { untested();
 	// assert(ev->widget=doc->scene()) // or so.
 	trace1("RELEASE", ev->type());
-	if(ev->type() == QEvent::MouseButtonRelease){ itested();
+    if(ev->type() == QEvent::GraphicsSceneMouseRelease){ itested();
 	}else{ untested();
 		unreachable();
 	}
@@ -606,6 +613,7 @@ QUndoCommand* MouseActionNewElement::leave(QEvent* ev)
 /*--------------------------------------------------------------------------*/
 QUndoCommand* MouseActionNewElement::rotate(QEvent*)
 { untested();
+    trace() << "Rotate";
 	if(!_gfx){ untested();
 		unreachable();
 	}else if(dynamic_cast<Symbol*>(element(_gfx))){ untested();
@@ -1299,8 +1307,6 @@ void SchematicDoc::actionEditUndo(QAction* sender)
 	assert(_app);
   _app->hideEdit(); // disable text edit of component property
 
-  if (undo())
-    emit signalUndoState(_undoStack->canUndo());
   updateViewport();
   assert(mouseActions());
   setDrawn(false);
@@ -1312,8 +1318,6 @@ void SchematicDoc::actionEditRedo(QAction* sender)
 	assert(_app);
   _app->hideEdit(); // disable text edit of component property
 
-  if (redo())
-     emit signalRedoState(_undoStack->canRedo());
   updateViewport();
   setDrawn(false);
 }

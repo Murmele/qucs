@@ -95,6 +95,7 @@ public:
   bool isConductor(pos_t) const;
 
   void possiblyRename(Element* e) const;
+  std::string uniqueName(const std::string& prefix) const;
 
 public: // wrap items
   QList<ElementGraphics*> selectedItems() const;

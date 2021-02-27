@@ -40,7 +40,7 @@ ElementGraphics::ElementGraphics() : QGraphicsItem()
 }
 /*--------------------------------------------------------------------------*/
 ElementGraphics::ElementGraphics(ElementGraphics const& e)
-	: QGraphicsItem(), _e(nullptr), _elementText(nullptr)
+    : QGraphicsItem()
 {itested();
 	assert(e._e);
 	Element* el = e._e->clone();
@@ -50,7 +50,7 @@ ElementGraphics::ElementGraphics(ElementGraphics const& e)
 }
 /*--------------------------------------------------------------------------*/
 ElementGraphics::ElementGraphics(Element* e)
-	: QGraphicsItem(), _e(nullptr), _elementText(nullptr)
+    : QGraphicsItem()
 {itested();
 	assert(e);
 	attachElement(e);

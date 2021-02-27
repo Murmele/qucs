@@ -80,7 +80,7 @@ vRect::vRect()
   Props.append(new Property("Td", "0 ns", false,
 		QObject::tr("initial delay time")));
 
-  set_rotated(1);  // fix historical flaw ??
+  /* set_rotated(1); */ setRotationAngle(0);  // fix historical flaw ??
 }
 
 vRect::~vRect()

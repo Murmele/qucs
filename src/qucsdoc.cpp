@@ -66,35 +66,26 @@ QucsDoc::~QucsDoc()
 	for(auto i : _simulators){
 		delete i.second;
 	}
-    delete _undoStack;
     delete mHandler;
 //	assert(_simulators == 0);
-}
-
-bool QucsDoc::pushUndoStack(QUndoCommand* cmd) {
-    if (!_undoStack || !cmd)
-        return false;
-
-    _undoStack->push(cmd);
-    return true;
 }
 
 // really?!
 bool QucsDoc::undo()
 {
-    if (!_undoStack)
+    if (!undoStack())
         return false;
 
-    _undoStack->undo();
+    undoStack()->undo();
     return true;
 }
 
 bool QucsDoc::redo()
 {
-    if (!_undoStack)
+    if (!undoStack())
         return false;
 
-    _undoStack->redo();
+    undoStack()->redo();
     return true;
 }
 

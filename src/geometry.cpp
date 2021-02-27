@@ -142,7 +142,7 @@ rect_t::rect_t(QRectF const& p) : _tl(0,0), _br(0,0)
 /*--------------------------------------------------------------------------*/
 QRectF rect_t::toRectF() const
 {
-    return QRectF(_tl.x(), _tl.y(), w(), h());
+    return QRectF(_tl.first, _tl.second, w(), h());
 }
 /*--------------------------------------------------------------------------*/
 rect_t rect_t::operator+(pos_t const& m) const

@@ -418,6 +418,13 @@ void SchematicScene::selectAll(bool v)
 	}
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief filter
+ * Remove all non ElementGraphics items, because they are not handled?
+ * TODO: use reference instead of copying the complete list and returning it!
+ * \param L
+ * \return
+ */
 static QList<ElementGraphics*> filter(QList<QGraphicsItem*> L)
 {
 	trace1("items raw mutable", L.size());
@@ -485,6 +492,13 @@ QList<ElementGraphics const*> SchematicScene::items(int x, int y) const
 	return b;
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief SchematicScene::items
+ * Returns all elements at position \p x and \p y
+ * \param x
+ * \param y
+ * \return
+ */
 QList<ElementGraphics*> SchematicScene::items(int x, int y)
 {itested();
 	QPointF r(x, y);
@@ -493,6 +507,12 @@ QList<ElementGraphics*> SchematicScene::items(int x, int y)
 	return b;
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief SchematicScene::items
+ * Return all items within the rect \p r
+ * \param r
+ * \return
+ */
 QList<ElementGraphics*> SchematicScene::items(QRectF const& r)
 {itested();
 	auto L = QGraphicsScene::items(r);
@@ -550,18 +570,32 @@ void SchematicScene::attachToModel(Element* e)
 	}
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief SchematicScene::possiblyRename
+ * Rename element if the label name already exists, because each
+ * Element must have an unique name
+ *
+ * Legacy, do not use anymore. Use uniqueName() instead
+ * \param e
+ */
 void SchematicScene::possiblyRename(Element* e) const
 {
 	std::string label = e->label();
+    e->setLabel(uniqueName(label));
+}
 
-   int z = label.size();
-	if(!z){
-	}else if(std::isdigit(label[z-1])){
-	}else{
-		unsigned i = scope()->nextIdx(label);
-		e->setLabel(label + std::to_string(i));
-		// gfx->update();
-	}
+std::string SchematicScene::uniqueName(const std::string& prefix) const
+{
+    int z = prefix.size();
+     if(!z){
+         assert(0); // should never occur
+         return "";
+     }
+     //}else if(std::isdigit(label[z-1])){
+     else{
+        unsigned i = scope()->nextIdx(prefix);
+        return prefix + std::to_string(i);
+     }
 }
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
