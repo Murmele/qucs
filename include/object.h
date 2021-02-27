@@ -11,11 +11,10 @@
  *                                                                         *
  ***************************************************************************/
 
-// base object for qucs.
-
 #ifndef QUCS_OBJECT_H
 #define QUCS_OBJECT_H
 #include "io_trace.h"
+#include "QUndoStack"
 /*--------------------------------------------------------------------------*/
 typedef unsigned index_t;
 /*--------------------------------------------------------------------------*/
@@ -41,13 +40,27 @@ protected:
 	explicit Object(Object const&){}
 
 public:
-	virtual ~Object(){}
+        virtual ~Object(){ delete mUndoStack; mUndoStack = nullptr;}
+        void setUndoStack(QUndoStack* stack) {mUndoStack = stack;}
+        QUndoStack* undoStack() {return mUndoStack;}
+        std::string const& label() const { return _label;}
+        std::string const& short_label()const {return _label;} // TODO: should be different?
+        void setLabel(std::string const& l);
+        void setLabel(char const* l);
 
-	std::string const& label() const{ return _label;}
-	std::string const& short_label()const {return _label;}
-//	void setLabel(QString const& l) {_label = l.toStdString();}
-	void setLabel(std::string const& l) {_label = l;}
-	void setLabel(char const* l) {_label = l;}
+        /*!
+         * \brief pushUndoStack
+         * Push undo command to Undostack if available, if no
+         * undostack is available, create a local one to execute
+         * the undo command, but the no undo is available
+         * \param cmd
+         * \return true if the command was pushed successfully to the undostack,
+         * false if the command \p cmd is not valid or no valid undostack was available.
+         * Returns also false if the command was pushed to the local undostack
+         */
+        bool pushUndoStack(QUndoCommand* cmd);
+
+
 
 protected: // error handling
 	void message(QucsMsgType, const char*) const;
@@ -55,6 +68,9 @@ protected: // error handling
 
 private:
 	std::string _label;
+        QUndoStack* mUndoStack{nullptr};
+
+        friend QUndoCommand; // so the Undocommand is directly able to access all private members and must not call the getter and setter functions
 };
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/

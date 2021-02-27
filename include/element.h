@@ -127,8 +127,8 @@ public:
 	virtual ~Element();
 
 public: // make old variables accessible
-	int const& cx() const { return _position.x(); }
-	int const& cy() const { return _position.y(); }
+        int const& cx() const { return _position.first; }
+        int const& cy() const { return _position.second; }
 
 	int const& x1_() const { return x1; }
 	int const& y1_() const { return y1; }
@@ -143,7 +143,7 @@ public: // other stuff
 	virtual bool showLabel() const{ return true; }
 	//virtual bool showParam(int i) const{ return true; } // later
 
-	void setPosition(pos_t const& c){ _position = c; }
+        void setPosition(pos_t const& c);
 	virtual void getPosition(int&, int&) const; // BUG
 	virtual void paint(ViewPainter*) const = 0;
 	virtual std::unique_ptr<QDialog> createSchematicWidget(QucsDoc*) const; // TODO: make it pure virtual
@@ -156,6 +156,11 @@ public: // other stuff
 	}
 
 public:
+        /*!
+         * \brief clone
+         * Clones the Element. The undostack must not be cloned!
+         * \return
+         */
 	virtual Element* clone()const = 0;
 	virtual Element* clone_instance()const{
 		return clone();
@@ -191,7 +196,7 @@ public:
 
 private:
   Object* _owner{nullptr}; // should probably be const all the way
-  pos_t _position; // Position of the element. The position must not be the center of the element
+  pos_t _position{0, 0}; // Position of the element. The position is the center of the element and must lie on the grid
 
 protected: // BUG in Painting
   int x1, y1; // Top left corner

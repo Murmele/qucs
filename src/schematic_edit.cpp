@@ -17,6 +17,12 @@
 #include "schematic_scene.h"
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief collectPorts
+ * Finds all port positions of an element and adds them to the vector \p p
+ * \param e Element for which the ports are collected
+ * \param p Position vector where all positions are stored
+ */
 static void collectPorts(ElementGraphics const* e, std::vector<pos_t>& p)
 {
 	if(auto s=dynamic_cast<Symbol const*>(element(e))){
@@ -120,7 +126,7 @@ void SchematicEdit::do_it_first()
 	}
 
 	trace1("============ edit insert...", _ins.size());
-	while(_ins.size()){
+    while(_ins.size()){ // iterate over all new elements
 		ElementGraphics* gfx = _ins.front();
 		trace1("try insert...", element(gfx)->label());
 		_ins.pop_front();
@@ -129,7 +135,7 @@ void SchematicEdit::do_it_first()
 		assert(e);
 		SchematicScene* scn = gfx->scene();
 		assert(scn);
-		scn->possiblyRename(e);
+        e->setLabel(scn->uniqueName(e->label()));
 		if(addmerge(gfx, done_del)){
 			trace0("merged");
 		}else{
@@ -158,6 +164,12 @@ QList<ElementGraphics*> SchematicEdit::items(
 	return _scn.items(pos, mode, order);
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief SchematicEdit::items
+ * Returns a list of ElementGraphics within the rect \p r
+ * \param r
+ * \return
+ */
 QList<ElementGraphics*> SchematicEdit::items(QRectF const& r) const
 { untested();
 	return _scn.items(r);
@@ -277,6 +289,13 @@ void SchematicEdit::qDelete(ElementGraphics* gfx)
 	_del.push_back(gfx);
 }
 /*--------------------------------------------------------------------------*/
+/*!
+ * \brief SchematicEdit::qInsert
+ * Inserts a new ElementGraphics \p gfx to this undo command.
+ * On these ElementGraphics the redo and undo will be
+ * executed
+ * \param gfx
+ */
 void SchematicEdit::qInsert(ElementGraphics* gfx)
 {
 	assert(!gfx->isVisible());

@@ -56,7 +56,8 @@ Ampere_noise::Ampere_noise()
   Props.append(new Property("a", "0", false,
 		QObject::tr("additive frequency term")));
 
-  set_rotated(1);  // fix historical flaw
+  ///* set_rotated(1); */ setRotationAngle(0);  // fix historical flaw
+  setRotationAngle(0);
 }
 
 Ampere_noise::~Ampere_noise()

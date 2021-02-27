@@ -32,7 +32,6 @@ class QPrinter;
 class QPainter;
 class MouseActionsHandler;
 class MouseAction;
-class QUndoStack;
 class QUndoCommand;
 class Element;
 class CommonData;
@@ -56,17 +55,6 @@ public:
   virtual float zoomBy(float) { return 1.0; };
   virtual void  showAll() {};
   virtual void  showNoZoom() {};
-  /*!
-   * \brief pushUndoStack
-   * Pushes the cmd on the undostack if it is available. If it was not possible to
-   * push the command on the undo stack, the command \p cmd must be deleted manually
-   *
-   * Maybe inheriting this class from qobject, so that signal
-   * slots can be used.
-   * \param cmd
-   * \return Returns true if the cmd was pushed successfully, else false
-   */
-  virtual bool pushUndoStack(QUndoCommand* cmd);
 
   static QString fileSuffix (const QString&);
   QString fileSuffix (void);
@@ -118,7 +106,6 @@ public: // actions: These somehow correspond to buttons.
 	void setOwner(QWidget* o){_owner=o;}
 
 	void setParameter(std::string const&, std::string const&);
-	//virtual QUndoStack* undoStack(){return _undoStack;}
 	virtual void updateViewport() {}
 	virtual void reloadGraphs() {} // fix later.
 
@@ -160,8 +147,6 @@ public:
 	int  showBias;     // -1=no, 0=calculation running, >0=show DC bias points
 	bool GridOn;
 	int  tmpPosX, tmpPosY;
-protected:
-        QUndoStack* _undoStack{nullptr}; // Every document has its own undostack
 private:
 	friend class Simulator;
 

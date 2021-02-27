@@ -66,7 +66,7 @@ iExp::iExp()
   Props.append(new Property("Tf", "1 ns", false,
 		QObject::tr("time constant of the falling edge")));
 
-  set_rotated(1);  // fix historical flaw
+  /* set_rotated(1); */ setRotationAngle(0);  // fix historical flaw
 }
 
 iExp::~iExp()

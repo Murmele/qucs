@@ -155,19 +155,24 @@ private:
   void rotate();
 
 protected:
-  void set_rotated(unsigned r);
-  void set_mirror_xaxis(unsigned r);
-  void set_mirror_yaxis(unsigned r);
+  //void set_rotated(unsigned r);
+  void setRotationAngle(int angle);
+  void setMirrorXAxis(bool mirror);
+  void setMirrorYAxis(bool mirror);
+//  void set_mirror_xaxis(unsigned r);
+//  void set_mirror_yaxis(unsigned r);
 
 public: // BUG
   unsigned rotated() const{return _rotated;}
   void    mirrorX();  // mirror Y axis
   void    mirrorY();  // mirror X axis
   bool    load(const QString&);
-
   // to hold track of the component appearance for saving and copying
-  bool mirroredX;   // is it mirrored about X axis or not
-  int  _rotated;     // rotation angle divided by 90 degrees
+  bool mirroredX{false};   // is it mirrored about X axis or not
+  int  _rotated;     // rotation angle divided by 90 degrees // legacy
+  int mRotationAngle{0};
+  bool mMirrorX{false};
+  bool mMirrorY{false};
 
   virtual QString getSubcircuitFile() const { return ""; }
   // set the pointer scematic associated with the component
@@ -262,11 +267,11 @@ private: // (hopefully) obsolete callbacks
 
 public: // BUG
   // center and relative boundings
-  int x1, y1;
-  int x2, y2;
+  int x1{0}, y1{0};
+  int x2{0}, y2{0};
 
 // private: !!!
-  bool showName;
+  bool showName{true};
 
 protected: // obsolete
   int Type;

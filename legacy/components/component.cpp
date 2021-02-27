@@ -40,6 +40,8 @@
 #include <QDialog>
 #include <assert.h>
 
+#include "undocommand.h"
+
 class Schematic;
 
 class QValidator;
@@ -109,7 +111,7 @@ Component::Component(Component const& p)
  * \class Component
  * \brief The Component class implements a legacy qucs component symbol
  */
-Component::Component() : Symbol(),  _rotated(0)
+Component::Component() : Symbol()
 {
   // Type = isAnalogComponent;
 
@@ -388,93 +390,95 @@ void Component::rotate()
     if(Ports.count() < 1) return;  // do not rotate components without ports
   int tmp, dx, dy;
 
-  // rotate all lines
-  foreach(Line *p1, Lines) {
-    tmp = -p1->x1;
-    p1->x1 = p1->y1;
-    p1->y1 = tmp;
-    tmp = -p1->x2;
-    p1->x2 = p1->y2;
-    p1->y2 = tmp;
-  }
 
-  // rotate all ports
-  for(ComponentPort* p2 : Ports) {
-    // p2->rotate();
-    tmp = -p2->x_();
-    p2->setPosition(p2->y_(), tmp);
-  }
+    // TODO: do rotate only graphicsitem
+//  // rotate all lines
+//  foreach(Line *p1, Lines) {
+//    tmp = -p1->x1;
+//    p1->x1 = p1->y1;
+//    p1->y1 = tmp;
+//    tmp = -p1->x2;
+//    p1->x2 = p1->y2;
+//    p1->y2 = tmp;
+//  }
 
-  // rotate all arcs
-  foreach(Arc *p3, Arcs) {
-    tmp = -p3->x;
-    p3->x = p3->y;
-    p3->y = tmp - p3->w;
-    tmp = p3->w;
-    p3->w = p3->h;
-    p3->h = tmp;
-    p3->angle += 16*90;
-    if(p3->angle >= 16*360) p3->angle -= 16*360;;
-  }
+//  // rotate all ports
+//  for(ComponentPort* p2 : Ports) {
+//    // p2->rotate();
+//    tmp = -p2->x_();
+//    p2->setPosition(p2->y_(), tmp);
+//  }
 
-  // rotate all rectangles
-  foreach(Area *pa, Rects) { untested();
-    tmp = -pa->x;
-    pa->x = pa->y;
-    pa->y = tmp - pa->w;
-    tmp = pa->w;
-    pa->w = pa->h;
-    pa->h = tmp;
-  }
+//  // rotate all arcs
+//  foreach(Arc *p3, Arcs) {
+//    tmp = -p3->x;
+//    p3->x = p3->y;
+//    p3->y = tmp - p3->w;
+//    tmp = p3->w;
+//    p3->w = p3->h;
+//    p3->h = tmp;
+//    p3->angle += 16*90;
+//    if(p3->angle >= 16*360) p3->angle -= 16*360;;
+//  }
 
-  // rotate all ellipses
-  foreach(Area *pa, Ellips) { untested();
-    tmp = -pa->x;
-    pa->x = pa->y;
-    pa->y = tmp - pa->w;
-    tmp = pa->w;
-    pa->w = pa->h;
-    pa->h = tmp;
-  }
+//  // rotate all rectangles
+//  foreach(Area *pa, Rects) { untested();
+//    tmp = -pa->x;
+//    pa->x = pa->y;
+//    pa->y = tmp - pa->w;
+//    tmp = pa->w;
+//    pa->w = pa->h;
+//    pa->h = tmp;
+//  }
 
-  // rotate all text
-  float ftmp;
-  foreach(Text *pt, Texts) {itested();
-    tmp = -pt->x;
-    pt->x = pt->y;
-    pt->y = tmp;
+//  // rotate all ellipses
+//  foreach(Area *pa, Ellips) { untested();
+//    tmp = -pa->x;
+//    pa->x = pa->y;
+//    pa->y = tmp - pa->w;
+//    tmp = pa->w;
+//    pa->w = pa->h;
+//    pa->h = tmp;
+//  }
 
-    ftmp = -pt->mSin;
-    pt->mSin = pt->mCos;
-    pt->mCos = ftmp;
-  }
+//  // rotate all text
+//  float ftmp;
+//  foreach(Text *pt, Texts) {itested();
+//    tmp = -pt->x;
+//    pt->x = pt->y;
+//    pt->y = tmp;
 
-  tmp = -x1;   // rotate boundings
-  x1  = y1; y1 = -x2;
-  x2  = y2; y2 = tmp;
+//    ftmp = -pt->mSin;
+//    pt->mSin = pt->mCos;
+//    pt->mCos = ftmp;
+//  }
 
-  tmp = -tx;    // rotate text position
-  tx  = ty;
-  ty  = tmp;
-  // use the screen-compatible metric
-  FontMetrics metrics;
+//  tmp = -x1;   // rotate boundings
+//  x1  = y1; y1 = -x2;
+//  x2  = y2; y2 = tmp;
 
-  dx = dy = 0;
-  if(showName) {
-    dx = metrics.width(QString(label().c_str()));
-    dy = metrics.lineSpacing();
-  }
-  for(Property *pp = Props.first(); pp != 0; pp = Props.next())
-    if(pp->display) {
-      // get width of text
-      tmp = metrics.width(pp->Name+"="+pp->Value);
-      if(tmp > dx) dx = tmp;
-      dy += metrics.lineSpacing();
-    }
-  if(tx > x2) ty = y1-ty+y2;    // rotate text position
-  else if(ty < y1) ty -= dy;
-  else if(tx < x1) { tx += dy-dx;  ty = y1-ty+y2; }
-  else ty -= dx;
+//  tmp = -tx;    // rotate text position
+//  tx  = ty;
+//  ty  = tmp;
+//  // use the screen-compatible metric
+//  FontMetrics metrics;
+
+//  dx = dy = 0;
+//  if(showName) {
+//    dx = metrics.width(QString(label().c_str()));
+//    dy = metrics.lineSpacing();
+//  }
+//  for(Property *pp = Props.first(); pp != 0; pp = Props.next())
+//    if(pp->display) {
+//      // get width of text
+//      tmp = metrics.width(pp->Name+"="+pp->Value);
+//      if(tmp > dx) dx = tmp;
+//      dy += metrics.lineSpacing();
+//    }
+//  if(tx > x2) ty = y1-ty+y2;    // rotate text position
+//  else if(ty < y1) ty -= dy;
+//  else if(tx < x1) { tx += dy-dx;  ty = y1-ty+y2; }
+//  else ty -= dx;
 }
 // -------------------------------------------------------
 
@@ -504,22 +508,21 @@ void Component::setParameter(std::string const& name, std::string const& v)
   if(name=="$angle"){
     int r = atoi(v.c_str());
     trace3("Component::setParameter", name, v, label());
-    assert(!(r % 90)); // for now.
-    r /= 90;
-    r %= 4;
-    set_rotated(r);
+    setRotationAngle(r);
   }else if(name=="$vflip"){
     int r = atoi(v.c_str());
     assert(r==1 || r==-1);
     r -= 1;
     r /= -2;
-    set_mirror_yaxis(r);
+    //set_mirror_yaxis(r);
+    setMirrorYAxis(r);
   }else if(name=="$hflip"){itested();
     int r = atoi(v.c_str());
     assert(r==1 || r==-1);
     r -= 1;
     r /= -2;
-    set_mirror_xaxis(r);
+    //set_mirror_xaxis(r);
+    setMirrorXAxis(r);
   }else if(name=="$xposition"){
     int x = atoi(v.c_str());
     auto c = position(); // center(). Now it makes anymore sense
@@ -586,44 +589,59 @@ std::string Component::paramValue(std::string const& name) const
   }
 }
 
-// -------------------------------------------------------
-void Component::set_rotated(unsigned r)
+void Component::setRotationAngle(int angle)
 {
-  assert(r<4);
-  while(r != unsigned(_rotated)){
-    rotate();
-
-    // keep track of what's done
-    ++_rotated;
-    _rotated %= 4;
-  }
-  trace3("Component::set_rotated", label(), r, _rotated);
+    pushUndoStack(new UndoCommand<int>(mRotationAngle, angle, mRotationAngle));
 }
 
-// -------------------------------------------------------
-void Component::set_mirror_yaxis(unsigned x)
+void Component::setMirrorXAxis(bool mirror)
 {
-  auto rot_bak = rotated();
-  if(x != mirroredX){
-    mirrorX(); // sic.
-  }else{
-    assert(x==0);
-  }
-
-  set_rotated(rot_bak);
+    pushUndoStack(new UndoCommand<bool>(mMirrorX, mirror, mMirrorX));
 }
-// -------------------------------------------------------
-void Component::set_mirror_xaxis(unsigned x)
+
+void Component::setMirrorYAxis(bool mirror)
 {
-  auto rot_bak = rotated();
-  if(x != mirroredX){
-    mirrorY(); // six.
-  }else{
-    assert(x==0);
-  }
-
-  set_rotated(rot_bak);
+    pushUndoStack(new UndoCommand<bool>(mMirrorY, mirror, mMirrorY));
 }
+
+//// -------------------------------------------------------
+//void Component::set_rotated(unsigned r)
+//{
+//  assert(r<4);
+//  while(r != unsigned(_rotated)){
+//    rotate();
+
+//    // keep track of what's done
+//    ++_rotated;
+//    _rotated %= 4;
+//  }
+//  trace3("Component::set_rotated", label(), r, _rotated);
+//}
+
+// -------------------------------------------------------
+//void Component::set_mirror_yaxis(unsigned x)
+//{
+//  auto rot_bak = rotated();
+//  if(x != mirroredX){
+//    mirrorX(); // sic.
+//  }else{
+//    assert(x==0);
+//  }
+
+//  set_rotated(rot_bak);
+//}
+//// -------------------------------------------------------
+//void Component::set_mirror_xaxis(unsigned x)
+//{
+//  auto rot_bak = rotated();
+//  if(x != mirroredX){
+//    mirrorY(); // six.
+//  }else{
+//    assert(x==0);
+//  }
+
+//  set_rotated(rot_bak);
+//}
 // -------------------------------------------------------
 // Mirrors the component about the x-axis.
 // BUG? mirrors the Y axis.
@@ -1208,7 +1226,8 @@ void MultiViewComponent::recreate()
       mirrorX();
     }
     if (rrot){
-      set_rotated( rrot%4 );
+      //set_rotated( rrot%4 );
+      setRotationAngle(rrot);
     }else{
     }
   }

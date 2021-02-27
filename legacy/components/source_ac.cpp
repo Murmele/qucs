@@ -82,7 +82,7 @@ Source_ac::Source_ac()
   Props.append(new Property("Temp", "26.85", false,
 	QObject::tr("simulation temperature in degree Celsius")));
 
-  set_rotated(1);  // fix historical flaw ??
+  /* set_rotated(1); */ setRotationAngle(0);  // fix historical flaw ??
 }
 
 Source_ac::~Source_ac()

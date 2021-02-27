@@ -68,6 +68,7 @@ CPP_SRC = \
 	task_element.cpp \
 	textdoc.cpp \
 	u_parameter.cc \
+    undocommand.cpp \
 	viewpainter.cpp \
 	wire.cpp \
 	wiredialog.cpp \

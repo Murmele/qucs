@@ -105,8 +105,6 @@ public:
 
   float textCorr();
   bool sizeOfFrame(int&, int&);
-
-  bool pushUndoStack(QUndoCommand* cmd) override;
 private: //temporary/obsolete
   void sizeOfAll(int&a, int&b, int&c, int&d){
 	  assert(_model);
@@ -335,6 +333,7 @@ protected:
 
 protected: // these are the overrides that collect mouse actions
            // forward to mouseAction instances to produce UndoActions
+  void keyPressEvent(QKeyEvent *event) override;
    void mouseMoveEvent(QMouseEvent*) override;
    void mousePressEvent(QMouseEvent*) override;
 //   void mouseDoubleClickEvent(QMouseEvent*) override;

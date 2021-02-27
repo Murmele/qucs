@@ -14,10 +14,11 @@
 
 #include "element.h"
 #include "schematic_doc.h"
+#include "undocommand.h"
 
 #include "QDialog"
 
-Element::Element() : _position(0, 0), _owner(nullptr)
+Element::Element()
 {
   // Type = isDummyElement; // BUG
   x1 = y1 = 0; // x2 = y2 = 0; // really?
@@ -27,8 +28,7 @@ Element::Element() : _position(0, 0), _owner(nullptr)
 Element::Element(Element const& e)
  : Object(e),
    _position(e._position),
-   x1(e.x1), y1(e.y1), // x2(e.x2), y2(e.y2), // BUG diagram & whatever.
-   _owner(nullptr) // sic.
+   x1(e.x1), y1(e.y1) // x2(e.x2), y2(e.y2), // BUG diagram & whatever.
 	//Name(e.Name) // yikes.
 {
   setLabel(e.label());
@@ -44,6 +44,10 @@ Element::~Element()
 std::unique_ptr<QDialog> Element::createSchematicWidget(QucsDoc*) const
 {
     return nullptr;
+}
+
+void Element::setPosition(const pos_t &c) {
+    pushUndoStack(new UndoCommand<pos_t>(_position, c, _position));
 }
 
 void Element::getPosition(int&x, int&y) const

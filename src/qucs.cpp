@@ -2836,8 +2836,8 @@ QucsDoc *QucsTabWidget::createEmptySchematic(const QString &name)
   QFileInfo Info(name);
   assert(App);
   SchematicDoc *d = new SchematicDoc(App, name, this);
-  connect(d, &SchematicDoc::signalRedoState, App, [=](bool canRedo){App->redo->setEnabled(canRedo);});
-  connect(d, &SchematicDoc::signalUndoState, App, [=](bool canUndo){App->undo->setEnabled(canUndo);});
+  connect(d->undoStack(), &QUndoStack::canRedoChanged, App, [=](bool canRedo){App->redo->setEnabled(canRedo);});
+  connect(d->undoStack(), &QUndoStack::canUndoChanged, App, [=](bool canUndo){App->undo->setEnabled(canUndo);});
 
   QWidget* w = dynamic_cast<QWidget*>(d);
   assert(w);
